@@ -1,0 +1,239 @@
+<!-- module\Fournisseur\view\fournisseur\index\formulairefournisseur.phtml -->
+
+<?php
+	use Zend\Session\Container;
+	$fournisseur=$this->fournisseur;
+	$session=new Container('societeSession');
+?>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>
+					<?php echo $this->layout()->headTitle; ?>
+					<small>
+						<?php echo $this->translate('Les champs précédés d\'un point d\'exclamation "!" sont requis.'); ?>
+					</small>
+				</h5>
+				<div class="ibox-tools">
+					<a href="<?php echo $this->url('fournisseur'); ?>"><i class="fa fa-arrow-left"></i> <?php echo $this->translate('Retour'); ?></a>
+				</div>
+			</div>
+			<div class="ibox-content">
+				<?php
+					$form=$this->form;
+					$errors=$form->getMessages();
+
+					$form->setAttribute('action', $this->url('formulaire_fournisseur',array('id'=>$this->id)));
+					$form->setAttribute('class','form-horizontal');
+					$form->get('submit')->setAttribute('value',$this->translate('Enregistrer'));
+					$form->prepare();
+
+					echo $this->form()->openTag($form);
+
+					// Affichage des champs de type hidden
+					foreach($form->hiddens as $hidden => $hiddenValue)
+						echo $this->formInput($form->get($hidden));
+
+					// Affichage des autres champs visibles
+					foreach($form->groups as $group => $value)
+					{
+				?>
+				<div id="<?php echo $group; ?>" class="form-group">
+					<label class="col-md-2 control-label"><?php echo $this->translate($value); ?></label>
+					<div class="col-md-10">
+					<?php 
+						if($group=='adresse')
+						{
+							$adresses=$session->offsetGet('adresses',array());
+							echo 
+								'<div id="adresse-list" class="col-lg-6 m-l-n">';
+							if(sizeof($adresses)>0)
+							{
+								foreach($adresses as $id1 => $a)
+								{
+									echo '<span class="entite adresse">';
+									if($a['adresse_principale']==true)
+									{
+										echo '<small class="label label-info">'.$this->translate('Principale').'</small> ';
+									}
+									if($a['adresse_facturation']==true)
+									{
+										echo '<small class="label label-danger">'.$this->translate('Facturation').'</small> ';
+									}
+									if($a['adresse_livraison']==true)
+									{
+										echo '<small class="label label-primary">'.$this->translate('Livraison').'</small> ';
+									}
+									if($a['adresse_postale']==true)
+									{
+										echo '<small class="label label-default">'.$this->translate('Postale').'</small> ';
+									}
+									echo
+											$a['rue1'].' '.
+											$a['rue2'].' '.
+											$a['rue3'].' '.
+											$a['code_postal'].' '.
+											$a['ville'].' '.
+											$a['pays']
+										;
+									
+
+									echo	'<input type="hidden" value="'.
+												$id1.
+											'"/> 
+											<i class="fa fa-times pull-right" title="'.$this->translate('Supprimer').'"></i>
+										</span>';
+								}
+							}
+							echo '</div><p><i class="fa fa-exclamation-triangle"></i> '.$this->translate('Pour être valide, une adresse doit comporter au moins une rue, un code postal, une ville et un pays.').'</p>'.
+								'<button id="adresse-button" class="btn btn-sm btn-white adresse"><i class="fa fa-plus"></i> '
+									.$this->translate('Nouvelle adresse').
+								'</button>'
+							;
+						}
+						else if($group=='interlocuteur')
+						{
+							$interlocuteurs=$session->offsetGet('interlocuteurs',array());
+							echo 
+								'<div id="interlocuteur-list" class="col-lg-6 m-l-n">';
+							if(sizeof($interlocuteurs)>0)
+							{
+								foreach($interlocuteurs as $id2 => $i)
+								{
+									echo '<span class="entite interlocuteur">';
+									if($i['envoi_vers_outlook']==true)
+									{
+										echo '<small class="label label-warning">'.$this->translate('Outlook').'</small> ';
+									}
+									echo
+											$i['titre_civilite'].' '.
+											$i['prenom'].' '.
+											$i['nom']
+									;
+
+									if(!empty($i['fonction']))
+										echo ' - '.$i['fonction'];									
+
+									echo	'<input type="hidden" value="'.
+												$id2.
+											'"/> 
+											<i class="fa fa-times pull-right" title="'.$this->translate('Supprimer').'"></i>
+										</span>';
+								}
+							}
+							echo '</div><p><i class="fa fa-exclamation-triangle"></i> '.$this->translate('Pour être valide, un interlocuteur doit posséder au moins un tire de civilité, un nom, et une société référente.').'</p>'.
+								'<button id="interlocuteur-button" class="btn btn-sm btn-white interlocuteur"><i class="fa fa-plus"></i> '
+									.$this->translate('Nouvel interlocuteur').
+								'</button>'
+							;
+						}
+						else
+						{
+							foreach($form->fields as $field => $data)
+							{
+								if(isset($data['form']['parent']) && $data['form']['parent']==$group)
+								{
+									if(isset($data['form']['required']) && $data['form']['required']==true)
+									{
+										if(isset($errors[$field]))
+											echo '<div class="input-group m-b has-error"><span class="input-group-addon">!</span>';
+										else
+											echo '<div class="input-group m-b"><span class="input-group-addon">!</span>';
+									}
+									switch($data['form']['type'])
+									{
+										case 'select':
+											echo $this->formSelect($form->get($field));
+										break;
+										case 'textarea':
+											echo $this->formTextarea($form->get($field));
+										break;
+										case 'checkbox':
+											echo $this->formLabel()->openTag($form->get($field)->setLabel('Label')->setLabelAttributes(array('class' => 'control-label checkbox-inline')));
+											echo $this->formCheckbox($form->get($field));
+											echo $data['form']['label'];
+											echo $this->formLabel()->closeTag();
+										break;
+										default:
+											echo $this->formInput($form->get($field));
+										break;
+									}
+									if(isset($data['form']['required']) && $data['form']['required']==true)
+										echo '</div>';
+									echo $this->formElementErrors($form->get($field), array('class' => 'liste-erreurs'));
+								}
+							}
+						}
+					?>
+					</div>
+				</div>
+				<div class="hr-line-dashed"></div>
+				<?php
+					}
+				?>
+				<div class="row">
+					<div class="col-md-12">		
+					<?php
+						echo 
+							$this->formButton()->openTag($form->get('submit')).
+							'<i class="fa fa-check"></i> '.$form->get('submit')->getLabel().
+							$this->formButton()->closeTag(); 
+					?>
+					<a id="annuler" href="<?php echo $this->url('fournisseur'); ?>" class="btn btn-default pull-right"><i class="fa fa-times"></i> <?php echo $this->translate('Annuler'); ?></a>
+					</div>
+				</div>
+				<?php echo $this->form()->closeTag($form); ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="adresse-modal" class="modal inmodal in" aria-hidden="true" role="dialog" role="dialog" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content animated bounceInRight">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal" type="button">
+					<span aria-hidden="true">×</span>
+					<span class="sr-only"><?php echo $this->translate('Fermer'); ?></span>
+				</button>
+				<h4 class="modal-title"><?php echo $this->translate('Formulaire d\'adresse'); ?></h4>
+				<small class="font-bold"><?php echo $this->translate('Les champs précédés d\'un point d\'exclamation "!" sont requis.'); ?></small>
+			</div>
+			<div class="modal-body">
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-white" data-dismiss="modal" type="button"><i class="fa fa-times"></i> <?php echo $this->translate('Annuler'); ?></button>
+				<button id="adresse-form-submit" name="submit" class="btn btn-primary pull-right" type="submit" data-default-text="<?php echo $this->translate('Valider'); ?>" data-loading-text="<?php echo $this->translate('En cours...'); ?>">
+					<i class="fa fa-check"></i>
+					<?php echo $this->translate('Valider'); ?>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="interlocuteur-modal" class="modal inmodal in" aria-hidden="true" role="dialog" role="dialog" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content animated bounceInRight">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal" type="button">
+					<span aria-hidden="true">×</span>
+					<span class="sr-only"><?php echo $this->translate('Fermer'); ?></span>
+				</button>
+				<h4 class="modal-title"><?php echo $this->translate('Formulaire d\'interlocuteur'); ?></h4>
+				<small class="font-bold"><?php echo $this->translate('Les champs précédés d\'un point d\'exclamation "!" sont requis.'); ?></small>
+			</div>
+			<div class="modal-body">
+			</div>
+			<div class="modal-footer">
+				<button id="annuler" class="btn btn-white" data-dismiss="modal" type="button"><i class="fa fa-times"></i> <?php echo $this->translate('Annuler'); ?></button>
+				<button id="interlocuteur-form-submit" name="submit" class="btn btn-primary pull-right" type="button" data-default-text="<?php echo $this->translate('Valider'); ?>" data-loading-text="<?php echo $this->translate('En cours...'); ?>">
+					<i class="fa fa-check"></i>
+					<?php echo $this->translate('Valider'); ?>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,428 @@
+<!-- module\Client\view\client\index\consulterclient.phtml -->
+<?php 
+    $client=$this->client;
+    $interlocuteurs = $client->getInterlocuteurs();
+    $adresses       = $client->getAdresses();
+    $segments       = $client->getSegments();
+    $produits       = $client->getProduitsFinis();
+?>
+
+<div class="row">
+	<div class="col-lg-6">
+		<div class="ibox float-e-margins">
+			<div class="ibox-content">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="m-b-md">
+                            <a href="#" id="client-delete-toggle" class="btn btn-danger btn-xs pull-right" data-target="#client-delete-modal" data-action="delete" data-id="<?php echo $client->getId(); ?>">
+                                <i class="fa fa-trash"></i>
+                                <?php echo $this->translate('Supprimer'); ?>
+                            </a>
+                            <a class="btn btn-white btn-xs pull-right" style="margin-right:5px;" href="<?php echo $this->url('formulaire_client',array('id'=>$client->getId())); ?>">
+                                <i class="fa fa-pencil"></i>
+                                <?php echo $this->translate('Modifier'); ?>
+                            </a>
+                            <h2><?php echo !(empty($client->getRaisonSociale())) ? $client->getRaisonSociale() : $this->translate('[Sans nom]') ; ?></h2>
+							<span class="text-muted small">
+								<?php echo $this->translate('Dernière modification :'); ?>
+								<i class="fa fa-clock-o"></i>
+								<?php echo $client->getDateCreationModificationFiche()->format('Y-m-d H:i:s'); ?>
+							</span>
+                        </div>
+                        <dl class="dl-horizontal col-sm-6">
+                            <?php if(!empty($client->getCodeClient())) : ?>
+                                <dt><?php echo $this->translate('Code client :'); ?></dt>
+                                <dd><?php echo $client->getCodeClient(); ?></dd>
+                            <?php endif; ?>
+                            <?php if(!empty($client->getDateCreation())) : ?>
+                                <dt><?php echo $this->translate('Date création :'); ?></dt>
+                                <dd><?php echo $client->getDateCreation(); ?></dd>
+                            <?php endif; ?>
+                            <?php if(!empty($client->getEffectifSalarie())) : ?>
+                                <dt><?php echo $this->translate('Effectif salarié :'); ?></dt>
+                                <dd><?php echo $client->getEffectifSalarie(); ?></dd>
+                            <?php endif; ?>
+                            <?php if(!empty($client->getTelephone())) : ?>
+                                <dt><?php echo $this->translate('Téléphone :'); ?></dt>
+                                <dd><?php echo $client->getTelephone(); ?></dd>
+                            <?php endif; ?>
+                            <?php if(!empty($client->getFax())) : ?>
+                                <dt><?php echo $this->translate('Fax :'); ?></dt>
+                                <dd><?php echo $client->getFax(); ?></dd>
+                            <?php endif; ?>
+                            <?php if(!empty($client->getSiteWeb())) : ?>
+                                <dt><?php echo $this->translate('Site web :'); ?></dt>
+                                <dd><a href="<?php echo $client->getSiteWeb(); ?>" target="_blank"><?php echo $client->getSiteWeb(); ?></a></dd>
+                            <?php endif; ?>
+                            <?php if(!empty($client->getEntrepriseALivrer())) : ?>
+                                <dt><?php echo $this->translate('Entreprise à livrer :'); ?></dt>
+                                <dd><?php echo $client->getEntrepriseALivrer(); ?></dd>
+                            <?php endif; ?>
+                            <?php if(!empty($client->getEntrepriseAFacturer())) : ?>
+                                <dt><?php echo $this->translate('Entreprise à facturer :'); ?></dt>
+                                <dd><?php echo $client->getEntrepriseAFacturer(); ?></dd>
+                            <?php endif; ?>
+                            
+                        </dl>
+                        <dl class="dl-horizontal col-sm-6">                            
+                            <?php if(!empty($client->getRefConditionReglement())) : ?>
+                                <dt><?php echo $this->translate('Conditions de paiement :'); ?></dt>
+                                <dd><?php echo $this->translate($client->getRefConditionReglement()->getIntituleConditionReglement()); ?></dd>
+                            <?php endif; ?>
+                            <?php if(!empty($client->getRefModeReglement())) : ?>
+                                <dt><?php echo $this->translate('Mode de règlement :'); ?></dt>
+                                <dd><?php echo $this->translate($client->getRefModeReglement()->getIntituleModeReglement()); ?></dd>
+                            <?php endif; ?>
+                            <?php if(!empty($client->getRefTypeSegment())) : ?>
+                                <dt><?php echo $this->translate('Type de segment :'); ?></dt>
+                                <dd><?php echo $this->translate($client->getRefTypeSegment()->getIntituleTypeSegment()); ?></dd>
+                            <?php endif; ?>
+
+                            <?php if(sizeof($segments)>0) : ?>
+                                <dt><?php echo $this->translate('Segments :'); ?></dt>
+                                <dd>
+                                    <?php
+                                        $firstId = $segments[0]->getId();
+                                        foreach($segments as $segment)
+                                        {
+                                            if($segment->getId() != $firstId) 
+                                                echo ', ';
+
+                                            echo $this->translate($segment->getIntituleSegment());
+                                        }
+                                    ?>
+                                </dd>
+                            <?php endif; ?>
+                            <?php if(sizeof($produits)>0) : ?>
+                                <dt><?php echo $this->translate('Produits finis :'); ?></dt>
+                                <dd>
+                                    <?php 
+                                        $firstId = $produits[0]->getId();
+                                        foreach($produits as $produit)
+                                        {
+                                            if($produit->getId() != $firstId) 
+                                                echo ', ';
+
+                                            echo $this->translate($produit->getIntituleProduitFini());
+                                        }
+                                    ?>
+                                </dd>
+                            <?php endif; ?>
+                        </dl>
+                        
+					</div>
+                    
+				</div>
+                <div class="client-lists">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" id="tab-interlocuteurs" class="active">
+                            <a href="#interlocuteurs" data-toggle="tab" aria-expanded="true">
+                                <i class="fa fa-user hidden-xs"></i>
+                                <?php echo $this->translate('Interlocuteurs'); ?>
+                            </a>
+                        </li>
+                        <li role="presentation" id="tab-adresses">
+                            <a href="#adresses" data-toggle="tab" aria-expanded="false">
+                                <i class="fa fa-map-marker hidden-xs"></i>
+                                <?php echo $this->translate('Adresses'); ?>
+                            </a>
+                        </li>
+                        <li role="presentation" id="tab-affaires">
+                            <a href="#affaires" data-toggle="tab" aria-expanded="false">
+                                <i class="fa fa-briefcase"></i>
+                                <?php echo $this->translate('Affaires'); ?>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="interlocuteurs" class="tab-pane active">
+                            <div class="scrollable">
+                                <div class="table-responsive">
+                                    <?php if(sizeof($interlocuteurs)>0): ?>
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <th><?php echo $this->translate('Interlocuteur'); ?></th>
+                                            <th><?php echo $this->translate('Fonction'); ?></th>
+                                            <th><?php echo $this->translate('Portable'); ?></th>
+                                        </thead>
+                                        <tbody>
+                                            <?php 
+                                                foreach($interlocuteurs as $i): 
+                                            ?>
+                                            <tr>
+                                                <td>
+                                                    <a href="#<?php echo $i->getId(); ?>" data-toggle="tab" class="link">
+                                                        <?php echo $i->getTitreCivilite().' '.$i->getPrenom().' '.$i->getNom(); ?>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <?php echo (!empty($i->getRefFonction())) ? $i->getRefFonction()->getIntituleFonction() : ''; ?>
+                                                </td>
+                                                <td><?php echo $i->getPortable(); ?></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                    <?php else: ?>
+                                        <p style="margin-top:15px"><?php echo $this->translate('Aucun interlocuteur trouvé.'); ?></p>
+                                    <?php endif; ?>
+                                </div>
+                                <span class="pull-right small text-muted"><?php echo sizeof($interlocuteurs).$this->translate(' interlocuteur(s)'); ?></span>
+                            </div>
+                        </div>
+                        <div id="adresses" class="tab-pane">
+                            <div class="scrollable">
+                                <?php 
+                                    if(sizeof($adresses)>0): 
+                                ?>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <th><?php echo $this->translate('Rue'); ?></th>
+                                            <th><?php echo $this->translate('Code postal'); ?></th>
+                                            <th><?php echo $this->translate('Ville'); ?></th>
+                                            <th><?php echo $this->translate('Pays'); ?></th>
+                                            <th><?php echo $this->translate('Type d\'adresse'); ?></th>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach($adresses as $adresse): ?>
+                                            <tr>
+                                                <td><?php echo $adresse->getRue1().' '.$adresse->getRue2().' '.$adresse->getRue3(); ?></td>
+                                                <td><?php echo !(empty($adresse->getCodePostal()))?$adresse->getCodePostal():''; ?></td>
+                                                <td><?php echo !(empty($adresse->getVille()))?$adresse->getVille():''; ?></td>
+                                                <td><?php echo !(empty($adresse->getPays()))?$adresse->getPays():''; ?></td>
+                                                <td>
+                                                    <?php 
+                                                        if($adresse->getAdressePrincipale()==true)
+                                                        {
+                                                            echo '<small class="label label-info">'.$this->translate('Principale').'</small> ';
+                                                        }
+                                                        if($adresse->getAdresseFacturation()==true)
+                                                        {
+                                                            echo '<small class="label label-danger">'.$this->translate('Facturation').'</small> ';
+                                                        }
+                                                        if($adresse->getAdresseLivraison()==true)
+                                                        {
+                                                            echo '<small class="label label-primary">'.$this->translate('Livraison').'</small> ';
+                                                        }
+                                                        if($adresse->getAdressePostale()==true)
+                                                        {
+                                                            echo '<small class="label label-default">'.$this->translate('Postale').'</small> ';
+                                                        }
+                                                    ?>
+                                                </td>
+                                                <!--
+                                                <td class="bool"><?php echo ($adresse->getAdressePrincipale()==true)?'<i class="fa fa-check"></i>':''; ?></td>
+                                                <td class="bool"><?php echo ($adresse->getAdresseFacturation()==true)?'<i class="fa fa-check"></i>':''; ?></td>
+                                                <td class="bool"><?php echo ($adresse->getAdresseLivraison()==true)?'<i class="fa fa-check"></i>':''; ?></td>
+                                                <td class="bool"><?php echo ($adresse->getAdressePostale()==true)?'<i class="fa fa-check"></i>':''; ?></td>
+                                                
+                                                <td class="actions">
+                                                    <a href="<?php echo $adresse->getId(); ?>"><i class="fa fa-pencil"></i></a>
+                                                    <a href="<?php echo $adresse->getId(); ?>"><i class="fa fa-minus"></i></a>
+                                                </td>-->
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <?php else: ?>
+                                    <p style="margin-top:15px"><?php echo $this->translate('Aucune adresse trouvée.'); ?></p>
+                                <?php endif; ?>
+                                <span class="pull-right small text-muted"><?php echo sizeof($adresses).$this->translate(' adresse(s)'); ?></span>
+                            </div>
+                        </div>
+                        <div id="affaires" class="tab-pane">
+                            <table class="table table-hover">
+                                
+                            </table>
+                            <ul>
+                                <li>
+                                    <a href="#"><?php echo $this->translate('Achats du client sur l\'exercice courant'); ?></a>
+                                </li>
+                                <li>
+                                    <a href="#"><?php echo $this->translate('Commandes du client sur l\'exercice courant'); ?></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+			</div>
+		</div>
+        <?php if(sizeof($interlocuteurs)>0): ?>
+        <div class="ibox">
+            <div class="ibox-content">
+                <div id="interlocuteur-details" class="tab-content">
+                    <?php
+                        foreach($interlocuteurs as $i){
+                            $civilite = $i->getTitreCivilite();
+                            $nom = $i->getNom();
+                            $prenom = $i->getPrenom();
+                            $telephone = $i->getTelephone();
+                            $mobile = $i->getPortable();
+                            $fax = $i->getFax();
+                            $email = $i->getEmail();
+                            $email2 = $i->getEmail2();
+                            $fonction = $i->getRefFonction();
+                            $accepteInfos = $i->getAccepteInfos();
+                            $envoiOutlook = $i->getEnvoiVersOutlook();
+                        
+                    ?>
+                        <div id="<?php echo $i->getId(); ?>" class="tab-pane">
+                            <h3>
+                                <strong>
+                                    <?php echo $civilite.' '.$i->getPrenom().' '.$i->getNom(); ?>
+                                </strong>
+                                <span class="text-muted small">
+                                    <?php echo $this->translate('Dernière modification : '); ?>
+                                    <i class="fa fa-clock-o"></i>
+                                    <?php echo $i->getDateCreationModificationFiche()->format('Y-m-d H:i:s'); ?>
+                                </span>
+                            </h3>
+                            <?php if($fonction): ?>
+                                <h4><?php echo $fonction->getIntituleFonction(); ?></h4>
+                            <?php endif; ?>
+
+                            <?php if($telephone): ?>
+                                <p><i class="fa fa-phone"></i> <?php echo $telephone; ?></p>
+                            <?php endif; ?>
+
+                            <?php if($mobile): ?>
+                                <p><i class="fa fa-mobile fa-lg"></i> <?php echo $mobile; ?></p>
+                            <?php endif; ?>
+
+                            <?php if($email): ?>
+                                <p><i class="fa fa-envelope"></i> <a href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a></p>
+                            <?php endif; ?>
+
+                            <?php if($email2): ?>
+                                <p><i class="fa fa-envelope"></i> <a href="mailto:<?php echo $email2; ?>"><?php echo $email2; ?></a></p>
+                            <?php endif; ?>
+
+                            <?php if($fax): ?>
+                                <p><i class="fa fa-fax"></i> <?php echo $fax; ?></p>
+                            <?php endif; ?>                            
+
+                            <?php if($accepteInfos): ?>
+                                <p class="small font-bold">
+                                    <span>
+                                        <i class="fa fa-circle text-success"></i>
+                                        <?php echo $this->translate('Cet interlocuteur accepte de recevoir des informations.'); ?>
+                                    </span>
+                                </p>
+                            <?php endif; ?>
+
+                            <?php if($envoiOutlook): ?>
+                                <p class="small font-bold">
+                                    <span>
+                                        <i class="fa fa-circle text-warning"></i>
+                                        <?php echo $this->translate('Cet interlocuteur utilise Outlook.'); ?>
+                                    </span>
+                                </p>
+                            <?php endif; ?>
+
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+    </div>
+    <!-- <div class="col-lg-6">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5><?php echo $this->translate('Affaires'); ?></h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                
+            </div>
+        </div>
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5><?php echo $this->translate('Commandes'); ?></h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <th>Plz</th>
+                        <th>DATE CMD</th>
+                        <th>N°CDE REIMELT</th>
+                        <th>N°CDE SAP</th>
+                        <th>N°CDE CLIENT</th>
+                        <th>CHARGE AFFAIRE ZEPPELIN</th>
+                        <th>DESCRIPTIF</th>
+                        <th>CENTRE DE PROFIT</th>
+                        <th>MONTANT</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>46</td>
+                            <td>07/05/2015</td>
+                            <td>15-42417</td>
+                            <td></td>
+                            <td>AND-113616</td>
+                            <td>M. Isabelle MAZOT</td>
+                            <td>Douille rainurée gauche DIO75</td>
+                            <td>14-15</td>
+                            <td>721.74€</td>
+                        </tr>
+                        <tr>
+                            <td>46</td>
+                            <td>03/04/2015</td>
+                            <td>15-42329</td>
+                            <td></td>
+                            <td>AND-111046</td>
+                            <td>M. Isabelle MAZOT</td>
+                            <td>Kit de réparation pour Ecluse Blow/Drop 31 litres</td>
+                            <td>14-15</td>
+                            <td>523,58€</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">1 245.32€</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5><?php echo $this->translate('Achats'); ?></h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                
+            </div>
+        </div>
+    </div> -->
+</div>
+
+<?php   
+    echo $this->render('client/suppression_client'); // Modal de confirmation suppression client
+?>

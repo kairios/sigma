@@ -1,0 +1,114 @@
+<!-- module\Personnel\view\personnel\index\listepersonnel.phtml -->
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="ibox">
+			<div class="ibox-title">
+				<h5><?php echo $this->translate('Liste des utilisateurs de Sigma V2.0'); ?></h5>
+				<!-- <div class="ibox-tools">
+					
+				</div> -->
+				<button class="btn btn-primary btn-xs pull-right personnel">
+					<i class="fa fa-plus"></i>
+					<?php echo $this->translate('Nouvel utilisateur'); ?>
+				</button>
+			</div>
+			<div class="ibox-content">
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- <button class="btn btn-white btn-sm pull-right hidden-xs" type="submit">
+							<?php echo $this->translate('Exporter'); ?>
+						</button> -->
+
+						<!-- Ne filtre rien pour l'instant -->
+						<div class="form-group m-r-xs">
+							<input id="client-filter" name="client-filter" placeholder="<?php echo $this->translate('Filtrer les résultats affichés'); ?>" type="search" class="form-control input-sm" aria-controls="table-client">
+						</div>
+						
+						<?php if(sizeof($this->personnels)>0): ?>
+						<table id="table-client" class="table table-hover table-striped table-condensed dataTable">
+							<thead>
+								<tr>
+									<th><?php echo $this->translate('Nom complet'); ?></th>
+									<th><?php echo $this->translate('Email'); ?></th>
+									<th><?php echo $this->translate('Fonction'); ?></th>
+									<th><?php echo $this->translate('Taux horaire'); ?></th>
+									<th class="actions"><?php echo $this->translate('Actions'); ?></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach($this->personnels as $personnel): ?>
+									<tr>
+										<td><?php echo (isset($personnel['nom_complet'])) ? $personnel['nom_complet'] : ''; ?></td>
+										<td>
+											<?php 
+												if(isset($personnel['email']))
+												{
+													echo '<a href="mailto:'.$personnel['email'].'">'.$personnel['email'].'</a>'; 
+												}
+											?>
+										</td>
+										<td><?php if(isset($personnel['intitule_fonction'])) { echo $this->translate($personnel['intitule_fonction']); } ?></td>
+										<td>
+											<?php 
+												if(isset($personnel['taux_horaire'])) 
+												{
+													$span = ($personnel['taux_horaire'] <= 0) ? '<span class="label label-danger">' : '<span class="label label-primary">';
+													echo $span.number_format($personnel['taux_horaire'],2).' €</span>'; 
+												}
+											?>
+										</td>
+										<td class="actions">
+                                            <a href="#"><i class="fa fa-eye fa-lg"></i></a>
+                                            <a href="<?php /*echo $this->url('formulaire_personnel', array('id'=>$personnel['id'])); */?>" class="personnel-form-toggle personnel" data-target="#personnel-form-modal" data-action="edit" data-id="<?php echo $personnel['id']; ?>"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+                                            <a href="#" class="personnel-delete-toggle personnel" data-target="#personnel-delete-modal" data-action="delete" data-id="<?php echo $personnel['id']; ?>"><i class="fa fa-trash-o fa-lg"></i></a> 
+                                        </td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+						<?php else: ?>
+							<p><?php echo $this->translate('Aucune donnée n\'a été trouvée.'); ?></p>
+						<?php endif; ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="personnel-form-modal" class="modal inmodal in" aria-hidden="true" role="dialog" role="dialog" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content animated bounceInRight">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal" type="button">
+					<span aria-hidden="true">×</span>
+					<span class="sr-only"><?php echo $this->translate('Fermer'); ?></span>
+				</button>
+				<h4 class="modal-title"><?php echo $this->translate('Formulaire utilisateur'); ?></h4>
+				<small class="font-bold"><?php echo $this->translate('Les champs précédés d\'un point d\'exclamation "!" sont requis.'); ?></small>
+			</div>
+			<div class="modal-body">
+			</div>
+			<div class="modal-footer">
+				<button id="annuler" class="btn btn-white" data-dismiss="modal" type="button"><i class="fa fa-times"></i> <?php echo $this->translate('Annuler'); ?></button>
+				<button id="personnel-form-submit" name="submit" class="btn btn-primary pull-right" type="button" data-default-text="<?php echo $this->translate('Valider'); ?>" data-loading-text="<?php echo $this->translate('En cours...'); ?>">
+					<i class="fa fa-check"></i>
+					<span><?php echo $this->translate('Valider'); ?></span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="personnel-modal" class="modal inmodal in" aria-hidden="true" role="dialog" role="dialog" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content animated bounceInRight">
+		</div>
+	</div>
+</div>
+
+<?php	
+	// echo $this->render('client/suppression_client'); // Modal de confirmation suppression client
+	// echo $this->render('client/suppression_interlocuteur'); // Modal de confirmation suppression interlocuteur
+?>

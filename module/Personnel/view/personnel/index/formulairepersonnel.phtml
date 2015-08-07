@@ -1,0 +1,210 @@
+<!-- module\Personnel\view\personnel\index\formulairepersonnel.phtml -->
+
+<?php 
+	$personnel = $this->personnel;
+?>
+
+<!-- <div class="col-lg-6 col-lg-offset-3">
+	<div class="ibox">
+		<div class="ibox-title">
+			<h5><?php echo $this->translate('Formulaire utilisateur'); ?></h5>
+		</div>
+		<div class="ibox-content"> -->
+			<?php
+				$form = $this->form;
+				$errors = $form->getMessages();
+
+				$form->setAttribute('action', $this->url('formulaire_personnel',array('id'=>$this->id))); /// A adapter selon la personne identifiée et l'action !!!!!
+				$form->get('submit')->setAttribute('value',$this->translate('Valider'));
+				$form->prepare();
+
+				echo $this->form()->openTag($form);
+
+				echo $this->formInput($form->get('id_personnel'));
+			?>
+			<div class="row">
+				<div class="form-group col-sm-6">
+					<?php
+						echo $this->formLabel($form->get('prenom')).'*';
+						
+						if(isset($errors['prenom']))
+						{
+							echo '<div class="input-group m-b has-error">';
+					 		echo $this->formInput($form->get('prenom')).'</div>';
+					 	}
+					 	echo $this->formInput($form->get('prenom'));
+
+					 ?>
+				</div>
+				<div class="form-group col-sm-6">
+					<?php
+						echo $this->formLabel($form->get('nom')).'*';
+						
+						if(isset($errors['nom']))
+						{
+							echo '<div class="input-group m-b has-error">';
+					 		echo $this->formInput($form->get('nom')).'</div>';
+					 	} 
+					 	else
+					 		echo $this->formInput($form->get('nom'));
+					 ?>
+				</div>
+				<div class="form-group col-sm-12">
+					<?php
+						echo $this->formLabel($form->get('email')).'*';
+						
+						if(isset($errors['email']))
+						{
+							echo '<div class="input-group m-b has-error">';
+					 		echo $this->formInput($form->get('email')).'</div>';
+					 	} 
+					 	else
+					 		echo $this->formInput($form->get('email'));
+					 ?>
+				</div>
+				<div class="form-group col-sm-6">
+					<?php
+						echo $this->formLabel($form->get('ref_fonction'));
+						
+						if(isset($errors['ref_fonction']))
+						{
+							echo '<div class="input-group m-b has-error">';
+					 		echo $this->formSelect($form->get('ref_fonction')).'</div>';
+					 	}
+					 	else
+					 		echo $this->formSelect($form->get('ref_fonction'));
+					 ?>	
+				</div>
+				<div class="form-group col-sm-6">
+					<?php
+						echo $this->formLabel($form->get('taux_horaire'));
+						
+						if(isset($errors['taux_horaire']))
+						{
+							echo '<div class="input-group m-b has-error">';
+					 		echo $this->formInput($form->get('taux_horaire')).'<span class="input-group-addon">&euro;</span></div>';
+					 	}
+					 	else
+					 		echo '<div class="input-group m-b">'.$this->formInput($form->get('taux_horaire')).'<span class="input-group-addon">&euro;</span></div>';
+					 ?>
+				</div>
+				<div class="form-group col-sm-12">
+					<?php 
+						echo $this->formLabel()->openTag($form->get('administrateur')->setLabelAttributes(array('class' => 'control-label checkbox-inline')));
+						echo $this->formCheckbox($form->get('administrateur'));
+						echo $this->translate($form->get('administrateur')->getLabel());
+						echo $this->formLabel()->closeTag();
+					?>
+					<!-- <hr class="tiny-hr-bottom"> -->
+				</div>
+
+				<?php 
+					// $hasMotDePasse = !empty($personnel->getMotDePasse()); 
+					// if($hasMotDePasse) {
+				?>
+					<!-- <div class="form-group col-sm-6">
+						<?php
+							// echo $this->formLabel($form->get('mot_de_passe'));
+							// echo (!$hasMotDePasse) ? '*' : '';
+							
+							// if(isset($errors['mot_de_passe']))
+							// {
+							// 	echo '<div class="m-b has-error">';
+						 // 		echo $this->formInput($form->get('mot_de_passe')).'</div>';
+						 // 	}
+						 // 	else
+						 // 		echo $this->formInput($form->get('mot_de_passe'));
+
+							// if(isset($errors['mot_de_passe']) && isset($errors['confirmation_mot_de_passe']))
+							// {
+							// 	echo '<span class="help-block m-b-none text-danger">'.$this->translate($errors['mot_de_passe']['UNSAME']).'</span>';
+							// }
+						 ?>	
+					</div>
+					<div class="form-group col-sm-6">
+						<?php
+							// echo $this->formLabel($form->get('confirmation_mot_de_passe'));
+							// echo (!$hasMotDePasse) ? '*' : '';
+							
+							// if(isset($errors['confirmation_mot_de_passe']))
+							// {
+							// 	echo '<div class="m-b has-error">';
+						 // 		echo $this->formInput($form->get('confirmation_mot_de_passe')).'</div>';
+						 // 	}
+						 // 	else
+						 // 		echo $this->formInput($form->get('confirmation_mot_de_passe'));
+						 ?>
+					</div>
+					<div class="col-xs-12">
+						<span class="help-block m-b-none">
+							<i class="fa fa-info-circle"></i>
+							// <?php echo $this->translate('Laisser vide pour ne pas modifier le mot de passe.'); ?>
+						</span>
+					</div> -->
+
+				<?php /* } */ ?>
+				
+				
+			</div>
+			<?php
+				// foreach($form->fields as $field => $data)
+				// {
+				// 	if($data['form']['type']=='hidden')
+				// 	{
+				// 		echo $this->formInput($form->get($field));
+				// 	}
+				// 	else if(!isset($data['form']['static']))
+				// 	{
+				// 		?>
+				 			<!-- <div class="form-group"> -->
+						<?php
+				// 			if(isset($data['form']['label']) && $data['form']['type']!='checkbox')
+				// 			{
+				// 				echo $this->formLabel($form->get($field),$data['form']['label']);
+				// 				if(isset($data['form']['required']) && $data['form']['required']==true) echo '*';
+				// 			}
+				// 			switch($data['form']['type'])
+				// 			{
+				// 				case 'select':
+				// 					echo $this->formSelect($form->get($field));
+				// 				break;
+				// 				case 'textarea':
+				// 					echo $this->formTextarea($form->get($field));
+				// 				break;
+				// 				case 'checkbox':
+				// 					echo $this->formLabel()->openTag($form->get($field)->setLabel('Label')->setLabelAttributes(array('class' => 'control-label checkbox-inline')));
+				// 					echo $this->formCheckbox($form->get($field));
+				// 					echo $data['form']['label'];
+				// 					echo $this->formLabel()->closeTag();
+
+				// 					if($field == 'administrateur') echo '<hr>';
+				// 				break;
+				// 				default:
+				// 					echo $this->formInput($form->get($field));
+				// 				break;
+				// 			}
+				// 			echo $this->formElementErrors($form->get($field), array('class' => 'liste-erreurs'));
+				// 		?>
+				<!-- // 			</div> -->
+				 		<?php
+				// 	}
+				// }
+			?>
+			<!-- <div class="row">
+				<div class="col-md-12">		
+					<?php
+						// echo 
+						// 	$this->formButton()->openTag($form->get('submit')).
+						// 	'<i class="fa fa-check"></i> '.$form->get('submit')->getValue().
+						// 	$this->formButton()->closeTag(); 
+					?>
+					<a id="annuler" href="<?php /*echo $this->url('personnel'); */?>" class="btn btn-default pull-right">
+						<i class="fa fa-times"></i>
+						<?php /*echo $this->translate('Annuler');*/ ?>
+					</a>
+				</div>
+			</div> -->
+			<?php echo $this->form()->closeTag($form); ?>
+<!-- 		</div>
+	</div>
+</div> -->

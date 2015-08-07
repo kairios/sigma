@@ -1,0 +1,51 @@
+<!-- module\Application\view\application\index\identification.phtml -->
+
+<?php if(!empty($this->messageForm)) : ?>
+<div id="login-alert" class="alert alert-danger alert-dismissable">
+    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+    <b><?php echo $this->translate('Alert!'); ?></b> <?php echo $this->messageForm; ?>
+</div>
+<?php endif; ?>
+
+<div id="login-box" class="ibox-content">
+
+	<!-- <p><strong>Email : </strong>ophelie.eouzan@zeppelin-france.com</p>
+	<p><strong>Mot de passe : </strong>blabla</p> -->
+
+	<!-- Formulaire ici -->
+	<?php
+		$form=$this->form;
+		$errors=$form->getMessages();
+
+		$form->setAttribute('action', $this->url('application_login'));
+		$form->get('submit')->setAttribute('value',$this->translate('Se connecter'));
+		$form->prepare();
+		
+		echo $this->form()->openTag($form);
+	?>
+
+	<div class="form-group <?php echo (isset($errors['email'])) ? 'has-error':''; ?>">
+	<?php
+		//echo $this->formLabel($form->get('email'));
+		echo $this->formInput($form->get('email')); 
+	?>
+	</div>
+	<div class="form-group <?php echo (isset($errors['mot_de_passe'])) ? 'has-error':''; ?>">
+	<?php
+		//echo $this->formLabel($form->get('mot_de_passe'));
+		echo $this->formInput($form->get('mot_de_passe')); 
+	?>
+	</div>
+
+	<?php
+		echo $this->formButton()->openTag($form->get('submit'));
+		echo $form->get('submit')->getLabel().' <i class="fa fa-sign-in"></i>';
+		echo $this->formButton()->closeTag();
+		echo $this->form()->closeTag($form);
+	?>
+
+	<a href="#">
+		<small><?php echo $this->translate('Mot de passe oublié?'); ?></small>
+	</a>
+<!--</div>-->
+</div>

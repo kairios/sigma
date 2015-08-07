@@ -1,0 +1,216 @@
+<!-- module\Client\view\client\index\listeclient.phtml -->
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel">
+			<div class="panel-heading">
+				<div class="panel-options">
+					<ul id="tabs" class="nav nav-tabs">
+						<li role="presentation" id="tab-client" class="active">
+							<a href="#clients" data-toggle="tab" aria-expanded="true">
+								<i class="fa fa-list"></i>
+								<span class="hidden-xs"><?php echo $this->translate('Clients'); ?></span>
+							</a>
+						</li>
+						<li role="presentation" id="tab-interlocuteur">
+							<a href="#interlocuteurs" data-toggle="tab" aria-expanded="false">
+								<i class="fa fa-user"></i>
+								<span class="hidden-xs"><?php echo $this->translate('Interlocuteurs'); ?></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="panel-body">
+					<div class="tab-content">
+						<!-- Onglet Clients -->
+						<div id="clients" class="tab-pane active">
+							<div class="row">
+                            	<a class="btn btn-primary btn-sm pull-right" href="<?php echo $this->url('formulaire_client'); ?>">
+                            		<i class="fa fa-plus"></i>
+                            		<?php echo $this->translate('Nouveau client') ?>
+                            	</a>
+                                <h3><?php echo $this->translate('Rechercher un client') ?></h3>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-xs-12">
+									<form action="" class="form-inline">
+										<div class="form-group">
+											<!-- <label for="type_segment-select"><?php echo $this->translate('Par type de segment'); ?></label> -->
+											<select id="type_segment-select" name="type_segment-select" class="chosen-select" multiple="" data-placeholder="<?php echo $this->translate('Par type de segment'); ?>">
+												<option value=""></option>
+												<?php foreach($this->types_segment as $type) : ?>
+													<option value="<?php echo $type->getId(); ?>"><?php echo $this->translate($type->getIntituleTypeSegment()); ?></option>
+												<?php endforeach; ?>
+											</select>
+										</div>
+										<div class="form-group">
+											<!-- <label for="segment-select"><?php echo $this->translate('Par segment'); ?></label> -->
+											<select id="segment-select" name="segment-select" class="chosen-select" multiple="" data-placeholder="<?php echo $this->translate('Par segment'); ?>">
+												<?php foreach($this->segments as $segment) : ?>
+													<option value="<?php echo $segment->getId(); ?>"><?php echo $this->translate($segment->getIntituleSegment()); ?></option>
+												<?php endforeach; ?>
+											</select>
+										</div>
+										<div class="form-group">
+											<!-- <label for="produit_fini-select"><?php echo $this->translate('Par produit fini'); ?></label> -->
+											<select id="produit_fini-select" name="produit_fini-select" class="chosen-select" multiple="" data-placeholder="<?php echo $this->translate('Par produit fini'); ?>">
+												<?php foreach($this->produits_finis as $produit) : ?>
+													<option value="<?php echo $produit->getId(); ?>"><?php echo $this->translate($produit->getIntituleProduitFini()); ?></option>
+												<?php endforeach; ?>
+											</select>
+										</div>
+										<div class="form-group m-r-xs">
+											<input id="mot_cle-input" name="search" placeholder="<?php echo $this->translate('Par mot clé'); ?>" type="search" class="form-control input-sm" aria-controls="table-client">
+										</div>
+										<button id="search-client" class="btn btn-white" type="submit">
+											<i class="fa fa-search"></i>
+											<?php echo $this->translate('Rechercher'); ?>
+										</button>
+									</form>
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-xs-12">
+									<button class="btn btn-white btn-sm pull-right hidden-xs" type="submit">
+										<?php echo $this->translate('Exporter'); ?>
+									</button>
+									<div class="form-group m-r-xs pull-right">
+										<input id="client-filter" name="client-filter" placeholder="<?php echo $this->translate('Filtrer les résultats affichés'); ?>" type="search" class="form-control input-sm" aria-controls="table-client">
+									</div>
+									
+									<?php if(sizeof($this->clients)>0): ?>
+									<table id="table-client" class="table table-bordered table-hover table-striped table-condensed dataTable">
+										<thead>
+											<tr>
+												<th><?php echo $this->translate('Code client'); ?></th>
+												<th><?php echo $this->translate('Raison sociale'); ?></th>
+												<th><?php echo $this->translate('Code postale'); ?></th>
+												<th><?php echo $this->translate('Ville'); ?></th>
+												<th><?php echo $this->translate('Pays'); ?></th>
+												<th class="actions"><?php echo $this->translate('Actions'); ?></th>
+											</tr>
+										</thead>
+										<tfoot>
+											<tr>
+												<th><?php echo $this->translate('Code client'); ?></th>
+												<th><?php echo $this->translate('Raison sociale'); ?></th>
+												<th><?php echo $this->translate('Code postale'); ?></th>
+												<th><?php echo $this->translate('Ville'); ?></th>
+												<th><?php echo $this->translate('Pays'); ?></th>
+												<th class="actions"><?php echo $this->translate('Actions'); ?></th>
+											</tr>
+										</tfoot>
+										<tbody>
+											<?php foreach($this->clients as $client): ?>
+												<tr>
+													<td><?php echo (isset($client['code_client']))?$client['code_client']:''; ?></td>
+													<td><?php echo $client['raison_sociale']; ?></td>
+													<td><?php echo (isset($client['code_postal']))?$client['code_postal']:''; ?></td>
+													<td><?php echo (isset($client['ville']))?$client['ville']:''; ?></td>
+													<td><?php echo (isset($client['pays']))?$client['pays']:''; ?></td>
+													<td class="actions">
+                                                        <a href="<?php echo $this->url('client/consulter_client',array('id'=>$client['id'])); ?>"><i class="fa fa-eye fa-lg"></i></a>
+                                                        <a href="<?php echo $this->url('formulaire_client',array('id'=>$client['id'])); ?>"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+                                                        <a href="#" class="client-delete-toggle client" data-target="#client-delete-modal" data-action="delete" data-id="<?php echo $client['id']; ?>"><i class="fa fa-trash-o fa-lg"></i></a> 
+                                                    </td>
+												</tr>
+											<?php endforeach; ?>
+										</tbody>
+									</table>
+									<?php else: ?>
+										<p><?php echo $this->translate('Aucune donnée n\'a été trouvée.'); ?></p>
+									<?php endif; ?>
+								</div>
+							</div>
+						</div>
+						<!-- Onglet Interlocuteurs -->
+						<div id="interlocuteurs" class="tab-pane">
+							<div class="row">
+								<button id="interlocuteur-button" class="btn btn-primary btn-sm pull-right interlocuteur">
+									<i class="fa fa-plus"></i>
+									<?php echo $this->translate('Nouvel interlocuteur') ?>
+								</button>
+                                <h3><?php echo $this->translate('Rechercher un interlocuteur') ?></h3>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="form-group m-r-xs pull-right">
+										<div class="input-group">
+											<input id="search-interlocuteur" name="search" placeholder="<?php echo $this->translate('Rechercher'); ?>" type="search" class="form-control input-sm" aria-controls="table-interlocuteur">
+											<span id="search-interlocuteur-span" class="input-group-addon">
+												<!--<button id="search-btn" class="btn btn-flat btn-sm" name="seach" type="submit">-->
+													<i class="fa fa-search"></i>
+												<!--</button>-->
+											</span>
+										</div>
+									</div>
+									<table id="table-interlocuteur" class="table table-bordered table-striped table-hover table-condensed dataTable">
+										<thead>
+											<tr>
+												<th><?php echo $this->translate('Interlocuteur'); ?></th>
+												<th><?php echo $this->translate('Code société'); ?></th>
+												<th><?php echo $this->translate('Société'); ?></th>
+												<th><?php echo $this->translate('Email'); ?></th>
+												<th class="bool"><?php echo $this->translate('Accepte infos'); ?></th>
+												<th class="actions"><?php echo $this->translate('Actions'); ?></th>
+											</tr>
+										</thead>
+										<tfoot>
+											<tr>
+												<th><?php echo $this->translate('Interlocuteur'); ?></th>
+												<th><?php echo $this->translate('Code société'); ?></th>
+												<th><?php echo $this->translate('Société'); ?></th>
+												<th><?php echo $this->translate('Email'); ?></th>
+												<th><?php echo $this->translate('Accepte infos'); ?></th>
+												<th class="actions"><?php echo $this->translate('Actions'); ?></th>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="interlocuteur-form-modal" class="modal inmodal in" aria-hidden="true" role="dialog" role="dialog" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content animated bounceInRight">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal" type="button">
+					<span aria-hidden="true">×</span>
+					<span class="sr-only"><?php echo $this->translate('Fermer'); ?></span>
+				</button>
+				<h4 class="modal-title"><?php echo $this->translate('Formulaire d\'interlocuteur'); ?></h4>
+				<small class="font-bold"><?php echo $this->translate('Les champs précédés d\'un point d\'exclamation "!" sont requis.'); ?></small>
+			</div>
+			<div class="modal-body">
+			</div>
+			<div class="modal-footer">
+				<button id="annuler" class="btn btn-white" data-dismiss="modal" type="button"><i class="fa fa-times"></i> <?php echo $this->translate('Annuler'); ?></button>
+				<button id="interlocuteur-form-submit" name="submit" class="btn btn-primary pull-right" type="button" data-default-text="<?php echo $this->translate('Valider'); ?>" data-loading-text="<?php echo $this->translate('En cours...'); ?>">
+					<i class="fa fa-check"></i>
+					<span><?php echo $this->translate('Valider'); ?></span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="interlocuteur-modal" class="modal inmodal in" aria-hidden="true" role="dialog" role="dialog" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content animated bounceInRight">
+		</div>
+	</div>
+</div>
+
+<?php	
+	echo $this->render('client/suppression_client'); // Modal de confirmation suppression client
+	echo $this->render('client/suppression_interlocuteur'); // Modal de confirmation suppression interlocuteur
+?>

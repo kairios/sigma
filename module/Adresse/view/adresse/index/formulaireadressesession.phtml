@@ -1,0 +1,71 @@
+<!-- module\Adresse\view\index\formulaireadresse -->
+<?php
+	$form=$this->form;
+	$errors=$form->getMessages();
+
+	//$form->setAttribute('action', $this->url('formulaire_adresse'));
+	//$form->setAttribute('class','form-horizontal');
+	$form->get('submit')->setAttribute('value',$this->translate('Enregistrer'));
+	$form->prepare();
+
+	echo $this->form()->openTag($form);
+
+	foreach($form->fields as $field => $data)
+	{
+		if($data['form']['type']=='hidden')
+		{
+			echo $this->formInput($form->get($field));
+		}
+		else
+		{
+			?>
+			<div class="form-group">
+			<?php
+
+			if(!isset($data['form']['static']))
+			{
+				if(isset($data['form']['label']) && $data['form']['type']!='checkbox')
+					echo $this->formLabel($form->get($field),$data['form']['label']);
+				if(isset($data['form']['required']) && $data['form']['required']==true)
+				{
+					if(isset($errors[$field]))
+						echo '<div class="input-group m-b has-error"><span class="input-group-addon">!</span>';
+					else
+						echo '<div class="input-group m-b"><span class="input-group-addon">!</span>';
+				}
+				switch($data['form']['type'])
+				{
+					case 'select':
+						//\Zend\Debug\Debug::dump($form->get('date_creation_modification_fiche'));die();
+						echo $this->formSelect($form->get($field));
+					break;
+					case 'textarea':
+						echo $this->formTextarea($form->get($field));
+					break;
+					case 'checkbox':
+					//\Zend\Debug\Debug::dump($data);die();
+						echo $this->formLabel()->openTag($form->get($field)->setLabel('Label')->setLabelAttributes(array('class' => 'control-label checkbox-inline')));
+						echo $this->formCheckbox($form->get($field));
+						echo $data['form']['label'];
+						echo $this->formLabel()->closeTag();
+					break;
+					case 'multicheckbox':
+						echo '<div class="col-sm-12">'.$this->formMultiCheckbox($form->get($field)->setLabel('Label')->setLabelAttributes(array('class' => 'control-label checkbox-inline'))).'</div>';
+					break;
+					default:
+						echo $this->formInput($form->get($field));
+					break;
+				}
+				if(isset($data['form']['required']) && $data['form']['required']==true)
+					echo '</div>';
+				echo $this->formElementErrors($form->get($field), array('class' => 'liste-erreurs'));
+			}
+			?>
+		</div>
+		<?php
+		}
+	}
+	
+	//echo $this->formInput($form->get('submit'));//
+	echo $this->form()->closeTag($form); 
+?>

@@ -1,0 +1,373 @@
+/* 
+* @Author: Ophelie
+* @Date:   2015-05-13 13:50:12
+* @Last Modified by:   Ophelie
+* @Last Modified time: 2015-07-23 10:28:01
+*/
+
+                                                /*********************************************************/
+                                                /*********************************************************/
+                                                /*              Documentation, compléments               */
+                                                /*********************************************************/
+                                                /*********************************************************/
+
+/**
+ * Bigger links : http://lamidudeveloppeur.fr/html-css/agrandissez-vos-zones-cliquables/
+ *
+ *
+ * Media Queries Bootstrap
+ *  @media(max-width:767px){} // xs
+ *  @media(min-width:768px){} // sm
+ *  @media(min-width:992px){} // md
+ *  @media(min-width:1200px){} // lg
+ * 
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                /*********************************************************/
+                                                /*********************************************************/
+                                                /*                        Global                         */
+                                                /*********************************************************/
+                                                /*********************************************************/
+
+
+/************* Surchage couleurs template **************/
+/*
+.btn-primary {
+    background-color: #2894bf;
+    border-color: #2894bf;
+}*/
+
+
+/****************** Stylisation de texte *****************/
+.important-text {
+    font-weight: bold;
+}
+
+
+/************************ Layout ***********************/
+#logo{
+    margin:12px 15px;
+    height:35px;
+}
+#langage
+{
+    margin-top:13px;
+}
+.minimalize-styl-2 {
+    float: none;
+    margin: 6px 5px 5px 20px;
+}
+.wrapper {
+    padding: 0px;
+}
+.wrapper-content {
+    padding: 20px 10px 40px;
+}
+.breadcrumb > .active {
+    font-weight: bold;
+}
+
+button.dim a {
+    color:#fff;
+}
+
+/* ?? */
+.ibox-tools button {
+	border:0px;
+    margin:0px;
+    padding:0px;
+    background:transparent;
+    color: #c4c4c4;
+    cursor: pointer;
+}
+
+.tiny-hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.tiny-hr-bottom {
+    /*margin-top: 10px;*/
+    margin-bottom: -5px;
+}
+
+
+/*************************** Tables ************************/
+.table {
+    max-width: 99%;
+    width: 99%;
+}
+.table > thead > tr > th, 
+.table > tbody > tr > th, 
+.table > tfoot > tr > th, 
+.table > thead > tr > td, 
+.table > tbody > tr > td, 
+.table > tfoot > tr > td {
+    padding: 5px;
+}
+th, td { 
+    white-space: nowrap; 
+}
+th.bool, td.bool, th.actions, td.actions 
+{ 
+    width:100px;
+    text-align:center; 
+}
+
+.ui-autocomplete
+{
+    z-index:3000;
+}
+
+
+
+.modal-body .form-group
+{
+    margin-bottom:0px;
+}
+.inmodal .modal-header {
+    padding: 15px;
+    text-align: left;
+}
+.link {
+    color: inherit;
+    font-weight: 600;
+}
+.alert {
+    margin-bottom: -10px;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+
+
+
+
+/******************* Formulaires *********************/
+.form-horizontal .checkbox, 
+.form-horizontal .radio, 
+.form-horizontal .checkbox-inline, 
+.form-horizontal .radio-inline {
+    margin-bottom: 0;
+    margin-top: -4px;
+    padding-top: 7px;
+}
+input.form-control, 
+select.form-control, 
+textarea.form-control
+{
+    margin-bottom:10px;
+}
+.form-inline .form-control 
+{
+    margin:0;
+}
+.tiny-form {
+    /*background: #f9f9f9 none repeat scroll 0 0;*/
+    border-top: 1px solid #e7eaec;
+    padding: 10px 15px;
+}
+.tiny-form hr,
+.tiny-form .form-group {
+    margin-bottom:0px;
+    margin-top: 5px;
+}
+.tiny-form input.form-control, 
+.tiny-form select.form-control {
+    height: 25px;
+    margin-bottom: 0px;
+    padding: 0 5px;
+}
+.tiny-form span.input-group-addon {
+    padding: 0px 8px;
+}
+#annuler
+{
+    margin-right:10px;
+}
+
+select option:first-child[value=""] {
+    font-weight: 700;
+}
+
+/* Stylisation du plugin CHOSEN */
+
+.chosen-container-multi .chosen-choices,
+.chosen-container-single .chosen-single,
+.chosen-container-active.chosen-with-drop .chosen-single {
+    line-height: 1.42857;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    border: 1px solid #e5e6e7;
+    background-image: none;
+}
+
+.chosen-container-single .chosen-single abbr,
+.chosen-container-single .chosen-single div b {
+    cursor: pointer;
+}
+.chosen-container-active .chosen-choices,
+.chosen-container-single .chosen-search input[type="text"]:focus {
+    border-color: #1ab394;
+    box-shadow: none;
+}
+
+.chosen-container .chosen-drop {
+    border :none;
+}
+
+@media screen and (max-width: 768px) {
+    .chosen-container-single,
+    .chosen-container-multi {
+        width:100% !important;
+    }
+}
+
+/* Permet de simuler un placeholder avec le plugin CHOSEN */
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+    color: #999;
+    opacity: 1;
+}
+
+.chosen-container .chosen-results li {
+    border-bottom: 1px dotted #e7eaec;;
+}
+
+.chosen-container .chosen-results li.highlighted { /* CA MARCHE PAS !!! */
+    background-color: #f5f5f5;
+}
+
+.form-group ~ #client-filter {
+    margin-bottom: 0;
+}
+
+/******************** Timeline *********************/
+
+#vertical-timeline {
+    margin-top: 1em;
+}
+
+#vertical-timeline .etat-courant {
+    font-style: italic;
+    font-weight: bold;
+    margin-left:40px;
+}
+
+#vertical-timeline .autre-etat {
+    margin-left:40px;
+    font-style: italic;
+}
+
+.vertical-timeline-content p {
+    margin: 0 0 10px;
+}
+
+.vertical-timeline-block {
+    margin: 1em 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                /*********************************************************/
+                                                /*********************************************************/
+                                                /*                     Pages du Site                     */
+                                                /*********************************************************/
+                                                /*********************************************************/
+
+/************************** Login **************************/
+
+.wrapper .middle-box {
+    margin-top: 0px;
+}
+
+.loginscreen.middle-box {
+    width: 400px;
+}
+
+.loginColumns {
+    background-color: white;
+    border: 1px dotted;
+    border-radius: 5px;
+    margin-top: 20px;
+    padding-top: 0px;
+
+    /* Before, just : padding-top:30px; */
+}
+
+#login-alert {
+    margin-bottom: 10px;
+    padding-right: 35px;
+}
+
+#login-box {
+    margin-top: 30px;
+}
+
+/********** Formulaire Client, pour Sous-entités ************/
+span.entite
+{
+    display:block;
+    border:1px solid;
+    margin-bottom:5px;
+    padding:5px;
+    cursor:pointer;
+}
+
+span.entite:hover
+{
+    background-color:#8ED1C1;
+    color:white;
+}
+
+span.entite i
+{
+    cursor:pointer;
+    text-decoration: none;  
+    color:#676A6C;
+}
+
+span.entite i:hover
+{
+    color:white;
+}
+
+/**************** Affaire, liste de produits ****************/
+
+@media screen and (max-width: 1195px) {
+  #table-ligne thead th:last-child, #table-ligne td:last-child:not(.footable-row-detail-cell) {
+    display:none;
+  }
+}
+.footable-row-detail {
+    display: none;
+}
+.footable-visible {
+    cursor: pointer;
+}

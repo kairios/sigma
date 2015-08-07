@@ -1,0 +1,112 @@
+<!-- module\Fournisseur\view\fournisseur\index\formulaireinterlocuteur.phtml -->
+
+<?php
+	$interlocuteur=$this->interlocuteur;
+	$form=$this->form;
+	$errors=$form->getMessages();
+
+	$form->setAttribute('action', $this->url('fournisseur/formulaire_interlocuteur',array('id'=>$this->id)));
+	$form->prepare();
+
+	echo $this->form()->openTag($form);
+?>
+<div class="row">
+	<div class="form-group col-sm-3">
+		<?php
+			echo $this->formLabel($form->get('titre_civilite'));
+			if(isset($errors['titre_civilite']))
+				echo '<div class="input-group m-b has-error"><span class="input-group-addon">!</span>';
+			else
+				echo '<div class="input-group m-b"><span class="input-group-addon">!</span>';
+		 	echo $this->formSelect($form->get('titre_civilite')).'</div>'; 
+		 ?>
+	</div>
+	<div class="form-group col-sm-4">
+		<?php 
+			echo $this->formLabel($form->get('prenom'));
+			echo $this->formInput($form->get('prenom')); 
+		?>
+	</div>
+	<div class="form-group col-sm-5">
+		<?php
+			echo $this->formLabel($form->get('nom'));
+			if(isset($errors['nom']))
+				echo '<div class="input-group m-b has-error"><span class="input-group-addon">!</span>';
+			else
+				echo '<div class="input-group m-b"><span class="input-group-addon">!</span>';
+			echo $this->formInput($form->get('nom')).'</div>'; 
+		?>
+	</div>
+</div>
+<div class="row">
+	<div class="form-group col-sm-3">
+		<?php
+			echo $this->formLabel($form->get('code_fournisseur'));
+		 	echo $this->formSelect($form->get('code_fournisseur'));
+		 ?>
+	</div>
+	<div class="form-group col-sm-9">
+		<?php
+			echo $this->formLabel($form->get('ref_societe_fournisseur'));
+			if(isset($errors['ref_societe_fournisseur']))
+				echo '<div class="input-group m-b has-error"><span class="input-group-addon">!</span>';
+			else
+				echo '<div class="input-group m-b"><span class="input-group-addon">!</span>';
+		 	echo $this->formSelect($form->get('ref_societe_fournisseur')).'</div>';
+		 ?>
+	</div>
+</div>
+
+<?php
+	foreach($form->fields as $field => $data)
+	{
+		if($data['form']['type']=='hidden')
+		{
+			echo $this->formInput($form->get($field));
+		}
+		else
+		{
+			if(!isset($data['form']['static']))
+			{
+				?>
+					<div class="form-group">
+				<?php
+					if(isset($data['form']['label']) && $data['form']['type']!='checkbox')
+						echo $this->formLabel($form->get($field),$data['form']['label']);
+					if(isset($data['form']['required']) && $data['form']['required']==true)
+					{
+						if(isset($errors[$field]))
+							echo '<div class="input-group m-b has-error"><span class="input-group-addon">!</span>';
+						else
+							echo '<div class="input-group m-b"><span class="input-group-addon">!</span>';
+					}
+					switch($data['form']['type'])
+					{
+						case 'select':
+							echo $this->formSelect($form->get($field));
+						break;
+						case 'textarea':
+							echo $this->formTextarea($form->get($field));
+						break;
+						case 'checkbox':
+							echo $this->formLabel()->openTag($form->get($field)->setLabel('Label')->setLabelAttributes(array('class' => 'control-label checkbox-inline')));
+							echo $this->formCheckbox($form->get($field));
+							echo $data['form']['label'];
+							echo $this->formLabel()->closeTag();
+						break;
+						default:
+							echo $this->formInput($form->get($field));
+						break;
+					}
+					if(isset($data['form']['required']) && $data['form']['required']==true)
+						echo '</div>';
+					echo $this->formElementErrors($form->get($field), array('class' => 'liste-erreurs'));
+				?>
+					</div>
+				<?php
+			}
+		}
+	}
+
+	echo $this->form()->closeTag($form); 
+?>

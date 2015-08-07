@@ -1,0 +1,52 @@
+
+<!-- module\Application\view\application\breadcrumb.phtml -->
+
+<ol class="breadcrumb">
+
+<?php
+
+	switch($this->action)
+	{
+		/** Module Client */
+		case 'listeclient':
+			echo '
+				<li><a href="'.$this->url('home').'">'.$this->translate('Accueil').'</a></li>
+				<li class="active">'.$this->translate('Clients et interlocuteurs').'</li>';                       
+		break;
+		case 'formulaireclient':
+			$client = $this->client;
+			echo '
+				<li><a href="'.$this->url('home').'">'.$this->translate('Accueil').'</a></li>
+				<li><a href="'.$this->url('client').'">'.$this->translate('Clients et interlocuteurs').'</a></li>
+				<li class="active">'.$this->translate('Formulaire').'</li>';                       
+		break;
+		case 'consulterclient':
+			echo '
+				<li><a href="'.$this->url('home').'">'.$this->translate('Accueil').'</a></li>
+				<li><a href="'.$this->url('client').'">'.$this->translate('Clients et interlocuteurs').'</a></li>
+				<li class="active">'.$this->translate('Fiche client').'</li>';  
+		break;
+		/** Module Fournisseur */
+		case 'listefournisseur':
+			echo '
+				<li><a href="'.$this->url('home').'">'.$this->translate('Accueil').'</a></li>
+				<li class="active">'.$this->translate('Fournisseurs et interlocuteurs').'</li>';                       
+		break;
+		case 'formulairefournisseur':
+			$client = $this->client;
+			echo '
+				<li><a href="'.$this->url('home').'">'.$this->translate('Accueil').'</a></li>
+				<li><a href="'.$this->url('fournisseur').'">'.$this->translate('Fournisseurs et interlocuteurs').'</a></li>
+				<li class="active">'.$this->translate('Formulaire').'</li>';                       
+		break;
+		case 'consulterfournisseur':
+			echo '
+				<li><a href="'.$this->url('home').'">'.$this->translate('Accueil').'</a></li>
+				<li><a href="'.$this->url('fournisseur').'">'.$this->translate('Fournisseurs et interlocuteurs').'</a></li>
+				<li class="active">'.$this->translate('Fiche fournisseur').'</li>';  
+		break;
+	}
+
+?>
+
+</ol>

@@ -1,0 +1,422 @@
+<?php
+    use Zend\Session\Container;
+    $utilisateurCourant=new Container('utilisateur');
+    $flashArray = array('errors'=>array(),'success'=>array());
+    echo $this->doctype(); // <!DOCTYPE html>
+?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle($this->translate('Sigma 2.0 | '.$this->layout()->headTitle))->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <!-- Le styles -->
+        <?php 
+
+            if(!isset($this->plugins))
+            {
+                $this->plugins=array();
+            }
+
+            $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() .'/img/index.png'))
+                 ->appendStylesheet($this->basePath('css/Inspinia/bootstrap.min.css')) // Bootstrap 
+                 ->appendStylesheet($this->basePath('css/font-awesome/css/font-awesome.min.css')) // Font Awesome 4.3.0
+            ;
+
+            foreach($this->plugins as $plugin)
+            {
+                switch($plugin)
+                {
+                    case 'chosen':
+                        $this->headLink()
+                            ->appendStylesheet('/css/Inspinia/plugins/chosen/chosen.css');
+                    break;
+                    case 'jquery-ui':
+                        $this->headLink()
+                            ->appendStylesheet('/css/jquery-ui-1.11.4/jquery-ui.min.css');
+                    break;
+                    case 'mask':
+                        $this->headLink()
+                            ->appendStylesheet('/css/Inspinia/plugins/jasny/jasny-bootstrap.min.css');
+                    break;
+                    case 'dataTable':
+                        $this->headLink()
+                            ->appendStylesheet('/css/Inspinia/plugins/dataTables/dataTables.bootstrap.css')
+                            ->appendStylesheet('/css/Inspinia/plugins/dataTables/dataTables.responsive.css')
+                            ->appendStylesheet('/css/Inspinia/plugins/dataTables/dataTables.tableTools.min.css')
+                        ;
+                    break;
+                    case 'morris':
+                        $this->headLink()
+                            ->appendStylesheet('/css/Inspinia/plugins/morris/morris-0.4.3.min.css');
+                    break;
+                    case 'footable':
+                        $this->headLink()
+                            ->appendStylesheet('/css/Inspinia/plugins/footable/footable.core.css');
+                    break;
+                    case 'fullcalendar':
+                        $this->headLink()->appendStylesheet('/css/Inspinia/plugins/fullcalendar/fullcalendar.css');
+                    break;
+                }
+            }
+
+            $this->headLink()
+                 //->appendStylesheet($this->basePath('css/Inspinia/plugins/toastr/toastr.min.js'))
+                 ->appendStylesheet($this->basePath('css/Inspinia/animate.css'))
+                 ->appendStylesheet($this->basePath('css/Inspinia/style.css'))
+                 ->appendStylesheet($this->basePath('css/sigma.css'))
+            ;
+
+            echo $this->headLink();
+        ?>
+    </head>
+    <body class="pace-done">
+        <div class="wrapper">
+            <!-- Barre de navigation principale sur le coté gauche -->
+
+            <nav id="navigation" class="navbar navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="nav-header">
+                            <div class="dropdown profile-element">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <span class="clear"> 
+                                        <span class="block m-t-xs"> 
+                                            <strong class="font-bold"><?php echo $utilisateurCourant->offsetGet('identite'); ?></strong> 
+                                        </span> 
+                                        <span class="text-muted text-xs block">
+                                            <?php echo ($utilisateurCourant->offsetGet('admin')) ? $this->translate('Administrateur') : $this->translate('Connecté') ?> <b class="caret"></b>
+                                        </span> 
+                                    </span> 
+                                </a>
+                                <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                    <li><a href="<?php echo $this->url('profil'); ?>"><?php echo $this->translate('Votre profil') ?></a></li>
+                                    <li><a href="#"><?php echo $this->translate('Vos modules') ?></a></li>
+                                    <li><a href="<?php echo $this->url('application_logout'); ?>"><?php echo $this->translate('Se déconnecter') ?></a></li>
+                                </ul>
+                            </div>
+                            <div class="logo-element">
+                                <a href="<?php echo $this->url('profil'); ?>">&#931;+</a>
+                            </div>
+                        </li>
+                        <li<?php echo (!isset($this->module) || $this->module=='application')?' class="active"':''; ?> title="<?php echo $this->translate('Accueil') ?>">
+                            <a href="<?php echo $this->url('home'); ?>">
+                                <i class="fa fa-home"></i>
+                                <span class="nav-label"><?php echo $this->translate('Accueil') ?></span>
+                            </a>
+                        </li> 
+                        <li<?php echo (isset($this->module) && ($this->module=='client' || $this->module=='fournisseur') )?' class="active"':''; ?> title="<?php echo $this->translate('Relations commerciales') ?>">
+                            <a href="#">
+                                <i class="fa fa-users"></i>
+                                <span class="nav-label"><?php echo $this->translate('Relations') ?></span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse">
+                                <li<?php echo (isset($this->module) && $this->module=='client')?' class="active"':''; ?> title="<?php echo $this->translate('Clients') ?>">
+                                    <a href="<?php echo $this->url('client'); ?>">
+                                        <?php echo $this->translate('Clients') ?>
+                                    </a>
+                                </li>
+                                <li<?php echo (isset($this->module) && $this->module=='fournisseur')?' class="active"':''; ?> title="<?php echo $this->translate('Fournisseurs') ?>">
+                                    <a href="<?php echo $this->url('fournisseur'); ?>">
+                                        <?php echo $this->translate('Fournisseurs') ?>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li title="<?php echo $this->translate('Gestion commerciale') ?>">
+                            <a href="#">
+                                <i class="fa fa-file-text"></i>
+                                <span class="nav-label"><?php echo $this->translate('Gestion') ?></span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse">
+                                <li<?php echo (isset($this->module) && $this->module=='affaire')?' class="active"':''; ?> title="<?php echo $this->translate('Affaires') ?>">
+                                    <a href="<?php echo $this->url('affaire'); ?>">
+                                        <?php echo $this->translate('Affaires') ?>
+                                    </a>
+                                </li>
+                                <li<?php echo (isset($this->module) && $this->module=='devis')?' class="active"':''; ?> title="<?php echo $this->translate('Devis') ?>">
+                                    <a href="#">
+                                        <?php echo $this->translate('Devis') ?>
+                                    </a>
+                                </li>
+                                <li<?php echo (isset($this->module) && $this->module=='commande_fournisseur')?' class="active"':''; ?> title="<?php echo $this->translate('Commandes fournisseur') ?>">
+                                    <a href="#">
+                                        <?php echo $this->translate('Commandes fournisseur') ?>
+                                    </a>
+                                </li>
+                                <li<?php echo (isset($this->module) && $this->module=='confirmation_commande')?' class="active"':''; ?> title="<?php echo $this->translate('Confirmations de commandes') ?>">
+                                    <a href="#">
+                                        <?php echo $this->translate('Confirmations de commandes') ?>
+                                    </a>
+                                </li>
+                                <li<?php echo (isset($this->module) && $this->module=='bon_livraison')?' class="active"':''; ?> title="<?php echo $this->translate('Bons de livraison') ?>">
+                                    <a href="#">
+                                        <?php echo $this->translate('Bons de livraison') ?>
+                                    </a>
+                                </li>
+                                <li<?php echo (isset($this->module) && $this->module=='facture')?' class="active"':''; ?> title="<?php echo $this->translate('Factures') ?>">
+                                    <a href="#">
+                                        <?php echo $this->translate('Factures') ?>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li <?php echo (isset($this->module) && ($this->module=='produit' || $this->module=='fiche_heure') )?' class="active"':''; ?> title="<?php echo $this->translate('Ressources commerciales') ?>">
+                            <a href="#">
+                                <i class="fa fa-archive"></i>
+                                <span class="nav-label"><?php echo $this->translate('Ressources') ?></span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse">
+                                <li <?php echo (isset($this->module) && $this->module=='produit')?' class="active"':''; ?> title="<?php echo $this->translate('Produits') ?>">
+                                    <a href="<?php echo $this->url('produit'); ?>">
+                                        <!--<i class="fa fa-inbox"></i>-->
+                                        <?php echo $this->translate('Produits') ?>
+                                    </a>
+                                </li>
+                                <li <?php echo (isset($this->module) && $this->module=='fiche_heure')?' class="active"':''; ?> title="<?php echo $this->translate('Fiches d\'heures') ?>">
+                                    <a href="<?php echo $this->url('editer_fiche_heures'); ?>">
+                                        <!--<i class="fa fa-file"></i>-->
+                                        <?php echo $this->translate('Fiches d\'heures') ?>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li title="<?php echo $this->translate('Analyses') ?>">
+                            <a href="<?php echo $this->url('analyse'); ?>">
+                                <i class="fa fa-bar-chart"></i>
+                                <span class="nav-label"><?php echo $this->translate('Analyses') ?></span>
+                            </a>
+                        </li>
+                        <?php if($utilisateurCourant->offsetGet('admin')) : ?>
+                            <li title="<?php echo $this->translate('Panel d\'administration'); ?>">
+                                <a href="#">
+                                    <i class="fa fa-lock"></i>
+                                    <span class="nav-label"><?php echo $this->translate('Administration'); ?></span>
+                                    <span class="fa arrow"></span>
+                                </a>
+                                <ul class="nav nav-second-level collapse">
+                                    <li title="<?php echo $this->translate('Utilisateurs Sigma V2.0'); ?>">
+                                        <a href="<?php echo $this->url('personnel'); ?>">
+                                            <?php echo $this->translate('Utilisateurs'); ?>
+                                        </a>
+                                    </li>
+                                    <li title="<?php echo $this->translate('Données Sigma v2.0'); ?>">
+                                        <a href="#">
+                                            <?php echo $this->translate('Données'); ?>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
+                    </ul><!-- /.side-menu -->
+                </div><!-- /.sidebar-colapse -->
+            </nav><!-- ./Barre de navigation -->
+
+            <!-- Corps de l'application -->
+            <div id="page-wrapper" class="gray-bg">
+
+                <!-- Barre horizontale en haut -->
+                <div class="row border-bottom">
+                    <nav class="navbar navbar-static-top<?php echo isset($this->layout()->module)&&($this->module=='application')? ' white-bg': ''; ?>" role="navigation" style="margin-bottom: 0">
+                        <div class="navbar-header">
+                            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                            <a href="<?php echo $this->url('home'); ?>"><img id="logo" src="<?php echo $this->basePath().'/img/logo.png'; ?>" alt="<?php echo $this->translate('Sigma 2.0 - Zeppelin Systems France') ?>"></a>
+                        </div>
+                        <ul class="nav navbar-top-links navbar-right">
+                            <li>
+                                <form role="search" class="" method="get" action="#">
+                                    <select id="langage" class="form-control" onchange="window.location.href='?lang='+this.value;">
+                                        <option value="fr_FR"<?php echo ($utilisateurCourant->offsetGet('lang')=='fr_FR')? ' selected': ''; ?>><?php echo $this->translate('Français') ?></option>
+                                        <option value="en_US"<?php echo ($utilisateurCourant->offsetGet('lang')=='en_US')? ' selected': ''; ?>><?php echo $this->translate('Anglais') ?></option>
+                                    </select>
+                                </form>
+                            </li>
+                            <?php if($utilisateurCourant->offsetGet('connecte', false)) : ?>
+                                <li>
+                                    <a href="<?php echo $this->url('application_logout'); ?>">
+                                        <i class="fa fa-sign-out"></i> <?php echo $this->translate('Se déconnecter') ?>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div><!-- ./Barre horizontale en haut -->
+
+                <!-- Breadcrumb -->
+                <?php if (isset($this->layout()->module)&&($this->module!='application')): ?>
+                <div class="row border-bottom white-bg page-heading">
+                    <div class="col-lg-10">
+                        <h2><?php echo $this->translate($this->headTitle); ?></h2>
+                        <!--
+                        <ol class="breadcrumb">
+                            <?php //foreach($this->route as $r): ?>
+                                <li><a href="<?php //echo $this->url("$this->module"); ?>"><?php //echo $r; ?></a></li>
+                            <?php //endforeach; ?>
+                            <li class="active"><?php //echo $this->breadcrumbActive; ?></li>
+                        </ol>-->
+                        <?php echo $this->render('application/breadcrumb'); ?>
+                    </div>
+                    <div class="col-lg-2">
+                    </div>
+                </div>
+                <?php endif; ?>
+                <!-- ./Breadcrumb -->
+
+                <!-- Notifications -->
+                <?php 
+                    $messagesFlash = $utilisateurCourant->offsetGet('messagesFlash',$flashArray);
+
+                    if( isset($messagesFlash['errors']) && is_array($messagesFlash['errors']) && count($messagesFlash['errors'])>0 )
+                    {
+                        foreach($messagesFlash['errors'] as $key => $message)
+                        {
+                            echo '<div class="alert alert-danger">
+                                    <b class="message-title">'.$this->translate('Erreur#').$key.'</b> '.$this->translate($message).'
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                </div>';
+                            unset($messagesFlash['errors'][$key]);
+                        }
+                    }
+                    if( isset($messagesFlash['success']) && is_array($messagesFlash['success']) && count($messagesFlash['success'])>0 )
+                    {
+                        foreach($messagesFlash['success'] as $key => $message)
+                        {
+                            echo '<div class="alert alert-success">
+                                    <b class="message-title">'.$this->translate($key).'</b> '.$this->translate($message).'
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                </div>';
+                            unset($messagesFlash['success'][$key]);
+                        }
+                    }
+                    if( isset($messagesFlash['warnings']) && is_array($messagesFlash['warnings']) && count($messagesFlash['warnings'])>0 )
+                    {
+                        foreach($messagesFlash['warnings'] as $key => $message)
+                        {
+                            echo '<div class="alert alert-warning">
+                                    <b class="message-title">'.$this->translate($key).'</b> '.$this->translate($message).'
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                </div>';
+                            unset($messagesFlash['warnings'][$key]);
+                        }
+                    }
+                    if( isset($messagesFlash['infos']) && is_array($messagesFlash['infos']) && count($messagesFlash['infos'])>0 )
+                    {
+                        foreach($messagesFlash['infos'] as $key => $message)
+                        {
+                            echo '<div class="alert alert-info">
+                                    <b class="message-title">'.$this->translate($key).'</b> '.$this->translate($message).'
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                </div>';
+                            unset($messagesFlash['infos'][$key]);
+                        }
+                    }
+
+                    $utilisateurCourant->offsetSet('messagesFlash', $messagesFlash);
+                ?><!-- ./Notifications -->
+
+                <!-- Notifications JS comme le script toastr ne fonctionnait pas... Remplacé maintenant par des notifications de session en PHP -->
+                <!-- <div class="notification alert alert-success">
+                    <b class="message-title"></b>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                </div> --><!-- ./Notifications -->
+
+                <!-- Contenu -->
+                <div class="wrapper wrapper-content animated fadeInRight">
+                    <?php echo $this->content; ?>
+                </div><!-- ./Contenu -->
+
+                <!-- Footer -->
+                <div class="footer">
+                    <!-- To the right -->
+                    <div class="pull-right">
+                        <strong>Sigma</strong> V2.0
+                    </div>
+                    <!-- Default to the left -->
+                    <div class="hidden-xs">
+                        <strong>Copyright &copy; 2015 <a href="">Zeppelin Systems France</a>.</strong> <?php echo $this->translate('Tous droits réservés.') ?>
+                    </div>
+                </div><!-- ./Footer -->
+
+            </div><!-- ./Corps application -->
+
+
+            
+        </div><!-- /.wrapper -->
+
+        <!-- Scripts -->
+
+        <script type="text/javascript">
+            var _module='<?php echo $this->module; ?>';
+            var _action='<?php echo $this->action; ?>';
+            var locale ='<?php echo $utilisateurCourant->offsetGet('lang'); ?>';
+        </script>
+
+        <?php
+            $this->headScript()
+                ->appendFile($this->basePath('js/html5shiv.js'),   'text/javascript', array('conditional' => 'lt IE 9',))
+                ->appendFile($this->basePath('js/respond.min.js'), 'text/javascript', array('conditional' => 'lt IE 9',))
+                ->appendFile($this->basePath('js/jquery.min.js'))
+                ->appendFile($this->basePath('js/Inspinia/bootstrap.min.js'))
+                ->appendFile($this->basePath('js/Inspinia/plugins/metisMenu/jquery.metisMenu.js'))
+                ->appendFile($this->basePath('js/Inspinia/plugins/slimscroll/jquery.slimscroll.min.js'));
+            ; 
+            foreach($this->plugins as $plugin)
+            {
+                switch($plugin)
+                {
+                    case 'chosen':
+                        $this->headScript()->appendFile($this->basePath('js/Inspinia/plugins/chosen/chosen.jquery.js'));
+                    break;
+                    case 'jquery-ui':
+                        $this->headScript()->appendFile($this->basePath('js/jquery-ui-1.11.4/jquery-ui.min.js'));
+                    break;
+                    case 'mask':
+                        $this->headScript()
+                            ->appendFile($this->basePath('js/Inspinia/plugins/jasny/jasny-bootstrap.min.js'));
+                    break;
+                    case 'dataTable':
+                        $this->headScript()
+                            ->appendFile($this->basePath('js/Inspinia/plugins/dataTables/jquery.dataTables.js'))
+                            ->appendFile($this->basePath('js/Inspinia/plugins/dataTables/dataTables.bootstrap.js'))
+                            ->appendFile($this->basePath('js/Inspinia/plugins/dataTables/dataTables.responsive.js'))
+                            ->appendFile($this->basePath('js/Inspinia/plugins/dataTables/dataTables.tableTools.min.js'))
+                        ;
+                    break;
+                    case 'fullcalendar':
+                        $this->headScript()
+                            ->appendFile($this->basePath('js/Inspinia/plugins/fullcalendar/moment.min.js'))
+                            ->appendFile($this->basePath('js/Inspinia/plugins/fullcalendar/fullcalendar.min.js'));
+                    break;
+                    case 'morris':
+                        $this->headScript()
+                            ->appendFile($this->basePath('js/Inspinia/plugins/morris/raphael-2.1.0.min.js'))
+                            ->appendFile($this->basePath('js/Inspinia/plugins/morris/morris.js'));
+                    break;
+                    // case 'footable':
+                    //     $this->headScript()
+                    //         ->appendFile($this->basePath('js/Inspinia/plugins/footable/footable.all.min.js')); // Gestion de tables dont les lignes se rétractent et se développent
+                    // break;
+                }
+            }
+            $this->headScript()
+                ->appendFile($this->basePath('js/Inspinia/inspinia.js'))
+                ->appendFile($this->basePath('js/Inspinia/plugins/pace/pace.min.js'))
+                //->appendFile($this->basePath('js/Inspinia/plugins/toastr/toastr.min.js')) // Plugin de notification JQuery
+                ->appendFile($this->basePath('js/sigma.js'))
+            ;
+
+            echo $this->headScript();
+            
+            echo $this->inlineScript();
+        ?> 
+
+    </body>
+</html>

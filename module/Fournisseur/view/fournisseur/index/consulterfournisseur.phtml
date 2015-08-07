@@ -1,0 +1,254 @@
+<!-- module\Fournisseur\view\fournisseur\index\consulterfournisseur.phtml -->
+<?php 
+    $fournisseur=$this->fournisseur;
+    $interlocuteurs=$fournisseur->getInterlocuteurs();
+?>
+
+<div class="row">
+	<div class="col-md-7">
+		<div class="ibox float-e-margins">
+			<div class="ibox-content">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="m-b-md">
+                            <a href="#" id="fournisseur-delete-toggle" class="btn btn-danger btn-xs pull-right" data-target="#fournisseur-delete-modal" data-action="delete" data-id="<?php echo $fournisseur->getId(); ?>">
+                                <i class="fa fa-trash"></i>
+                                <?php echo $this->translate('Supprimer'); ?>
+                            </a>
+                            <a class="btn btn-white btn-xs pull-right" style="margin-right:5px;" href="<?php echo $this->url('formulaire_fournisseur',array('id'=>$fournisseur->getId())); ?>">
+                                <i class="fa fa-pencil"></i>
+                                <?php echo $this->translate('Modifier'); ?>
+                            </a>
+                            <h2><?php echo !(empty($fournisseur->getRaisonSociale())) ? $fournisseur->getRaisonSociale() : $this->translate('[Sans nom]') ; ?></h2>
+							<span class="text-muted small">
+								<?php echo $this->translate('Dernière modification :'); ?>
+								<i class="fa fa-clock-o"></i>
+								<?php echo $fournisseur->getDateCreationModificationFiche()->format('Y-m-d H:i:s'); ?>
+							</span>
+                        </div>
+                        <dl class="dl-horizontal col-sm-6">
+                            <dt><?php echo $this->translate('Code fournisseur :'); ?></dt>
+                            <dd><?php echo $fournisseur->getCodeFournisseur(); ?></dd>
+
+                            <dt><?php echo $this->translate('Téléphone :'); ?></dt>
+                            <dd><?php echo $fournisseur->getTelephone(); ?></dd>
+                            <dt><?php echo $this->translate('Fax :'); ?></dt>
+                            <dd><?php echo $fournisseur->getFax(); ?></dd>
+                            <dt><?php echo $this->translate('Site web :'); ?></dt>
+                            <dd><a href="<?php echo $fournisseur->getSiteWeb(); ?>" target="_blank"><?php echo $fournisseur->getSiteWeb(); ?></a></dd>
+
+                            <dt><?php echo $this->translate('Conditions de paiement :'); ?></dt>
+                            <dd><?php echo !(empty($fournisseur->getRefConditionReglement()))?$fournisseur->getRefConditionReglement()->getIntituleConditionReglement():''; ?></dd>
+                            <dt><?php echo $this->translate('Mode de règlement :'); ?></dt>
+                            <dd><?php echo !(empty($fournisseur->getRefModeReglement()))?$fournisseur->getRefModeReglement()->getIntituleModeReglement():''; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal col-sm-6">
+                            <dt><?php echo $this->translate('Conditions de paiement :'); ?></dt>
+                            <dd><?php echo !(empty($fournisseur->getRefConditionReglement()))?$fournisseur->getRefConditionReglement()->getIntituleConditionReglement():''; ?></dd>
+                            <dt><?php echo $this->translate('Mode de règlement :'); ?></dt>
+                            <dd><?php echo !(empty($fournisseur->getRefModeReglement()))?$fournisseur->getRefModeReglement()->getIntituleModeReglement():''; ?></dd>
+                            <dt><?php echo $this->translate('Activité :'); ?></dt>
+                            <dd><?php echo !(empty($fournisseur->getRefActivite())) ? $fournisseur->getRefActivite()->getIntituleActivite():''; ?></dd>
+                            <dt><?php echo $this->translate('Catégorie :'); ?></dt>
+                            <dd><?php echo !(empty($fournisseur->getRefCategorie())) ? $fournisseur->getRefCategorie()->getIntituleCategorie():''; ?></dd>
+                            <!-- <dt><?php echo $this->translate('Poste par défaut :'); ?></dt>
+                            <dd><?php echo !(empty($fournisseur->getRefPosteParDefaut())) ? $fournisseur->getRefPosteParDefaut()->getIntitulePoste():''; ?></dd> -->
+                        </dl>
+					</div>
+				</div>
+                <div class="fournisseur-lists">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" id="tab-interlocuteurs" class="active">
+                            <a href="#interlocuteurs" data-toggle="tab" aria-expanded="true">
+                                <i class="fa fa-user hidden-xs"></i>
+                                <?php echo $this->translate('Interlocuteurs'); ?>
+                            </a>
+                        </li>
+                        <li role="presentation" id="tab-adresses">
+                            <a href="#adresses" data-toggle="tab" aria-expanded="false">
+                                <i class="fa fa-map-marker hidden-xs"></i>
+                                <?php echo $this->translate('Adresses'); ?>
+                            </a>
+                        </li>
+                        <li id="tab-produits">
+                            <a href="#produits" data-toggle="tab" aria-expanded="false">
+                                <i class="fa fa-inbox"></i>
+                                <?php echo $this->translate('Produits'); ?>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="interlocuteurs" class="tab-pane active">
+                            <div class="scrollable">
+                                <div class="table-responsive">
+                                    <?php if(sizeof($interlocuteurs)>0): ?>
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <th><?php echo $this->translate('Interlocuteur'); ?></th>
+                                            <th><?php echo $this->translate('Fonction'); ?></th>
+                                            <th><?php echo $this->translate('Portable'); ?></th>
+                                        </thead>
+                                        <tbody>
+                                            <?php 
+                                                foreach($interlocuteurs as $i): 
+                                            ?>
+                                            <tr>
+                                                <td>
+                                                    <a href="#<?php echo $i->getId(); ?>" data-toggle="tab" class="link">
+                                                        <?php echo $i->getTitreCivilite().' '.$i->getPrenom().' '.$i->getNom(); ?>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <?php echo (!empty($i->getRefFonction())) ? $i->getRefFonction()->getIntituleFonction() : ''; ?>
+                                                </td>
+                                                <td><?php echo $i->getPortable(); ?></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                    <?php else: ?>
+                                        <p style="margin-top:15px"><?php echo $this->translate('Aucun interlocuteur trouvé.'); ?></p>
+                                    <?php endif; ?>
+                                </div>
+                                <span class="pull-right small text-muted"><?php echo sizeof($interlocuteurs).$this->translate(' interlocuteur(s)'); ?></span>
+                            </div>
+                        </div>
+                        <div id="adresses" class="tab-pane">
+                            <div class="scrollable">
+                                <?php 
+                                    $adresses=$fournisseur->getAdresses();
+                                    if(sizeof($adresses)>0): 
+                                ?>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <th><?php echo $this->translate('Rue'); ?></th>
+                                            <th><?php echo $this->translate('Code postal'); ?></th>
+                                            <th><?php echo $this->translate('Ville'); ?></th>
+                                            <th><?php echo $this->translate('Pays'); ?></th>
+                                            <th><?php echo $this->translate('Type d\'adresse'); ?></th>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach($adresses as $adresse): ?>
+                                            <tr>
+                                                <td><?php echo $adresse->getRue1().' '.$adresse->getRue2().' '.$adresse->getRue3(); ?></td>
+                                                <td><?php echo !(empty($adresse->getCodePostal()))?$adresse->getCodePostal():''; ?></td>
+                                                <td><?php echo !(empty($adresse->getVille()))?$adresse->getVille():''; ?></td>
+                                                <td><?php echo !(empty($adresse->getPays()))?$adresse->getPays():''; ?></td>
+                                                <td>
+                                                    <?php 
+                                                        if($adresse->getAdressePrincipale()==true)
+                                                        {
+                                                            echo '<small class="label label-info">'.$this->translate('Principale').'</small> ';
+                                                        }
+                                                        if($adresse->getAdresseFacturation()==true)
+                                                        {
+                                                            echo '<small class="label label-danger">'.$this->translate('Facturation').'</small> ';
+                                                        }
+                                                        if($adresse->getAdresseLivraison()==true)
+                                                        {
+                                                            echo '<small class="label label-primary">'.$this->translate('Livraison').'</small> ';
+                                                        }
+                                                        if($adresse->getAdressePostale()==true)
+                                                        {
+                                                            echo '<small class="label label-default">'.$this->translate('Postale').'</small> ';
+                                                        }
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <?php else: ?>
+                                    <p style="margin-top:15px"><?php echo $this->translate('Aucune adresse trouvée.'); ?></p>
+                                <?php endif; ?>
+                                <span class="pull-right small text-muted"><?php echo sizeof($adresses).$this->translate(' adresse(s)'); ?></span>
+                            </div>
+                        </div>
+                        <div id="produits" class="tab-pane">
+                            <p><?php echo $this->translate('Liste des produits'); ?></p>
+                        </div>
+                    </div>
+                </div>
+			</div>
+		</div>
+        <?php if(sizeof($interlocuteurs)>0): ?>
+        <div class="ibox">
+            <div class="ibox-content">
+                <div id="interlocuteur-details" class="tab-content">
+                    <?php
+                        foreach($interlocuteurs as $i){
+                            $civilite = $i->getTitreCivilite();
+                            $nom = $i->getNom();
+                            $prenom = $i->getPrenom();
+                            $telephone = $i->getTelephone();
+                            $mobile = $i->getPortable();
+                            $fax = $i->getFax();
+                            $email = $i->getEmail();
+                            $fonction = $i->getRefFonction();
+                            $envoiOutlook = $i->getEnvoiVersOutlook();
+                            $complement = $i->getComplement();
+                        
+                    ?>
+                        <div id="<?php echo $i->getId(); ?>" class="tab-pane">
+                            <h3>
+                                <strong>
+                                    <?php echo $civilite.' '.$i->getPrenom().' '.$i->getNom(); ?>
+                                </strong>
+                                <span class="text-muted small">
+                                    <?php echo $this->translate('Dernière modification : '); ?>
+                                    <i class="fa fa-clock-o"></i>
+                                    <?php echo $i->getDateCreationModificationFiche()->format('Y-m-d H:i:s'); ?>
+                                </span>
+                            </h3>
+
+                            <?php if($fonction): ?>
+                                <h4><?php echo $fonction->getIntituleFonction(); ?></h4>
+                            <?php endif; ?>
+                            
+                            <?php if($complement): ?>
+                                <div class="well well-sm">
+                                    <?php echo $complement; ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if($telephone): ?>
+                                <p><i class="fa fa-phone"></i> <?php echo $telephone; ?></p>
+                            <?php endif; ?>
+
+                            <?php if($mobile): ?>
+                                <p><i class="fa fa-mobile fa-lg"></i> <?php echo $mobile; ?></p>
+                            <?php endif; ?>
+
+                            <?php if($email): ?>
+                                <p><i class="fa fa-envelope"></i> <a href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a></p>
+                            <?php endif; ?>
+
+                            <?php if($fax): ?>
+                                <p><i class="fa fa-fax"></i> <?php echo $fax; ?></p>
+                            <?php endif; ?>                            
+
+                            <?php if($envoiOutlook): ?>
+                                <p class="small font-bold">
+                                    <span>
+                                        <i class="fa fa-circle text-warning"></i>
+                                        <?php echo $this->translate('Cet interlocuteur utilise Outlook.'); ?>
+                                    </span>
+                                </p>
+                            <?php endif; ?>
+
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>
+
+<?php   
+    echo $this->render('fournisseur/suppression_fournisseur'); // Modal de confirmation suppression fournisseur
+?>

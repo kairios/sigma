@@ -1,0 +1,369 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ZendSkeletonApplication\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-06-04 17:53+0100\n"
+"PO-Revision-Date: 2015-06-04 17:57+0100\n"
+"Last-Translator: Evan Coury <me@evancoury.com>\n"
+"Language-Team: ZF Contibutors <zf-devteam@zend.com>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: translate\n"
+"X-Poedit-Basepath: ..\\..\\\n"
+"X-Generator: Poedit 1.8.1\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: Application\n"
+"X-Poedit-SearchPath-1: Client\n"
+
+#: Application/src/Application/Controller/IndexController.php:45
+msgid "Outil de gestion commerciale - Zeppelin Sytems France"
+msgstr ""
+
+#: Client/src/Client/Controller/IndexController.php:94
+#: Client/src/Client/Controller/IndexController.php:95
+#: Application/view/layout/layout.phtml:98
+#: Client/view/client/index/listeclient.phtml:9
+msgid "Clients"
+msgstr "Customers"
+
+#: Client/src/Client/Controller/IndexController.php:226
+#: Client/src/Client/Controller/IndexController.php:227
+#: Client/view/client/index/listeclient.phtml:18
+#: Client/view/client/index/nouveauclient.phtml:6
+msgid "Nouveau client"
+msgstr "New customer"
+
+#: Client/src/Client/Controller/IndexController.php:247
+msgid "Ce client n'existe pas"
+msgstr ""
+
+#: Client/src/Client/Controller/IndexController.php:253
+msgid "Fiche client"
+msgstr ""
+
+#: Application/view/error/404.phtml:1
+msgid "A 404 error occurred"
+msgstr ""
+
+#: Application/view/error/404.phtml:10
+msgid "The requested controller was unable to dispatch the request."
+msgstr ""
+
+#: Application/view/error/404.phtml:13
+msgid "The requested controller could not be mapped to an existing controller class."
+msgstr ""
+
+#: Application/view/error/404.phtml:16
+msgid "The requested controller was not dispatchable."
+msgstr ""
+
+#: Application/view/error/404.phtml:19
+msgid "The requested URL could not be matched by routing."
+msgstr ""
+
+#: Application/view/error/404.phtml:22
+msgid "We cannot determine at this time why a 404 was generated."
+msgstr ""
+
+#: Application/view/error/404.phtml:34
+msgid "Controller"
+msgstr ""
+
+#: Application/view/error/404.phtml:41
+#, php-format
+msgid "resolves to %s"
+msgstr ""
+
+#: Application/view/error/404.phtml:53 Application/view/error/index.phtml:8
+msgid "Additional information"
+msgstr ""
+
+#: Application/view/error/404.phtml:56 Application/view/error/404.phtml:80
+#: Application/view/error/index.phtml:11 Application/view/error/index.phtml:35
+msgid "File"
+msgstr ""
+
+#: Application/view/error/404.phtml:60 Application/view/error/404.phtml:84
+#: Application/view/error/index.phtml:15 Application/view/error/index.phtml:39
+msgid "Message"
+msgstr ""
+
+#: Application/view/error/404.phtml:64 Application/view/error/404.phtml:88
+#: Application/view/error/index.phtml:19 Application/view/error/index.phtml:43
+msgid "Stack trace"
+msgstr ""
+
+#: Application/view/error/404.phtml:74 Application/view/error/index.phtml:29
+msgid "Previous exceptions"
+msgstr ""
+
+#: Application/view/error/404.phtml:103 Application/view/error/index.phtml:58
+msgid "No Exception available"
+msgstr ""
+
+#: Application/view/error/index.phtml:1
+msgid "An error occurred"
+msgstr ""
+
+#: Application/view/layout/layout.phtml:10
+msgid "Sigma 2.0 | "
+msgstr "Sigma 2.0 |"
+
+#: Application/view/layout/layout.phtml:71
+msgid "Administrateur"
+msgstr "Administrator"
+
+#: Application/view/layout/layout.phtml:74
+msgid "Profil"
+msgstr "Profile"
+
+#: Application/view/layout/layout.phtml:75
+msgid "Modules"
+msgstr ""
+
+#: Application/view/layout/layout.phtml:76
+#: Application/view/layout/layout.phtml:204
+msgid "Se déconnecter"
+msgstr "Logout"
+
+#: Application/view/layout/layout.phtml:86
+msgid "Accueil"
+msgstr "Home"
+
+#: Application/view/layout/layout.phtml:92
+msgid "Relations"
+msgstr "Relationship"
+
+#: Application/view/layout/layout.phtml:103
+msgid "Fournisseurs"
+msgstr "Suppliers"
+
+#: Application/view/layout/layout.phtml:111
+msgid "Gestion"
+msgstr "Management"
+
+#: Application/view/layout/layout.phtml:117
+msgid "Affaires"
+msgstr ""
+
+#: Application/view/layout/layout.phtml:122
+msgid "Demandes de prix"
+msgstr ""
+
+#: Application/view/layout/layout.phtml:127
+msgid "Devis"
+msgstr ""
+
+#: Application/view/layout/layout.phtml:132
+msgid "Commandes fournisseur"
+msgstr ""
+
+#: Application/view/layout/layout.phtml:137
+msgid "Confirmations de commandes"
+msgstr ""
+
+#: Application/view/layout/layout.phtml:142
+msgid "Bons de livraison"
+msgstr ""
+
+#: Application/view/layout/layout.phtml:147
+msgid "Factures"
+msgstr ""
+
+#: Application/view/layout/layout.phtml:155
+msgid "Ressources"
+msgstr "Resources"
+
+#: Application/view/layout/layout.phtml:162
+msgid "Produits"
+msgstr "Products"
+
+#: Application/view/layout/layout.phtml:168
+msgid "Fiches d'heures"
+msgstr ""
+
+#: Application/view/layout/layout.phtml:176
+msgid "Analyses"
+msgstr "Analyses"
+
+#: Application/view/layout/layout.phtml:191
+msgid "Sigma 2.0 - Zeppelin Systems France"
+msgstr ""
+
+#: Application/view/layout/layout.phtml:197
+msgid "Français"
+msgstr "French"
+
+#: Application/view/layout/layout.phtml:198
+msgid "Anglais"
+msgstr "English"
+
+#: Application/view/layout/layout.phtml:240
+msgid "Tous droits réservés."
+msgstr "All rights reserved."
+
+#: Client/view/client/index/consulterclient.phtml:14
+#: Client/view/client/index/consulterclient.phtml:48
+msgid "Modifier fournisseur"
+msgstr ""
+
+#: Client/view/client/index/consulterclient.phtml:15
+#: Client/view/client/index/consulterclient.phtml:49
+msgid "[Sans nom]"
+msgstr "[Missing name]"
+
+#: Client/view/client/index/consulterclient.phtml:17
+msgid "Dernière modification :"
+msgstr "Last modification :"
+
+#: Client/view/client/index/consulterclient.phtml:25
+msgid "Code client :"
+msgstr "Customer code :"
+
+#: Client/view/client/index/consulterclient.phtml:27
+msgid "Date création :"
+msgstr "Creation date :"
+
+#: Client/view/client/index/consulterclient.phtml:29
+msgid "Effectif salarié :"
+msgstr "Number of employees"
+
+#: Client/view/client/index/consulterclient.phtml:31
+msgid "Téléphone :"
+msgstr "Phone number :"
+
+#: Client/view/client/index/consulterclient.phtml:33
+msgid "Fax :"
+msgstr ""
+
+#: Client/view/client/index/consulterclient.phtml:35
+msgid "Site web :"
+msgstr "Website :"
+
+#: Client/view/client/index/consulterclient.phtml:37
+msgid "Email :"
+msgstr ""
+
+#: Client/view/client/index/listeclient.phtml:10
+msgid "Interlocuteurs"
+msgstr "Interlocutors"
+
+#: Client/view/client/index/listeclient.phtml:19
+msgid "Rechercher un client"
+msgstr "Search for customer"
+
+#: Client/view/client/index/listeclient.phtml:26
+#: Client/view/client/index/listeclient.phtml:89
+msgid "Rechercher"
+msgstr "Search"
+
+#: Client/view/client/index/listeclient.phtml:37
+#: Client/view/client/index/listeclient.phtml:47
+msgid "Code client"
+msgstr "Customer code"
+
+#: Client/view/client/index/listeclient.phtml:38
+#: Client/view/client/index/listeclient.phtml:48
+msgid "Raison sociale"
+msgstr "Corporate name"
+
+#: Client/view/client/index/listeclient.phtml:39
+#: Client/view/client/index/listeclient.phtml:49
+msgid "Code postale"
+msgstr "Postal code"
+
+#: Client/view/client/index/listeclient.phtml:40
+#: Client/view/client/index/listeclient.phtml:50
+msgid "Ville"
+msgstr "City"
+
+#: Client/view/client/index/listeclient.phtml:41
+#: Client/view/client/index/listeclient.phtml:51
+msgid "Pays"
+msgstr "Country"
+
+#: Client/view/client/index/listeclient.phtml:42
+#: Client/view/client/index/listeclient.phtml:52
+#: Client/view/client/index/listeclient.phtml:105
+#: Client/view/client/index/listeclient.phtml:115
+msgid "Actions"
+msgstr "Actions"
+
+#: Client/view/client/index/listeclient.phtml:73
+msgid "Aucune donnée n'a été trouvée."
+msgstr "No data found."
+
+#: Client/view/client/index/listeclient.phtml:81
+msgid "Nouvel interlocuteur"
+msgstr "New interlocutor"
+
+#: Client/view/client/index/listeclient.phtml:82
+msgid "Rechercher un interlocuteur"
+msgstr "Search for interlocutor"
+
+#: Client/view/client/index/listeclient.phtml:100
+#: Client/view/client/index/listeclient.phtml:110
+msgid "Interlocuteur"
+msgstr "Interlocuteur"
+
+#: Client/view/client/index/listeclient.phtml:101
+#: Client/view/client/index/listeclient.phtml:111
+msgid "Code société"
+msgstr "Company's code"
+
+#: Client/view/client/index/listeclient.phtml:102
+#: Client/view/client/index/listeclient.phtml:112
+msgid "Société"
+msgstr "Company"
+
+#: Client/view/client/index/listeclient.phtml:103
+#: Client/view/client/index/listeclient.phtml:113
+msgid "Email"
+msgstr ""
+
+#: Client/view/client/index/listeclient.phtml:104
+#: Client/view/client/index/listeclient.phtml:114
+msgid "Accepte infos"
+msgstr ""
+
+#: Client/view/client/index/modifierclient.phtml:2
+msgid "Formulaire d'ajout de client"
+msgstr ""
+
+#: Client/view/client/index/nouveauclient.phtml:8
+msgid "Retour"
+msgstr "Back"
+
+#: Client/view/client/index/nouveauclient.phtml:19
+#: Client/view/client/partial/adresse-form.phtml:9
+msgid "Enregistrer"
+msgstr "Save"
+
+#: Client/view/client/index/nouveauclient.phtml:80
+msgid "Annuler"
+msgstr "Cancel"
+
+#: Client/view/client/modal/overlay-confirmation-suppression.phtml:4
+msgid "Confirmation de suppression"
+msgstr "Deletion confirmation"
+
+#: Client/view/client/modal/overlay-confirmation-suppression.phtml:8
+msgid "Êtes-vous bien certain de vouloir supprimer ce client ?"
+msgstr ""
+
+#: Client/view/client/modal/overlay-confirmation-suppression.phtml:11
+msgid "Fermer"
+msgstr "Close"
+
+#: Client/view/client/modal/overlay-confirmation-suppression.phtml:12
+msgid "Chargement en cours..."
+msgstr "Loading..."
+
+#: Client/view/client/modal/overlay-confirmation-suppression.phtml:12
+msgid "Valider"
+msgstr "Validate"
+
+#~ msgid "All rights reserved."
+#~ msgstr "Tous droits réservés."
