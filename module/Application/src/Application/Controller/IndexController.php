@@ -152,7 +152,7 @@ class IndexController extends AbstractActionController
         $utilisateur->offsetSet('mot_de_passe',$motDePasse);
         $utilisateur->offsetSet('taux_horaire',$personnel->getTauxHoraire());
         $utilisateur->offsetSet('date_modif',$personnel->getDateCreationModification());
-        $utilisateur->offsetSet('fonction',$personnel->getRefFonction()->getIntituleFonction());
+        // $utilisateur->offsetSet('fonction',$personnel->getRefFonction()->getIntituleFonction());
         $utilisateur->offsetSet('connecte',true);
     }
 }

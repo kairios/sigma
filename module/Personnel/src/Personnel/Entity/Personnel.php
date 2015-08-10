@@ -77,15 +77,6 @@ class Personnel
      */
     private $tauxHoraire;
 
-    /**
-     * @var \Personnel\Entity\FonctionPersonnel
-     *
-     * @ORM\ManyToOne(targetEntity="Personnel\Entity\FonctionPersonnel")
-     * @ORM\JoinColumns({
-     *     @ORM\JoinColumn(name="ref_fonction", referencedColumnName="id")
-     * })
-     */
-    private $refFonction;
 
     public function getId()
     {
@@ -167,15 +158,6 @@ class Personnel
         $this->tauxHoraire = $tauxHoraire;
     }
 
-    public function getRefFonction()
-    {
-        return $this->refFonction;
-    }
-
-    public function setRefFonction($refFonction)
-    {
-        $this->refFonction = $refFonction;
-    }
 
     /**
      * Convert the object to an array.
@@ -184,14 +166,6 @@ class Personnel
      */
     public function getArrayCopy() 
     {
-        // $fonction = '';
-        $idFonction=$this->getRefFonction();
-        if(!(empty($idFonction)))
-        {
-            // $fonction=$idFonction->getIntituleFonction();
-            $idFonction=$idFonction->getId();
-        }
-
         return array(
             'id_personnel'          =>  $this->getId(),
             'nom'                   =>  $this->getNom(),
@@ -200,8 +174,6 @@ class Personnel
             'mot_de_passe'          =>  $this->getMotDePasse(),
             'administrateur'        =>  $this->getAdministrateur(),
             'taux_horaire'          =>  $this->getTauxHoraire(),
-            'ref_fonction'          =>  $idFonction,
-
         );
     }
   
@@ -212,9 +184,6 @@ class Personnel
      */
     public function exchangeArray($data = array(),$em=null) 
     {
-        $refFonction    = $em->getRepository('Personnel\Entity\FonctionPersonnel')->find( (int)$data['ref_fonction'] );
-        $fonction       = (!empty($refFonction)) ? $refFonction : null;
-
         $nom                            = (!empty($data['nom'])) ? $data['nom'] : null;
         $prenom                         = (!empty($data['prenom'])) ? $data['prenom'] : null;
         $email                          = (!empty($data['email'])) ? $data['email'] : null;
@@ -229,10 +198,7 @@ class Personnel
         $this->setTauxHoraire($tauxHoraire);
         //$this->setMotDePasse($motDePasse);
         $this->setAdminitrateur($data['administrateur']);
-        $this->setDateCreationModification($dateCreationModificationFiche);
-        $this->setRefFonction($fonction);
-
-        
+        $this->setDateCreationModification($dateCreationModificationFiche);     
     }
 
     public function loadByEmailAndPassword($em=null,$email='',$motDePasse='')
@@ -274,11 +240,9 @@ class Personnel
     public function getListeUtilisateurs($sm)
     {
         $query =   
-            "SELECT p.id, CONCAT_WS(' ', p.prenom, p.nom) AS nom_complet, p.email, f.intitule_fonction, p.taux_horaire 
+            "SELECT p.id, CONCAT_WS(' ', p.prenom, p.nom) AS nom_complet, p.email, p.taux_horaire 
              FROM personnel AS p
-                LEFT JOIN fonction_personnel AS f
-                    ON p.ref_fonction = f.id 
-            ORDER BY nom_complet ASC
+             ORDER BY nom_complet ASC
             "
         ;
 

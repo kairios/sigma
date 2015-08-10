@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-23 13:35:13
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-07-29 17:37:50
+ * @Last Modified time: 2015-08-10 14:27:27
  */
 
 // module\Client\src\Client\Controller\IndexController.php
@@ -470,7 +470,7 @@ class IndexController extends AbstractActionController
         $utilisateur->offsetSet('mot_de_passe',$motDePasse); // Hum... Réccupérer le mot de passe en session ou celui fournit par le formulaire. Encodé en MD5 à ce moment là ou pas ?
         $utilisateur->offsetSet('taux_horaire',$personnel->getTauxHoraire());
         $utilisateur->offsetSet('date_modif',$personnel->getDateCreationModification());
-        $utilisateur->offsetSet('fonction',$personnel->getRefFonction()->getIntituleFonction());
+        // $utilisateur->offsetSet('fonction',$personnel->getRefFonction()->getIntituleFonction());
         $utilisateur->offsetSet('connecte',true);
     }
 

@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-21 13:16:37
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-03 16:51:10
+ * @Last Modified time: 2015-08-10 14:26:35
  */
 
 // module\Personnel\src\Personnel\Form\PersonnelForm.php
@@ -12,7 +12,7 @@ namespace Personnel\Form;
 
 use Zend\Form\Form;
 use Personnel\Model\PersonnelModel;
-use Personnel\Entity\FonctionPersonnel;
+// use Personnel\Entity\FonctionPersonnel;
 use Personnel\Entity\Personnel;
 
 class PersonnelForm extends Form
@@ -113,19 +113,19 @@ class PersonnelForm extends Form
 						$options=array();
 						switch($field)
 						{
-							case 'ref_fonction':
-								$fonctions 	= $em->getRepository('Personnel\Entity\FonctionPersonnel')->findAll();
-								if(is_array($fonctions) && count($fonctions)>0)
-								{
-									foreach($fonctions as $fonction)
-									{
-										$options[]=array(
-											'value'=>$fonction->getId(),
-											'label'=>$translator->translate($fonction->getIntituleFonction())
-										);
-									}
-								}
-							break;
+							// case 'ref_fonction':
+							// 	$fonctions 	= $em->getRepository('Personnel\Entity\FonctionPersonnel')->findAll();
+							// 	if(is_array($fonctions) && count($fonctions)>0)
+							// 	{
+							// 		foreach($fonctions as $fonction)
+							// 		{
+							// 			$options[]=array(
+							// 				'value'=>$fonction->getId(),
+							// 				'label'=>$translator->translate($fonction->getIntituleFonction())
+							// 			);
+							// 		}
+							// 	}
+							// break;
 						}
 						$element['options']['value_options']=$options;
 					}

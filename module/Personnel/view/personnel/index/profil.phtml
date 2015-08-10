@@ -18,7 +18,7 @@
 				<?php endif; ?>
 			</h3>
 
-			<h4> <?php echo $fonction; ?></h4>
+			<!-- <h4> <?php // echo $fonction; ?></h4> -->
 			<p><i class="fa fa-clock-o"></i> <?php echo $utilisateurCourant->offsetGet('date_modif')->format('Y-m-d H:i:s'); ?></p>
 			<p><i class="fa fa-envelope"></i> <a href="mailto:<?php echo $utilisateurCourant->offsetGet('email'); ?>"><?php echo $utilisateurCourant->offsetGet('email'); ?></a></p>
 			<p><i class="fa fa-eur"></i> <?php echo ($utilisateurCourant->offsetGet('taux_horaire')) ? number_format($utilisateurCourant->offsetGet('taux_horaire'),2) : '&Oslash;' ?></p>

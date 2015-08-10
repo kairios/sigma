@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-21 13:16:19
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-07-24 16:39:38
+ * @Last Modified time: 2015-08-10 14:26:47
  */
 
 // module\Personnel\src\Personnel\Model\PersonnelModel.php
@@ -22,7 +22,7 @@ class PersonnelModel implements InputFilterAwareInterface
 		'id_personnel'				=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'Id')),
 		'nom'						=>array('type'=>'text','max'=>70,	'form'=>array('type'=>'text','required'=>true,'label'=>'Nom','static'=>true)),
 		'prenom'					=>array('type'=>'text','max'=>70,	'form'=>array('type'=>'text','required'=>true,'label'=>'Prénom','static'=>true)),
-		'ref_fonction'				=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>false,'label'=>'Fonction','static'=>true)),
+		// 'ref_fonction'				=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>false,'label'=>'Fonction','static'=>true)),
 		'taux_horaire'				=>array('type'=>'text','max'=>10,	'form'=>array('type'=>'text','required'=>false,'label'=>'Taux horaire','static'=>true)),
 		'administrateur'			=>array('type'=>'bool',				'form'=>array('type'=>'checkbox','required'=>false,'label'=>'Administrateur du site')),
 		'email'						=>array('type'=>'text','max'=>80,	'form'=>array('type'=>'text','required'=>true,'label'=>'Email','static'=>true)),

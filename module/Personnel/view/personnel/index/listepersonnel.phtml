@@ -31,7 +31,7 @@
 								<tr>
 									<th><?php echo $this->translate('Nom complet'); ?></th>
 									<th><?php echo $this->translate('Email'); ?></th>
-									<th><?php echo $this->translate('Fonction'); ?></th>
+									<!-- <th><?php echo $this->translate('Fonction'); ?></th> -->
 									<th><?php echo $this->translate('Taux horaire'); ?></th>
 									<th class="actions"><?php echo $this->translate('Actions'); ?></th>
 								</tr>
@@ -48,7 +48,7 @@
 												}
 											?>
 										</td>
-										<td><?php if(isset($personnel['intitule_fonction'])) { echo $this->translate($personnel['intitule_fonction']); } ?></td>
+										<!-- <td><?php // if(isset($personnel['intitule_fonction'])) { echo $this->translate($personnel['intitule_fonction']); } ?></td> -->
 										<td>
 											<?php 
 												if(isset($personnel['taux_horaire'])) 
