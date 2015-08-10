@@ -5,12 +5,12 @@ namespace Application\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TypeLivraisonCommandeFournisseur
+ * CategoriePoste
  *
- * @ORM\Table(name="type_livraison_commande_fournisseur")
+ * @ORM\Table(name="categorie_poste")
  * @ORM\Entity
  */
-class TypeLivraisonCommandeFournisseur
+class CategoriePoste
 {
     /**
      * @var integer
@@ -22,11 +22,11 @@ class TypeLivraisonCommandeFournisseur
     private $id;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="ref_intitule_type_livraison", type="integer", nullable=false)
+     * @ORM\Column(name="intitule_categorie", type="string", length=80, nullable=false)
      */
-    private $refIntituleTypeLivraison;
+    private $intituleCategorie;
 
 
 }

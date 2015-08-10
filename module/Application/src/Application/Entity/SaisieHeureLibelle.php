@@ -5,12 +5,12 @@ namespace Application\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CentreDeProfit
+ * SaisieHeureLibelle
  *
- * @ORM\Table(name="centre_de_profit")
+ * @ORM\Table(name="saisie_heure_libelle")
  * @ORM\Entity
  */
-class CentreDeProfit
+class SaisieHeureLibelle
 {
     /**
      * @var integer
@@ -22,18 +22,18 @@ class CentreDeProfit
     private $id;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="numero", type="integer", nullable=false)
+     * @ORM\Column(name="intitule_libelle", type="string", length=50, nullable=false)
      */
-    private $numero;
+    private $intituleLibelle;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="intitule_centre", type="string", length=50, nullable=false)
+     * @ORM\Column(name="value_libelle", type="string", length=50, nullable=true)
      */
-    private $intituleCentre;
+    private $valueLibelle;
 
 
 }

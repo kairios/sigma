@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Facture
  *
- * @ORM\Table(name="facture", indexes={@ORM\Index(name="fk_facture_client1_idx", columns={"ref_societe_client"}), @ORM\Index(name="fk_facture_interlocuteur_client1_idx", columns={"ref_interlocuteur_client"}), @ORM\Index(name="fk_facture_personnel1_idx", columns={"ref_personnel"}), @ORM\Index(name="fk_facture_affaire1_idx", columns={"ref_affaire"})})
+ * @ORM\Table(name="facture", indexes={@ORM\Index(name="fk_facture_client1_idx", columns={"ref_client"}), @ORM\Index(name="fk_facture_interlocuteur_client1_idx", columns={"ref_interlocuteur"}), @ORM\Index(name="fk_facture_personnel1_idx", columns={"ref_personnel"}), @ORM\Index(name="fk_facture_affaire1_idx", columns={"ref_affaire"})})
  * @ORM\Entity
  */
 class Facture
@@ -22,6 +22,48 @@ class Facture
     private $id;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="ref_affaire", type="integer", nullable=false)
+     */
+    private $refAffaire;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ref_client", type="integer", nullable=false)
+     */
+    private $refClient;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ref_interlocuteur", type="integer", nullable=true)
+     */
+    private $refInterlocuteur;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ref_personnel", type="integer", nullable=false)
+     */
+    private $refPersonnel;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_affaire", type="string", length=30, nullable=true)
+     */
+    private $numeroAffaire;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_facture", type="string", length=20, nullable=false)
+     */
+    private $numeroFacture;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_facture", type="date", nullable=false)
@@ -29,32 +71,11 @@ class Facture
     private $dateFacture;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="code_facture", type="string", length=20, nullable=false)
-     */
-    private $codeFacture;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="tva_inclus", type="boolean", nullable=false)
-     */
-    private $tvaInclus = '1';
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="tva", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $tva;
-
-    /**
      * @var integer
      *
-     * @ORM\Column(name="nombre_colis", type="integer", nullable=false)
+     * @ORM\Column(name="nb_colis", type="integer", nullable=false)
      */
-    private $nombreColis = '1';
+    private $nbColis = '1';
 
     /**
      * @var float
@@ -92,60 +113,32 @@ class Facture
     private $referenceBl;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="remarques", type="text", nullable=true)
+     * @ORM\Column(name="taux_tva", type="float", precision=10, scale=0, nullable=false)
      */
-    private $remarques;
+    private $tauxTva;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="facture_envoyee", type="boolean", nullable=false)
+     * @ORM\Column(name="tva_inclus", type="boolean", nullable=false)
      */
-    private $factureEnvoyee = '0';
+    private $tvaInclus = '1';
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="facture_reglee", type="boolean", nullable=false)
+     * @ORM\Column(name="envoyee", type="boolean", nullable=false)
      */
-    private $factureReglee = '0';
+    private $envoyee = '0';
 
     /**
-     * @var integer
+     * @var boolean
      *
-     * @ORM\Column(name="pourcentage_facture", type="integer", nullable=false)
+     * @ORM\Column(name="reglee", type="boolean", nullable=false)
      */
-    private $pourcentageFacture = '100';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="condition_reglement", type="string", length=60, nullable=true)
-     */
-    private $conditionReglement;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="mode_reglement", type="string", length=50, nullable=true)
-     */
-    private $modeReglement;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_reglement_attendu", type="date", nullable=true)
-     */
-    private $dateReglementAttendu;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_reglement_effectue", type="date", nullable=true)
-     */
-    private $dateReglementEffectue;
+    private $reglee = '0';
 
     /**
      * @var boolean
@@ -155,44 +148,25 @@ class Facture
     private $proformat = '0';
 
     /**
-     * @var \Application\Entity\Affaire
+     * @var float
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Affaire")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_affaire", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="total_ht", type="float", precision=10, scale=0, nullable=false)
      */
-    private $refAffaire;
+    private $totalHt = '0';
 
     /**
-     * @var \Application\Entity\Client
+     * @var float
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Client")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_societe_client", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="total_ttc", type="float", precision=10, scale=0, nullable=false)
      */
-    private $refSocieteClient;
+    private $totalTtc = '0';
 
     /**
-     * @var \Application\Entity\InterlocuteurClient
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\InterlocuteurClient")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_interlocuteur_client", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="remarques", type="text", nullable=true)
      */
-    private $refInterlocuteurClient;
-
-    /**
-     * @var \Application\Entity\Personnel
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Personnel")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_personnel", referencedColumnName="id")
-     * })
-     */
-    private $refPersonnel;
+    private $remarques;
 
 
 }

@@ -61,7 +61,7 @@ class Personnel
      *
      * @ORM\Column(name="administrateur", type="boolean", nullable=false)
      */
-    private $administrateur = '0';
+    private $administrateur = 0;
 
     /**
      * @var float
@@ -70,5 +70,10 @@ class Personnel
      */
     private $tauxHoraire;
 
-
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="supprime", type="boolean", nullable=false)
+     */
+    private $supprime = 0;
 }

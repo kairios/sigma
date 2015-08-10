@@ -1,16 +1,16 @@
 <?php
 
-namespace Application\Entity;
+
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TagFicheHeure
+ * RaisonPerte
  *
- * @ORM\Table(name="tag_fiche_heure")
+ * @ORM\Table(name="raison_perte")
  * @ORM\Entity
  */
-class TagFicheHeure
+class RaisonPerte
 {
     /**
      * @var integer
@@ -24,9 +24,9 @@ class TagFicheHeure
     /**
      * @var string
      *
-     * @ORM\Column(name="intitule_tag", type="string", length=30, nullable=false)
+     * @ORM\Column(name="intitule_raison_perte", type="string", length=100, nullable=false)
      */
-    private $intituleTag;
+    private $intituleRaisonPerte;
 
 
 }

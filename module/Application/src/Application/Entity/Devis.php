@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Devis
  *
- * @ORM\Table(name="devis", indexes={@ORM\Index(name="fk_devis_affaire1_idx", columns={"ref_affaire"})})
+ * @ORM\Table(name="devis", indexes={@ORM\Index(name="fk_devis_affaire1_idx", columns={"ref_affaire"}), @ORM\Index(name="ref_personnel", columns={"ref_personnel"})})
  * @ORM\Entity
  */
 class Devis
@@ -22,13 +22,6 @@ class Devis
     private $id;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_devis", type="date", nullable=false)
-     */
-    private $dateDevis;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="code_devis", type="string", length=50, nullable=false)
@@ -36,11 +29,18 @@ class Devis
     private $codeDevis;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_devis", type="date", nullable=false)
+     */
+    private $dateDevis;
+
+    /**
      * @var integer
      *
-     * @ORM\Column(name="version_devis", type="integer", nullable=false)
+     * @ORM\Column(name="version", type="integer", nullable=false)
      */
-    private $versionDevis = '1';
+    private $version = '1';
 
     /**
      * @var float
@@ -57,30 +57,9 @@ class Devis
     private $fraisPort = '0';
 
     /**
-     * @var float
-     *
-     * @ORM\Column(name="total_hors_frais_port", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $totalHorsFraisPort = '0';
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="total_avec_frais_port", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $totalAvecFraisPort = '0';
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="remarques", type="text", nullable=true)
-     */
-    private $remarques;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="delais_livraison", type="string", length=70, nullable=true)
+     * @ORM\Column(name="delais_livraison", type="string", length=50, nullable=true)
      */
     private $delaisLivraison;
 
@@ -94,28 +73,59 @@ class Devis
     /**
      * @var string
      *
-     * @ORM\Column(name="conditions_règlement", type="string", length=50, nullable=true)
+     * @ORM\Column(name="condition_reglement", type="string", length=60, nullable=true)
      */
-    private $conditionsRèglement;
+    private $conditionReglement;
 
     /**
-     * @var boolean
+     * @var float
      *
-     * @ORM\Column(name="devis_courant", type="boolean", nullable=false)
+     * @ORM\Column(name="total_hors_port", type="float", precision=10, scale=0, nullable=false)
      */
-    private $devisCourant = '1';
+    private $totalHorsPort = '0';
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="total_avec_port", type="float", precision=10, scale=0, nullable=false)
+     */
+    private $totalAvecPort = '0';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_envoi", type="date", nullable=true)
+     */
+    private $dateEnvoi;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_signature", type="date", nullable=true)
+     */
+    private $dateSignature;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_prenom_personnel", type="string", length=50, nullable=false)
+     * @ORM\Column(name="remarques", type="text", nullable=true)
      */
-    private $nomPrenomPersonnel;
+    private $remarques;
 
     /**
-     * @var \Application\Entity\Affaire
+     * @var \Personnel
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Affaire")
+     * @ORM\ManyToOne(targetEntity="Personnel")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ref_personnel", referencedColumnName="id")
+     * })
+     */
+    private $refPersonnel;
+
+    /**
+     * @var \Affaire
+     *
+     * @ORM\ManyToOne(targetEntity="Affaire")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_affaire", referencedColumnName="id")
      * })

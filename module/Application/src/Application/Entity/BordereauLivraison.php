@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * BordereauLivraison
  *
- * @ORM\Table(name="bordereau_livraison", indexes={@ORM\Index(name="fk_bordereau_livraison_client1_idx", columns={"ref_societe_client"}), @ORM\Index(name="fk_bordereau_livraison_interlocuteur_client1_idx", columns={"ref_interlocuteur_client"}), @ORM\Index(name="fk_bordereau_livraison_affaire1_idx", columns={"ref_affaire"})})
+ * @ORM\Table(name="bordereau_livraison", indexes={@ORM\Index(name="fk_bordereau_livraison_client1_idx", columns={"ref_client"}), @ORM\Index(name="fk_bordereau_livraison_interlocuteur_client1_idx", columns={"ref_interlocuteur"}), @ORM\Index(name="fk_bordereau_livraison_affaire1_idx", columns={"ref_affaire"})})
  * @ORM\Entity
  */
 class BordereauLivraison
@@ -24,56 +24,56 @@ class BordereauLivraison
     /**
      * @var string
      *
-     * @ORM\Column(name="code_bordereau_livraison", type="string", length=50, nullable=false)
+     * @ORM\Column(name="code_bordereau", type="string", length=50, nullable=false)
      */
-    private $codeBordereauLivraison;
+    private $codeBordereau;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_bordereau_livraison", type="date", nullable=false)
+     * @ORM\Column(name="date_bordereau", type="date", nullable=false)
      */
-    private $dateBordereauLivraison;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="reference_commande_client", type="string", length=45, nullable=true)
-     */
-    private $referenceCommandeClient;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="livraison_effectuee", type="boolean", nullable=false)
-     */
-    private $livraisonEffectuee = '0';
+    private $dateBordereau;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="nbre_palette", type="integer", nullable=false)
+     * @ORM\Column(name="nb_palette", type="integer", nullable=false)
      */
-    private $nbrePalette = '0';
+    private $nbPalette = 1;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="poids_total_colis", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\Column(name="poids_colis", type="float", precision=10, scale=0, nullable=false)
      */
-    private $poidsTotalColis = '0';
+    private $poidsColis = 0;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="transporteur", type="string", length=150, nullable=true)
+     * @ORM\Column(name="transporteur", type="string", length=50, nullable=true)
      */
     private $transporteur;
 
     /**
-     * @var \Application\Entity\Affaire
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Affaire")
+     * @ORM\Column(name="reference_commande_client", type="string", length=50, nullable=true)
+     */
+    private $referenceCommandeClient;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_livraison", type="date", nullable=true)
+     */
+    private $dateLivraison;
+
+    /**
+     * @var \Affaire
+     *
+     * @ORM\ManyToOne(targetEntity="Affaire")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_affaire", referencedColumnName="id")
      * })
@@ -81,24 +81,24 @@ class BordereauLivraison
     private $refAffaire;
 
     /**
-     * @var \Application\Entity\Client
+     * @var \Client
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Client")
+     * @ORM\ManyToOne(targetEntity="Client")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_societe_client", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_client", referencedColumnName="id")
      * })
      */
-    private $refSocieteClient;
+    private $refClient;
 
     /**
-     * @var \Application\Entity\InterlocuteurClient
+     * @var \InterlocuteurClient
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\InterlocuteurClient")
+     * @ORM\ManyToOne(targetEntity="InterlocuteurClient")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_interlocuteur_client", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_interlocuteur", referencedColumnName="id")
      * })
      */
-    private $refInterlocuteurClient;
+    private $refInterlocuteur;
 
 
 }

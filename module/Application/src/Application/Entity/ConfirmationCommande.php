@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ConfirmationCommande
  *
- * @ORM\Table(name="confirmation_commande", indexes={@ORM\Index(name="fk_confirmation_commande_affaire1_idx", columns={"ref_affaire"}), @ORM\Index(name="fk_confirmation_commande_personnel1_idx", columns={"ref_personnel"}), @ORM\Index(name="fk_confirmation_commande_client1_idx", columns={"ref_societe_client"}), @ORM\Index(name="fk_confirmation_commande_interlocuteur_client1_idx", columns={"ref_interlocuteur_client"})})
+ * @ORM\Table(name="confirmation_commande", indexes={@ORM\Index(name="fk_confirmation_commande_affaire1_idx", columns={"ref_affaire"}), @ORM\Index(name="fk_confirmation_commande_personnel1_idx", columns={"ref_personnel"}), @ORM\Index(name="fk_confirmation_commande_client1_idx", columns={"ref_client"}), @ORM\Index(name="fk_confirmation_commande_interlocuteur_client1_idx", columns={"ref_interlocuteur"})})
  * @ORM\Entity
  */
 class ConfirmationCommande
@@ -24,30 +24,23 @@ class ConfirmationCommande
     /**
      * @var string
      *
-     * @ORM\Column(name="code_confirmation_commande", type="string", length=50, nullable=false)
+     * @ORM\Column(name="numero_affaire", type="string", length=30, nullable=false)
      */
-    private $codeConfirmationCommande;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_confirmation_commande", type="date", nullable=false)
-     */
-    private $dateConfirmationCommande;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="confirmation_envoyee", type="boolean", nullable=false)
-     */
-    private $confirmationEnvoyee = '0';
+    private $numeroAffaire;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="remarques", type="text", nullable=true)
+     * @ORM\Column(name="code_confirmation", type="string", length=50, nullable=false)
      */
-    private $remarques;
+    private $codeConfirmation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_confirmation", type="date", nullable=false)
+     */
+    private $dateConfirmation;
 
     /**
      * @var string
@@ -57,9 +50,30 @@ class ConfirmationCommande
     private $delaisLivraison;
 
     /**
-     * @var \Application\Entity\Affaire
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Affaire")
+     * @ORM\Column(name="reference_commande_client", type="string", length=50, nullable=true)
+     */
+    private $referenceCommandeClient;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_envoi", type="date", nullable=true)
+     */
+    private $dateEnvoi;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remarques", type="text", nullable=true)
+     */
+    private $remarques;
+
+    /**
+     * @var \Affaire
+     *
+     * @ORM\ManyToOne(targetEntity="Affaire")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_affaire", referencedColumnName="id")
      * })
@@ -67,29 +81,29 @@ class ConfirmationCommande
     private $refAffaire;
 
     /**
-     * @var \Application\Entity\Client
+     * @var \Client
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Client")
+     * @ORM\ManyToOne(targetEntity="Client")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_societe_client", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_client", referencedColumnName="id")
      * })
      */
-    private $refSocieteClient;
+    private $refClient;
 
     /**
-     * @var \Application\Entity\InterlocuteurClient
+     * @var \InterlocuteurClient
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\InterlocuteurClient")
+     * @ORM\ManyToOne(targetEntity="InterlocuteurClient")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_interlocuteur_client", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_interlocuteur", referencedColumnName="id")
      * })
      */
-    private $refInterlocuteurClient;
+    private $refInterlocuteur;
 
     /**
-     * @var \Application\Entity\Personnel
+     * @var \Personnel
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Personnel")
+     * @ORM\ManyToOne(targetEntity="Personnel")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_personnel", referencedColumnName="id")
      * })

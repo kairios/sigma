@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Produit
  *
- * @ORM\Table(name="produit", indexes={@ORM\Index(name="fk_produit_translation1_idx", columns={"ref_intitule"}), @ORM\Index(name="fk_produit_segment", columns={"ref_segment"})})
+ * @ORM\Table(name="produit")
  * @ORM\Entity
  */
 class Produit
@@ -29,24 +29,25 @@ class Produit
     private $codeProduit;
 
     /**
-     * @var \Application\Entity\Segment
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Segment")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_segment", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="intitule_produit", type="string", length=120, nullable=false)
      */
-    private $refSegment;
+    private $intituleProduit;
 
     /**
-     * @var \Application\Entity\Traduction
+     * @var \DateTime
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Traduction")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_intitule", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="date_creation_modification_fiche", type="datetime", nullable=false)
      */
-    private $refIntitule;
+    private $dateCreationModificationFiche = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remarques", type="text", nullable=true)
+     */
+    private $remarques;
 
 
 }

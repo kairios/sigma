@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Affaire
  *
- * @ORM\Table(name="affaire", indexes={@ORM\Index(name="fk_affaire_raison_perte1_idx", columns={"ref_raison_perte"}), @ORM\Index(name="fk_affaire_client1_idx", columns={"ref_societe_client"}), @ORM\Index(name="fk_affaire_interlocuteur_client1_idx", columns={"ref_interlocuteur_client"}), @ORM\Index(name="fk_affaire_etat_affaire1_idx", columns={"ref_etat_affaire"}), @ORM\Index(name="fk_affaire_tbl_personnel1_idx", columns={"ref_personnel_par_defaut"}), @ORM\Index(name="fk_affaire_centre_de_profit1_idx", columns={"ref_centre_profit"}), @ORM\Index(name="fk_affaire_condition_reglement1_idx", columns={"ref_condition_reglement"})})
+ * @ORM\Table(name="affaire", indexes={@ORM\Index(name="fk_affaire_client1_idx", columns={"ref_client"}), @ORM\Index(name="fk_affaire_interlocuteur_client1_idx", columns={"ref_interlocuteur"}), @ORM\Index(name="fk_affaire_tbl_personnel1_idx", columns={"ref_personnel"}), @ORM\Index(name="fk_affaire_centre_de_profit1_idx", columns={"ref_centre_profit"}), @ORM\Index(name="fk_affaire_condition_reglement1_idx", columns={"ref_condition_reglement"}), @ORM\Index(name="ref_concurrent", columns={"ref_concurrent"}), @ORM\Index(name="ref_devis_signe", columns={"ref_devis_signe"})})
  * @ORM\Entity
  */
 class Affaire
@@ -22,32 +22,46 @@ class Affaire
     private $id;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="numero_affaire", type="integer", nullable=false)
+     * @ORM\Column(name="numero_affaire", type="string", length=30, nullable=false)
      */
     private $numeroAffaire;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_affaire", type="string", length=150, nullable=true)
+     * @ORM\Column(name="designation_affaire", type="string", length=150, nullable=true)
      */
-    private $nomAffaire;
+    private $designationAffaire;
 
     /**
-     * @var \DateTime
+     * @var integer
      *
-     * @ORM\Column(name="date_creation_affaire", type="date", nullable=false)
+     * @ORM\Column(name="exercice", type="integer", nullable=false)
      */
-    private $dateCreationAffaire;
+    private $exercice;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code_affaire", type="string", length=30, nullable=false)
+     * @ORM\Column(name="demande_client", type="text", nullable=true)
      */
-    private $codeAffaire;
+    private $demandeClient;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="remise", type="float", precision=10, scale=0, nullable=false)
+     */
+    private $remise = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="frais_port", type="float", precision=10, scale=0, nullable=false)
+     */
+    private $fraisPort = 0;
 
     /**
      * @var string
@@ -66,90 +80,62 @@ class Affaire
     /**
      * @var boolean
      *
-     * @ORM\Column(name="devis_prepare", type="boolean", nullable=false)
-     */
-    private $devisPrepare = '0';
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="commande_passee", type="boolean", nullable=false)
-     */
-    private $commandePassee = '0';
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="remise", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $remise = '0';
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="frais_port", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $fraisPort = '0';
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="contrat_signe", type="boolean", nullable=false)
-     */
-    private $contratSigne = '0';
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_signature", type="date", nullable=true)
-     */
-    private $dateSignature;
-
-    /**
-     * @var boolean
-     *
      * @ORM\Column(name="suivi_budget_actif", type="boolean", nullable=false)
      */
-    private $suiviBudgetActif = '0';
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="exercice_fiscal", type="integer", nullable=false)
-     */
-    private $exerciceFiscal;
+    private $suiviBudgetActif = 0;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_perte_projet", type="date", nullable=true)
+     * @ORM\Column(name="date_debut", type="date", nullable=false)
      */
-    private $datePerteProjet;
+    private $dateDebut;
 
     /**
-     * @var \Application\Entity\CentreDeProfit
+     * @var \DateTime
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\CentreDeProfit")
+     * @ORM\Column(name="date_fin", type="date", nullable=true)
+     */
+    private $dateFin;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="etat_affaire", type="string", length=30, nullable=false)
+     */
+    private $etatAffaire;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="raison_perte", type="string", length=150, nullable=true)
+     */
+    private $raisonPerte;
+
+    /**
+     * @var \InterlocuteurClient
+     *
+     * @ORM\ManyToOne(targetEntity="InterlocuteurClient")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_centre_profit", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_interlocuteur", referencedColumnName="id")
      * })
      */
-    private $refCentreProfit;
+    private $refInterlocuteur;
 
     /**
-     * @var \Application\Entity\Client
+     * @var \Personnel
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Client")
+     * @ORM\ManyToOne(targetEntity="Personnel")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_societe_client", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_personnel", referencedColumnName="id")
      * })
      */
-    private $refSocieteClient;
+    private $refPersonnel;
 
     /**
-     * @var \Application\Entity\ConditionReglement
+     * @var \ConditionReglement
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\ConditionReglement")
+     * @ORM\ManyToOne(targetEntity="ConditionReglement")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_condition_reglement", referencedColumnName="id")
      * })
@@ -157,44 +143,44 @@ class Affaire
     private $refConditionReglement;
 
     /**
-     * @var \Application\Entity\EtatAffaire
+     * @var \Fournisseur
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\EtatAffaire")
+     * @ORM\ManyToOne(targetEntity="Fournisseur")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_etat_affaire", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_concurrent", referencedColumnName="id")
      * })
      */
-    private $refEtatAffaire;
+    private $refConcurrent;
 
     /**
-     * @var \Application\Entity\InterlocuteurClient
+     * @var \Devis
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\InterlocuteurClient")
+     * @ORM\ManyToOne(targetEntity="Devis")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_interlocuteur_client", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_devis_signe", referencedColumnName="id")
      * })
      */
-    private $refInterlocuteurClient;
+    private $refDevisSigne;
 
     /**
-     * @var \Application\Entity\RaisonPerte
+     * @var \CentreDeProfit
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\RaisonPerte")
+     * @ORM\ManyToOne(targetEntity="CentreDeProfit")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_raison_perte", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_centre_profit", referencedColumnName="id")
      * })
      */
-    private $refRaisonPerte;
+    private $refCentreProfit;
 
     /**
-     * @var \Application\Entity\Personnel
+     * @var \Client
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Personnel")
+     * @ORM\ManyToOne(targetEntity="Client")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_personnel_par_defaut", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_client", referencedColumnName="id")
      * })
      */
-    private $refPersonnelParDefaut;
+    private $refClient;
 
 
 }

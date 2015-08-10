@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CommandeFournisseur
  *
- * @ORM\Table(name="commande_fournisseur", indexes={@ORM\Index(name="fk_commande_fournisseur_affaire1_idx", columns={"ref_affaire"}), @ORM\Index(name="fk_commande_fournisseur_personnel1_idx", columns={"ref_personnel"}), @ORM\Index(name="fk_commande_fournisseur_fournisseur1_idx", columns={"ref_societe_fournisseur"}), @ORM\Index(name="fk_commande_fournisseur_interlocuteur_fournisseur1_idx", columns={"ref_interlocuteur_fournisseur"}), @ORM\Index(name="fk_commande_fournisseur_type_livraison1_idx", columns={"ref_type_livraison"}), @ORM\Index(name="fk_commande_fournisseur_mode_reglement1_idx", columns={"ref_mode_reglement"}), @ORM\Index(name="fk_commande_fournisseur_condition_reglement1_idx", columns={"ref_condition_reglement"})})
+ * @ORM\Table(name="commande_fournisseur", indexes={@ORM\Index(name="fk_commande_fournisseur_affaire1_idx", columns={"ref_affaire"}), @ORM\Index(name="fk_commande_fournisseur_personnel1_idx", columns={"ref_personnel"}), @ORM\Index(name="fk_commande_fournisseur_fournisseur1_idx", columns={"ref_fournisseur"}), @ORM\Index(name="fk_commande_fournisseur_interlocuteur_fournisseur1_idx", columns={"ref_interlocuteur"}), @ORM\Index(name="fk_commande_fournisseur_mode_reglement1_idx", columns={"ref_mode_reglement"}), @ORM\Index(name="fk_commande_fournisseur_condition_reglement1_idx", columns={"ref_condition_reglement"})})
  * @ORM\Entity
  */
 class CommandeFournisseur
@@ -24,16 +24,16 @@ class CommandeFournisseur
     /**
      * @var string
      *
-     * @ORM\Column(name="code_commande_fournisseur", type="string", length=20, nullable=false)
+     * @ORM\Column(name="code_commande", type="string", length=20, nullable=false)
      */
-    private $codeCommandeFournisseur;
+    private $codeCommande;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_commande_fournisseur", type="date", nullable=false)
+     * @ORM\Column(name="date_commande", type="date", nullable=false)
      */
-    private $dateCommandeFournisseur;
+    private $dateCommande;
 
     /**
      * @var string
@@ -59,23 +59,30 @@ class CommandeFournisseur
     /**
      * @var string
      *
-     * @ORM\Column(name="autre_adresse_livraison", type="text", nullable=true)
-     */
-    private $autreAdresseLivraison;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="delai_livraison_souhaite", type="string", length=70, nullable=true)
      */
     private $delaiLivraisonSouhaite;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="commande_passee", type="boolean", nullable=false)
+     * @ORM\Column(name="type_livraison", type="integer", nullable=false)
      */
-    private $commandePassee = '0';
+    private $typeLivraison = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="autre_adresse_livraison", type="text", nullable=true)
+     */
+    private $autreAdresseLivraison;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_envoi", type="date", nullable=true)
+     */
+    private $dateEnvoi;
 
     /**
      * @var string
@@ -85,9 +92,9 @@ class CommandeFournisseur
     private $remarques;
 
     /**
-     * @var \Application\Entity\Affaire
+     * @var \Affaire
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Affaire")
+     * @ORM\ManyToOne(targetEntity="Affaire")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_affaire", referencedColumnName="id")
      * })
@@ -95,49 +102,29 @@ class CommandeFournisseur
     private $refAffaire;
 
     /**
-     * @var \Application\Entity\ConditionReglement
+     * @var \Fournisseur
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\ConditionReglement")
+     * @ORM\ManyToOne(targetEntity="Fournisseur")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_condition_reglement", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_fournisseur", referencedColumnName="id")
      * })
      */
-    private $refConditionReglement;
+    private $refFournisseur;
 
     /**
-     * @var \Application\Entity\Fournisseur
+     * @var \InterlocuteurFournisseur
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Fournisseur")
+     * @ORM\ManyToOne(targetEntity="InterlocuteurFournisseur")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_societe_fournisseur", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_interlocuteur", referencedColumnName="id")
      * })
      */
-    private $refSocieteFournisseur;
+    private $refInterlocuteur;
 
     /**
-     * @var \Application\Entity\InterlocuteurFournisseur
+     * @var \Personnel
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\InterlocuteurFournisseur")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_interlocuteur_fournisseur", referencedColumnName="id")
-     * })
-     */
-    private $refInterlocuteurFournisseur;
-
-    /**
-     * @var \Application\Entity\ModeReglement
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\ModeReglement")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_mode_reglement", referencedColumnName="id")
-     * })
-     */
-    private $refModeReglement;
-
-    /**
-     * @var \Application\Entity\Personnel
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Personnel")
+     * @ORM\ManyToOne(targetEntity="Personnel")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_personnel", referencedColumnName="id")
      * })
@@ -145,14 +132,24 @@ class CommandeFournisseur
     private $refPersonnel;
 
     /**
-     * @var \Application\Entity\TypeLivraisonCommandeFournisseur
+     * @var \ConditionReglement
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\TypeLivraisonCommandeFournisseur")
+     * @ORM\ManyToOne(targetEntity="ConditionReglement")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_type_livraison", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_condition_reglement", referencedColumnName="id")
      * })
      */
-    private $refTypeLivraison;
+    private $refConditionReglement;
+
+    /**
+     * @var \ModeReglement
+     *
+     * @ORM\ManyToOne(targetEntity="ModeReglement")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ref_mode_reglement", referencedColumnName="id")
+     * })
+     */
+    private $refModeReglement;
 
 
 }
