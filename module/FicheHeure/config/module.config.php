@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-29 17:42:02
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-07-29 18:06:50
+ * @Last Modified time: 2015-08-10 17:47:36
  */
 
 // module\FicheHeure\config\module.config.php
@@ -60,9 +60,9 @@ return array(
     ),
     'view_manager' => array(
         'template_map' => array(
-            'fiche_heure/index'           => __DIR__ . '/../view/fiche_heure/index/index.phtml',
-            'fiche_heure/editerficheheure' => __DIR__ . '/../view/fiche_heure/index/editerficheheure.phtml',
-            'fiche_heure/formulaireheures' => __DIR__ . '/../view/fiche_heure/index/formulaireheures.phtml',
+            'fiche_heure/index'           => __DIR__ . '/../view/fiche-heure/index/index.phtml',
+            'fiche_heure/editerficheheure' => __DIR__ . '/../view/fiche-heure/index/editerficheheure.phtml',
+            'fiche_heure/formulairesaisieheure' => __DIR__ . '/../view/fiche-heure/index/formulairesaisieheure.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

@@ -15,7 +15,7 @@ class SaisieHeureLibelle
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,16 +24,17 @@ class SaisieHeureLibelle
     /**
      * @var string
      *
-     * @ORM\Column(name="intitule_libelle", type="string", length=50, nullable=false)
+     * @ORM\Column(name="intitule_libelle", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
      */
     private $intituleLibelle;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="value_libelle", type="string", length=50, nullable=true)
+     * @ORM\Column(name="value_libelle", type="string", length=50, precision=0, scale=0, nullable=true, unique=false)
      */
     private $valueLibelle;
+
 
     /**
      * Get id
@@ -90,8 +91,4 @@ class SaisieHeureLibelle
     {
         return $this->valueLibelle;
     }
-
-
 }
-
-?>
