@@ -96,7 +96,19 @@ class IndexController extends AbstractActionController
         if($utilisateurCourant == null)
             throw new \Exception($translator->translate('Une erreur est survenue au chargement des heures.'));
 
-        $saisiesHoraires = $em->getRepository('FicheHeure\Entity\SaisieHeureJournee')->findAll();
+        $array = array();
+        $saisiesHoraires = $em->getRepository('FicheHeure\Entity\SaisieHeureJournee')->findAll(); // a transformer en array compréhensible par la conversion JSON.
+
+        foreach($saisiesHoraires as $saisie)
+        {
+            $id = 99;
+            $title = 'Machin';
+            $start = '2015-08-19';
+            $allDay = false;
+
+            $saisiesHoraires[0] = array('id'=>$id, 'title'=>$title, 'start'=>$start, 'allDay'=>$allDay);
+        }
+        // var_dump($saisiesHoraires[0]);die();
 
         // $saisieHoraire      = new SaisieHeureJournee($utilisateurCourant);
         // $form               = new SaisieHeureJourneeForm($translator,$sm,$em,$request,$saisieHoraire);
@@ -112,7 +124,7 @@ class IndexController extends AbstractActionController
         ));
 
         return new ViewModel(array(
-            'saisiesHoraires' => $saisiesHoraires
+            'saisiesHoraires' => json_encode($saisiesHoraires)
         ));
     }
 

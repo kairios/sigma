@@ -393,7 +393,8 @@
                     case 'fullcalendar':
                         $this->headScript()
                             ->appendFile($this->basePath('js/Inspinia/plugins/fullcalendar/moment.min.js'))
-                            ->appendFile($this->basePath('js/Inspinia/plugins/fullcalendar/fullcalendar.min.js'));
+                            ->appendFile($this->basePath('js/Inspinia/plugins/fullcalendar/fullcalendar.min.js'))
+                            ->appendFile($this->basePath('js/Inspinia/plugins/fullcalendar/lang/'.$utilisateurCourant->offsetGet('lang').'.js'));
                     break;
                     case 'morris':
                         $this->headScript()
