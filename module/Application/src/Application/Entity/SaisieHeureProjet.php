@@ -1,16 +1,16 @@
 <?php
 
-namespace Application\Entity;
+
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SaisieHeure
+ * SaisieHeureProjet
  *
- * @ORM\Table(name="saisie_heure", indexes={@ORM\Index(name="ref_personnel", columns={"ref_personnel"}), @ORM\Index(name="ref_libelle", columns={"ref_libelle"}), @ORM\Index(name="ref_affaire", columns={"ref_affaire"}), @ORM\Index(name="ref_poste", columns={"ref_poste"})})
+ * @ORM\Table(name="saisie_heure_projet", indexes={@ORM\Index(name="ref_libelle", columns={"ref_libelle"}), @ORM\Index(name="ref_affaire", columns={"ref_affaire"}), @ORM\Index(name="ref_poste", columns={"ref_poste"}), @ORM\Index(name="ref_saisie_horaire", columns={"ref_saisie_horaire"})})
  * @ORM\Entity
  */
-class SaisieHeure
+class SaisieHeureProjet
 {
     /**
      * @var integer
@@ -20,34 +20,6 @@ class SaisieHeure
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="datetime", nullable=false)
-     */
-    private $date = '0000-00-00 00:00:00';
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="heure_debut", type="datetime", nullable=false)
-     */
-    private $heureDebut = '0000-00-00 00:00:00';
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="heure_fin", type="datetime", nullable=false)
-     */
-    private $heureFin = '0000-00-00 00:00:00';
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="duree_pause", type="float", precision=10, scale=0, nullable=false)
-     */
-    private $dureePause = '1';
 
     /**
      * @var float
@@ -62,16 +34,6 @@ class SaisieHeure
      * @ORM\Column(name="supprime", type="boolean", nullable=false)
      */
     private $supprime = '0';
-
-    /**
-     * @var \Personnel
-     *
-     * @ORM\ManyToOne(targetEntity="Personnel")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_personnel", referencedColumnName="id")
-     * })
-     */
-    private $refPersonnel;
 
     /**
      * @var \SaisieHeureLibelle
@@ -102,6 +64,16 @@ class SaisieHeure
      * })
      */
     private $refPoste;
+
+    /**
+     * @var \SaisieHeureJournee
+     *
+     * @ORM\ManyToOne(targetEntity="SaisieHeureJournee")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ref_saisie_horaire", referencedColumnName="id")
+     * })
+     */
+    private $refSaisieHoraire;
 
 
 }

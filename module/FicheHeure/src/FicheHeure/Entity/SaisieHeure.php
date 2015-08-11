@@ -26,21 +26,21 @@ class SaisieHeure
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
-    private $date = '0000-00-00 00:00:00';
+    private $date/* = '0000-00-00 00:00:00'*/;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="heure_debut", type="datetime", nullable=false)
      */
-    private $heureDebut = '0000-00-00 00:00:00';
+    private $heureDebut/* = '0000-00-00 00:00:00'*/;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="heure_fin", type="datetime", nullable=false)
      */
-    private $heureFin = '0000-00-00 00:00:00';
+    private $heureFin /*= '0000-00-00 00:00:00'*/;
 
     /**
      * @var float
@@ -102,6 +102,11 @@ class SaisieHeure
      * @ORM\Column(name="supprime", type="boolean", nullable=false)
      */
     private $supprime = 0;
+
+    public function __construct()
+    {
+    
+    }
 
     /**
      * Get id

@@ -1,3 +1,6 @@
-c:\xampp2\htdocs\kairios\sigma>
+Dans sigma racine :
+
+
+c:/xampp2/php/php.exe c:/xampp2/htdocs/kairios/sigma/vendor/doctrine/doctrine-module/bin/doctrine-module orm:convert-mapping --namespace="Application\Entity\\" --force  --from-database annotation c:/xampp2/htdocs/kairios/sigma/module/Application/src/Application/Entity/generation/ 
 
 c:/xampp2/php/php.exe c:/xampp2/htdocs/kairios/sigma/vendor/doctrine/doctrine-module/bin/doctrine-module orm:generate-entities c:/xampp2/htdocs/kairios/sigma/module/Application/src/Application/Entity/generation/ --generate-annotations=true

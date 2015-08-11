@@ -158,6 +158,21 @@ class Personnel
         $this->tauxHoraire = $tauxHoraire;
     }
 
+    public function getHeureDebut($day)
+    {
+        return 8.5;
+    }
+
+    public function getHeureFin($day)
+    {
+        return 17.5;
+    }
+
+    public function getDureePause($day)
+    {
+        return 1;
+    }
+
 
     /**
      * Convert the object to an array.

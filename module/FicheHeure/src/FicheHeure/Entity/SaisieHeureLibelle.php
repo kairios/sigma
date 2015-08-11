@@ -29,13 +29,6 @@ class SaisieHeureLibelle
     private $intituleLibelle;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="value_libelle", type="string", length=50, nullable=true)
-     */
-    private $valueLibelle;
-
-    /**
      * Get id
      *
      * @return integer 
@@ -67,31 +60,6 @@ class SaisieHeureLibelle
     {
         return $this->intituleLibelle;
     }
-
-    /**
-     * Set valueLibelle
-     *
-     * @param string $valueLibelle
-     * @return SaisieHeureLibelle
-     */
-    public function setValueLibelle($valueLibelle)
-    {
-        $this->valueLibelle = $valueLibelle;
-    
-        return $this;
-    }
-
-    /**
-     * Get valueLibelle
-     *
-     * @return string 
-     */
-    public function getValueLibelle()
-    {
-        return $this->valueLibelle;
-    }
-
-
 }
 
 ?>

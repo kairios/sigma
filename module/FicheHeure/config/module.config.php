@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-29 17:42:02
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-10 17:47:36
+ * @Last Modified time: 2015-08-11 16:53:32
  */
 
 // module\FicheHeure\config\module.config.php
@@ -29,6 +29,66 @@ return array(
                     'defaults'=>array(
                         'controller'=>'FicheHeure\Controller\Index',
                         'action'=>'editerficheheure'
+                    ),
+                ),
+                'may_terminate'=>true,
+                'child_routes'=>array(
+                    'fiche_heure'=>array(
+                        'type'=>'Segment',
+                        'options'=>array(
+                            'route'=>'[/:action][/:id]',
+                            'constraints'=>array(
+                                'action'=>'[a-zA-Z][a-zA-Z0-9_-]*',
+                                'id'=>'[0-9]+',
+                            ),
+                            'defaults'=>array(
+                                '__NAMESPACE__' => 'FicheHeure\Controller',
+                                'controller'    => 'Index',
+                                'action'        => 'editerficheheure',
+                            ),
+                        ),
+                    ),
+                    'formulaire_saisie_heure'=>array(
+                        'type'=>'Segment',
+                        'options'=>array(
+                            'route'=>'/formulaire-saisie-heure[/:id]',
+                            'constraints'=>array(
+                                'id'=>'[0-9]+'
+                            ),
+                            'defaults'=>array(
+                                '__NAMESPACE__' => 'FicheHeure\Controller',
+                                'controller'=>'Index',
+                                'action'=>'formulairesaisieheure'
+                            )
+                        )
+                    ),
+                    'formulaire_saisie_horaire'=>array(
+                        'type'=>'Segment',
+                        'options'=>array(
+                            'route'=>'/formulaire-saisie-horaire/:date',
+                            'constraints'=>array(
+                                'date'=>'[0-9]{4}-[0-9]{2}-[0-9]{2}'
+                            ),
+                            'defaults'=>array(
+                                '__NAMESPACE__' => 'FicheHeure\Controller',
+                                'controller'=>'Index',
+                                'action'=>'formulairesaisiehoraire'
+                            )
+                        )
+                    ),
+                    'enregistrer_saisie_journee'=>array(
+                        'type'=>'Segment',
+                        'options'=>array(
+                            'route'=>'/enregistrer-saisie-journee[/:id]',
+                            'constraints'=>array(
+                                'id'=>'[0-9]+'
+                            ),
+                            'defaults'=>array(
+                                '__NAMESPACE__' => 'FicheHeure\Controller',
+                                'controller'=>'Index',
+                                'action'=>'enregistrersaisiejournee'
+                            )
+                        ),
                     ),
                 ),
             ),
@@ -60,9 +120,10 @@ return array(
     ),
     'view_manager' => array(
         'template_map' => array(
-            'fiche_heure/index'           => __DIR__ . '/../view/fiche-heure/index/index.phtml',
-            'fiche_heure/editerficheheure' => __DIR__ . '/../view/fiche-heure/index/editerficheheure.phtml',
-            'fiche_heure/formulairesaisieheure' => __DIR__ . '/../view/fiche-heure/index/formulairesaisieheure.phtml',
+            'fiche_heure/index'                     => __DIR__ . '/../view/fiche-heure/index/index.phtml',
+            'fiche_heure/editerficheheure'          => __DIR__ . '/../view/fiche-heure/index/editerficheheure.phtml',
+            'fiche_heure/formulairesaisiehoraire'   => __DIR__ . '/../view/fiche-heure/index/formulairesaisiehoraire.phtml',
+            'fiche_heure/formulairesaisieheure'     => __DIR__ . '/../view/fiche-heure/index/formulairesaisieheure.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

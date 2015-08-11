@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-21 13:16:19
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-10 14:26:47
+ * @Last Modified time: 2015-08-11 14:40:33
  */
 
 // module\Personnel\src\Personnel\Model\PersonnelModel.php
@@ -23,7 +23,7 @@ class PersonnelModel implements InputFilterAwareInterface
 		'nom'						=>array('type'=>'text','max'=>70,	'form'=>array('type'=>'text','required'=>true,'label'=>'Nom','static'=>true)),
 		'prenom'					=>array('type'=>'text','max'=>70,	'form'=>array('type'=>'text','required'=>true,'label'=>'Prénom','static'=>true)),
 		// 'ref_fonction'				=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>false,'label'=>'Fonction','static'=>true)),
-		'taux_horaire'				=>array('type'=>'text','max'=>10,	'form'=>array('type'=>'text','required'=>false,'label'=>'Taux horaire','static'=>true)),
+		'taux_horaire'				=>array('type'=>'float','max'=>10,	'form'=>array('type'=>'text','required'=>false,'label'=>'Taux horaire','static'=>true)),
 		'administrateur'			=>array('type'=>'bool',				'form'=>array('type'=>'checkbox','required'=>false,'label'=>'Administrateur du site')),
 		'email'						=>array('type'=>'text','max'=>80,	'form'=>array('type'=>'text','required'=>true,'label'=>'Email','static'=>true)),
 		//'mot_de_passe'				=>array('type'=>'text','max'=>100,	'form'=>array('type'=>'password','required'=>false,'label'=>'Mot de passe')),
@@ -69,6 +69,13 @@ class PersonnelModel implements InputFilterAwareInterface
 					case 'text' :
 						$element['filters']=$textFilters;
 						$element['validators']=array($textValidator);
+					break;
+					case 'float':
+						$element['validators']=array(
+							array(
+								'name'=>'IsFloat'
+							)
+						);
 					break;
 				}
 

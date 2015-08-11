@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-29 17:40:56
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-03 13:47:26
+ * @Last Modified time: 2015-08-11 18:24:25
  */
 
 // module\FicheHeure\src\FicheHeure\Controller\IndexController.php
@@ -17,7 +17,9 @@ use Zend\View\Model\JsonModel;
 use Doctrine\ORM\EntityManager;
 // Session
 use Zend\Session\Container;
-use Personnel\Entity\Personnel;
+use FicheHeure\Entity\SaisieHeureJournee;
+use FicheHeure\Entity\SaisieHeureProjet;
+use FicheHeure\Form\SaisieHeureJourneeForm;
 
 class IndexController extends AbstractActionController
 {
@@ -77,10 +79,27 @@ class IndexController extends AbstractActionController
 
     public function editerficheheureAction()
     {
-        $translator = $this->getServiceLocator()->get('Translator');
+        // Récupération de l'EntityManager
+        $em=$this->getEntityManager();
+        // Récupération du Service Manager
+        $sm=$this->getServiceLocator();
+         // Récupération du traducteur
+        $translator=$sm->get('Translator');
+        // Récupération de la requete
+        $request=$this->getRequest();
 
         $utilisateur = new Container('utilisateur');
-        $utilisateurCourant = $utilisateur->offsetGet('identite');
+        //$utilisateurCourant = $utilisateur->offsetGet('identite');
+
+        $id = $utilisateur->offsetGet('id');
+        $utilisateurCourant = $em->getRepository('Personnel\Entity\Personnel')->find($id);
+        if($utilisateurCourant == null)
+            throw new \Exception($translator->translate('Une erreur est survenue au chargement des heures.'));
+
+        $saisiesHoraires = $em->getRepository('FicheHeure\Entity\SaisieHeureJournee')->findAll();
+
+        // $saisieHoraire      = new SaisieHeureJournee($utilisateurCourant);
+        // $form               = new SaisieHeureJourneeForm($translator,$sm,$em,$request,$saisieHoraire);
 
         //Assignation de variables au layout
         $this->layout()->setVariables(array(
@@ -92,7 +111,181 @@ class IndexController extends AbstractActionController
             'plugins'           =>  array('fullcalendar'),
         ));
 
-        return new ViewModel();
+        return new ViewModel(array(
+            'saisiesHoraires' => $saisiesHoraires
+        ));
+    }
+
+    
+
+    public function formulairesaisiehoraireAction()
+    {
+        if($this->getRequest()->isXmlHttpRequest())
+        {
+            /************************************** Initialisation de variables **************************************/
+
+            $statusForm=null;
+            // Récupération de l'EntityManager
+            $em = $this->getEntityManager();
+            // Récupération du Service Manager
+            $sm = $this->getServiceLocator();
+             // Récupération du traducteur
+            $translator = $sm->get('Translator');
+            // Récupération de la requete
+            $request = $this->getRequest();
+
+            $utilisateur = new Container('utilisateur');
+
+            /*********************************** Initialisation de la saisie heure ***********************************/
+
+            $saisieHoraire = null;
+
+            // On reccupère l'utilisateur courant
+            $idPersonnel = $utilisateur->offsetGet('id');
+            $utilisateurCourant = $em->getRepository('Personnel\Entity\Personnel')->find($idPersonnel);
+            if($utilisateurCourant == null)
+                throw new \Exception($translator->translate('Une erreur est survenue au chargement des horaires.'));
+
+            // On recupère la date de la saisie
+            $date_format    = $this->params()->fromRoute('date'); // 2015/08/19
+            // var_dump($date_format);die();
+            $date           = str_replace('-','',$date_format);   // 20150819
+
+            // On recupère la saisie à partir de la date et du personnel
+            $saisieHoraire = $em->getRepository('FicheHeure\Entity\SaisieHeureJournee')->findOneBy(array('date'=>$date,'refPersonnel'=>$idPersonnel));
+            if($saisieHoraire==null)
+            {
+                // On crée une nouvelle saisie d'horaires
+                $saisieHoraire = new SaisieHeureJournee($utilisateurCourant,$date);
+            }
+
+            /******************************* Creation du formulaire de saisie d'heure *******************************/
+            
+            $form = new SaisieHeureJourneeForm($translator,$sm,$em,$request,$saisieHoraire);
+            if($request->isPost())
+            {
+                $form->setData($request->getPost());
+
+                if($form->isValid())
+                {
+                    $statusForm = true;
+                    $saisieHoraire->exchangeArray($form->getData(),$em);
+
+                    $saisieHeure = new SaisieHeureProjet;
+                    $saisieHeure->exchangeArrayFromSaisieHoraire($form->getData(),$em);
+                    $saisieHeure->setRefSaisieHoraire($saisieHoraire);
+
+                    $em->persist($saisieHoraire);
+                    $em->persist($saisieHeure);
+                    $em->flush();
+
+                    return new JsonModel(array(
+                        'statut'    => $statusForm
+                    ));
+                }
+                else // Sinon, on retourne les erreurs au formulaire qui les affiche
+                {
+                    $statusForm = false;
+                    $errors     = $form->getMessages();
+
+                    return new JsonModel(array(
+                        'statut'=>$statusForm,
+                        'reponse'=>$errors,
+                    ));
+                }
+            }
+
+            /************************** Affichage du formulaire sans le layout (en modal) **************************/
+
+            $viewModel=new ViewModel;
+            // $view->setTemplate('fiche_heure/formulairesaisiehoraire');
+            $viewModel->setVariables(array(
+                'saisieHoraire'=>$saisieHoraire,
+                'date'=>$date,
+                'form'=>$form,
+                // 'id'=>$saisieHoraire->getId()
+            ))->setTerminal(true);
+
+            return $viewModel;
+        }
+        return $this->redirect()->toRoute('home');
+    }
+
+    public function formulairesaisieheureAction()
+    {
+        if($this->getRequest()->isXmlHttpRequest())
+        {
+            /* Initialisation de variables */
+
+            $statusForm=null;
+            // Récupération de l'EntityManager
+            $em=$this->getEntityManager();
+            // Récupération du Service Manager
+            $sm=$this->getServiceLocator();
+             // Récupération du traducteur
+            $translator=$sm->get('Translator');
+            // Récupération de la requete
+            $request=$this->getRequest();
+
+            /* Initialisation de la saisie heure */
+            $saisieHeure = null;
+            $id = $this->params()->fromRoute('id');
+            if(!empty($id)) // Si l'ID de la saisie d'heures est transmis, on réccupère celui-ci
+            {
+                // Récupération de la saisie d'heures en BD
+                $saisieHeure = $em->getRepository('FicheHeure\Entity\SaisieHeure')->find($id);
+                if($saisieHeure==null)
+                    throw new \Exception($translator->translate('Une erreur est survenue au chargement des heures.'));
+            }
+            else // Sinon on crée une nouvelle saisie d'heures
+            {
+                $id = null;
+                $saisieHeure = new SaisieHeure;
+            }
+
+            /* Creation du formulaire de saisie d'heure */
+            
+            $form = new SaisieHeureForm($translator,$sm,$em,$request,$saisieHeure);
+            if($request->isPost())
+            {
+                $form->setData($request->getPost());
+
+                if($form->isValid())
+                {
+                    $statusForm = true;
+                    $saisieHeure->exchangeArray($form->getData(),$em);
+                    $em->persist($saisieHeure);
+                    $em->flush($saisieHeure);
+
+                    return new JsonModel(array(
+                        'statut'    => $statusForm,
+                        'idSaisie' => $saisieHeure->getId(),
+                    ));
+                }
+                else // Sinon, on retourne les erreurs au formulaire qui les affiche
+                {
+                    $statusForm = false;
+                    $errors     = $form->getMessages();
+
+                    return new JsonModel(array(
+                        'statut'=>$statusForm,
+                        'reponse'=>$errors,
+                    ));
+                }
+            }
+
+            /* Affichage du formulaire sans le layout (en modal) */
+
+            $viewModel=new ViewModel;
+            $viewModel->setVariables(array(
+                'saisieHeure'=>$saisieHeure,
+                'form'=>$form,
+                'id'=>$id
+            ))->setTerminal(true);
+
+            return $viewModel;
+        }
+        return $this->redirect()->toRoute('home');
     }
 }
 

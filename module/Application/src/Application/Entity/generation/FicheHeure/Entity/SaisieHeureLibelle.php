@@ -28,13 +28,6 @@ class SaisieHeureLibelle
      */
     private $intituleLibelle;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="value_libelle", type="string", length=50, precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $valueLibelle;
-
 
     /**
      * Get id
@@ -67,28 +60,5 @@ class SaisieHeureLibelle
     public function getIntituleLibelle()
     {
         return $this->intituleLibelle;
-    }
-
-    /**
-     * Set valueLibelle
-     *
-     * @param string $valueLibelle
-     * @return SaisieHeureLibelle
-     */
-    public function setValueLibelle($valueLibelle)
-    {
-        $this->valueLibelle = $valueLibelle;
-    
-        return $this;
-    }
-
-    /**
-     * Get valueLibelle
-     *
-     * @return string 
-     */
-    public function getValueLibelle()
-    {
-        return $this->valueLibelle;
     }
 }

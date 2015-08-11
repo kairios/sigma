@@ -12,10 +12,77 @@
 				<h4 class="modal-title"><?php echo $this->translate('Formulaire de saisie heures'); ?></h4>
 			</div>
 			<div class="modal-body">
-				<p>
-					<?php echo $this->translate('hello world'); ?>
-					<!-- form ici -->
-				</p>
+				<?php
+					$saisie = $this->saisie;
+					$form 	= $this->form;
+					$errors = $form->getMessages();
+
+					$form->setAttribute('action', $this->url('editer_fiche_heures/formulaire_saisie_heure',array('id'=>$this->id)));
+					$form->prepare();
+
+					echo $this->form()->openTag($form);
+
+					echo $this->formInput($form->get('id_saisie_horaire'));
+					echo $this->formInput($form->get('ref_personnel'));
+				?>
+				<div class="form-group">
+					<?php
+						echo $this->formLabel($form->get('date'));
+						echo $this->formInput($form->get('date')); 
+					?>
+				</div>
+				<div class="row">
+					<div class="form-group col-sm-4">
+						<?php
+							echo $this->formLabel($form->get('heure_debut'));
+							echo $this->formSelect($form->get('heure_debut')); 
+						 ?>
+					</div>
+					<div class="form-group col-sm-4">
+						<?php
+							echo $this->formLabel($form->get('heure_fin'));
+							echo $this->formSelect($form->get('heure_fin'));
+						 ?>
+					</div>
+					<div class="form-group col-sm-4">
+						<?php 
+							echo $this->formLabel($form->get('duree_pause'));
+							echo $this->formInput($form->get('duree_pause'));
+						?>
+					</div>
+				</div>
+				<hr>
+				<div class="well">
+					<div class="row">
+						<div class="form-group col-sm-6">
+							<?php
+								echo $this->formLabel($form->get('ref_libelle'));
+								echo $this->formSelect($form->get('ref_libelle'));
+							 ?>
+						</div>
+						<div class="form-group col-sm-6">
+							<?php
+								echo $this->formLabel($form->get('ref_affaire'));
+								echo $this->formSelect($form->get('ref_affaire'));
+							 ?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-sm-6">
+							<?php
+								echo $this->formLabel($form->get('nb_heure'));
+								echo $this->formInput($form->get('nb_heure'));
+							 ?>
+						</div>
+						<div class="form-group col-sm-6">
+							<?php
+								echo $this->formLabel($form->get('ref_poste'));
+								echo $this->formSelect($form->get('ref_poste'));
+							 ?>
+						</div>
+					</div>
+				</div>
+				<?php echo $this->form()->closeTag($form); ?>
 			</div>
 			<div class="modal-footer">
 				<button id="annuler" class="btn btn-white" data-dismiss="modal" type="button"><i class="fa fa-times"></i> <?php echo $this->translate('Annuler'); ?></button>

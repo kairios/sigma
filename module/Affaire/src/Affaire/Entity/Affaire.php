@@ -3,6 +3,13 @@
 namespace Affaire\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+// Pour récupérer des paramètres
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Where;
+use Zend\Db\Sql\Expression;
 
 /**
  * Affaire
@@ -113,9 +120,9 @@ class Affaire
     private $raisonPerte;
 
     /**
-     * @var \InterlocuteurClient
+     * @var \Client\Entity\InterlocuteurClient
      *
-     * @ORM\ManyToOne(targetEntity="InterlocuteurClient")
+     * @ORM\ManyToOne(targetEntity="Client\Entity\InterlocuteurClient")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_interlocuteur", referencedColumnName="id")
      * })
@@ -123,9 +130,9 @@ class Affaire
     private $refInterlocuteur;
 
     /**
-     * @var \Personnel
+     * @var \Personnel\Entity\Personnel
      *
-     * @ORM\ManyToOne(targetEntity="Personnel")
+     * @ORM\ManyToOne(targetEntity="Personnel\Entity\Personnel")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_personnel", referencedColumnName="id")
      * })
@@ -133,9 +140,9 @@ class Affaire
     private $refPersonnel;
 
     /**
-     * @var \ConditionReglement
+     * @var \Application\Entity\ConditionReglement
      *
-     * @ORM\ManyToOne(targetEntity="ConditionReglement")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\ConditionReglement")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_condition_reglement", referencedColumnName="id")
      * })
@@ -143,9 +150,9 @@ class Affaire
     private $refConditionReglement;
 
     /**
-     * @var \Fournisseur
+     * @var \Fournisseur\Entity\Fournisseur
      *
-     * @ORM\ManyToOne(targetEntity="Fournisseur")
+     * @ORM\ManyToOne(targetEntity="Fournisseur\Entity\Fournisseur")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_concurrent", referencedColumnName="id")
      * })
@@ -153,9 +160,9 @@ class Affaire
     private $refConcurrent;
 
     /**
-     * @var \Devis
+     * @var \Devis\Entity\Devis
      *
-     * @ORM\ManyToOne(targetEntity="Devis")
+     * @ORM\ManyToOne(targetEntity="Devis\Entity\Devis")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_devis_signe", referencedColumnName="id")
      * })
@@ -163,9 +170,9 @@ class Affaire
     private $refDevisSigne;
 
     /**
-     * @var \CentreDeProfit
+     * @var \Affaire\Entity\CentreDeProfit
      *
-     * @ORM\ManyToOne(targetEntity="CentreDeProfit")
+     * @ORM\ManyToOne(targetEntity="Affaire\Entity\CentreDeProfit")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_centre_profit", referencedColumnName="id")
      * })
@@ -173,9 +180,9 @@ class Affaire
     private $refCentreProfit;
 
     /**
-     * @var \Client
+     * @var \Client\Entity\Client
      *
-     * @ORM\ManyToOne(targetEntity="Client")
+     * @ORM\ManyToOne(targetEntity="Client\Entity\Client")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_client", referencedColumnName="id")
      * })
@@ -650,6 +657,22 @@ class Affaire
     public function getRefClient()
     {
         return $this->refClient;
+    }
+
+    public function getNumerosAffaire($sm)
+    {
+        $query      = "SELECT id,numero_affaire FROM affaire ORDER BY numero_affaire ASC ";
+        $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+        $results    = $statement->execute();
+
+        if($results->isQueryResult())
+        {
+            $resultSet=new ResultSet;
+            $resultSet->initialize($results);
+            return $resultSet->toArray();
+        }
+
+        return array();
     }
 
 

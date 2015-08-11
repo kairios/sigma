@@ -1,0 +1,75 @@
+
+<!-- module\FicheHeure\view\fiche-heure\index\formulairesaisiehoraire.phtml -->
+
+<?php
+	$saisie = $this->saisie;
+	$form 	= $this->form;
+	$errors = $form->getMessages();
+
+	$form->setAttribute('action', $this->url('editer_fiche_heures/formulaire_saisie_horaire',array('date'=>$this->date)));
+	$form->prepare();
+
+	echo $this->form()->openTag($form);
+
+	echo $this->formInput($form->get('id_saisie_horaire'));
+	echo $this->formInput($form->get('ref_personnel'));
+?>
+<div class="form-group">
+	<?php
+		echo $this->formLabel($form->get('date'));
+		echo $this->formInput($form->get('date')); 
+	?>
+</div>
+<div class="row">
+	<div class="form-group col-sm-4">
+		<?php
+			echo $this->formLabel($form->get('heure_debut'));
+			echo $this->formSelect($form->get('heure_debut')); 
+		 ?>
+	</div>
+	<div class="form-group col-sm-4">
+		<?php
+			echo $this->formLabel($form->get('heure_fin'));
+			echo $this->formSelect($form->get('heure_fin'));
+		 ?>
+	</div>
+	<div class="form-group col-sm-4">
+		<?php 
+			echo $this->formLabel($form->get('duree_pause'));
+			echo $this->formInput($form->get('duree_pause'));
+		?>
+	</div>
+</div>
+<hr>
+<div class="well">
+	<div class="row">
+		<div class="form-group col-sm-6">
+			<?php
+				echo $this->formLabel($form->get('ref_libelle'));
+				echo $this->formSelect($form->get('ref_libelle'));
+			 ?>
+		</div>
+		<div class="form-group col-sm-6">
+			<?php
+				echo $this->formLabel($form->get('ref_affaire'));
+				echo $this->formSelect($form->get('ref_affaire'));
+			 ?>
+		</div>
+		<p id="ref_affaire_error" style="display:none"><?php echo $this->translate('Vous devez selectionner un projet'); ?></p>
+	</div>
+	<div class="row">
+		<div class="form-group col-sm-6">
+			<?php
+				echo $this->formLabel($form->get('nb_heure')).'*';
+				echo $this->formInput($form->get('nb_heure'));
+			 ?>
+		</div>
+		<div class="form-group col-sm-6">
+			<?php
+				echo $this->formLabel($form->get('ref_poste'));
+				echo $this->formSelect($form->get('ref_poste'));
+			 ?>
+		</div>
+	</div>
+</div>
+<?php echo $this->form()->closeTag($form); ?>

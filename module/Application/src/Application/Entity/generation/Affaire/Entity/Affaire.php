@@ -113,9 +113,9 @@ class Affaire
     private $raisonPerte;
 
     /**
-     * @var \Affaire\Entity\InterlocuteurClient
+     * @var \Client\Entity\InterlocuteurClient
      *
-     * @ORM\ManyToOne(targetEntity="Affaire\Entity\InterlocuteurClient")
+     * @ORM\ManyToOne(targetEntity="Client\Entity\InterlocuteurClient")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_interlocuteur", referencedColumnName="id", nullable=true)
      * })
@@ -123,9 +123,9 @@ class Affaire
     private $refInterlocuteur;
 
     /**
-     * @var \Affaire\Entity\Personnel
+     * @var \Personnel\Entity\Personnel
      *
-     * @ORM\ManyToOne(targetEntity="Affaire\Entity\Personnel")
+     * @ORM\ManyToOne(targetEntity="Personnel\Entity\Personnel")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_personnel", referencedColumnName="id", nullable=true)
      * })
@@ -133,9 +133,9 @@ class Affaire
     private $refPersonnel;
 
     /**
-     * @var \Affaire\Entity\ConditionReglement
+     * @var \Application\Entity\ConditionReglement
      *
-     * @ORM\ManyToOne(targetEntity="Affaire\Entity\ConditionReglement")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\ConditionReglement")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_condition_reglement", referencedColumnName="id", nullable=true)
      * })
@@ -143,9 +143,9 @@ class Affaire
     private $refConditionReglement;
 
     /**
-     * @var \Affaire\Entity\Fournisseur
+     * @var \Fournisseur\Entity\Fournisseur
      *
-     * @ORM\ManyToOne(targetEntity="Affaire\Entity\Fournisseur")
+     * @ORM\ManyToOne(targetEntity="Fournisseur\Entity\Fournisseur")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_concurrent", referencedColumnName="id", nullable=true)
      * })
@@ -153,9 +153,9 @@ class Affaire
     private $refConcurrent;
 
     /**
-     * @var \Affaire\Entity\Devis
+     * @var \Devis\Entity\Devis
      *
-     * @ORM\ManyToOne(targetEntity="Affaire\Entity\Devis")
+     * @ORM\ManyToOne(targetEntity="Devis\Entity\Devis")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_devis_signe", referencedColumnName="id", nullable=true)
      * })
@@ -173,9 +173,9 @@ class Affaire
     private $refCentreProfit;
 
     /**
-     * @var \Affaire\Entity\Client
+     * @var \Client\Entity\Client
      *
-     * @ORM\ManyToOne(targetEntity="Affaire\Entity\Client")
+     * @ORM\ManyToOne(targetEntity="Client\Entity\Client")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_client", referencedColumnName="id", nullable=true)
      * })
@@ -495,10 +495,10 @@ class Affaire
     /**
      * Set refInterlocuteur
      *
-     * @param \Affaire\Entity\InterlocuteurClient $refInterlocuteur
+     * @param \Client\Entity\InterlocuteurClient $refInterlocuteur
      * @return Affaire
      */
-    public function setRefInterlocuteur(\Affaire\Entity\InterlocuteurClient $refInterlocuteur = null)
+    public function setRefInterlocuteur(\Client\Entity\InterlocuteurClient $refInterlocuteur = null)
     {
         $this->refInterlocuteur = $refInterlocuteur;
     
@@ -508,7 +508,7 @@ class Affaire
     /**
      * Get refInterlocuteur
      *
-     * @return \Affaire\Entity\InterlocuteurClient 
+     * @return \Client\Entity\InterlocuteurClient 
      */
     public function getRefInterlocuteur()
     {
@@ -518,10 +518,10 @@ class Affaire
     /**
      * Set refPersonnel
      *
-     * @param \Affaire\Entity\Personnel $refPersonnel
+     * @param \Personnel\Entity\Personnel $refPersonnel
      * @return Affaire
      */
-    public function setRefPersonnel(\Affaire\Entity\Personnel $refPersonnel = null)
+    public function setRefPersonnel(\Personnel\Entity\Personnel $refPersonnel = null)
     {
         $this->refPersonnel = $refPersonnel;
     
@@ -531,7 +531,7 @@ class Affaire
     /**
      * Get refPersonnel
      *
-     * @return \Affaire\Entity\Personnel 
+     * @return \Personnel\Entity\Personnel 
      */
     public function getRefPersonnel()
     {
@@ -541,10 +541,10 @@ class Affaire
     /**
      * Set refConditionReglement
      *
-     * @param \Affaire\Entity\ConditionReglement $refConditionReglement
+     * @param \Application\Entity\ConditionReglement $refConditionReglement
      * @return Affaire
      */
-    public function setRefConditionReglement(\Affaire\Entity\ConditionReglement $refConditionReglement = null)
+    public function setRefConditionReglement(\Application\Entity\ConditionReglement $refConditionReglement = null)
     {
         $this->refConditionReglement = $refConditionReglement;
     
@@ -554,7 +554,7 @@ class Affaire
     /**
      * Get refConditionReglement
      *
-     * @return \Affaire\Entity\ConditionReglement 
+     * @return \Application\Entity\ConditionReglement 
      */
     public function getRefConditionReglement()
     {
@@ -564,10 +564,10 @@ class Affaire
     /**
      * Set refConcurrent
      *
-     * @param \Affaire\Entity\Fournisseur $refConcurrent
+     * @param \Fournisseur\Entity\Fournisseur $refConcurrent
      * @return Affaire
      */
-    public function setRefConcurrent(\Affaire\Entity\Fournisseur $refConcurrent = null)
+    public function setRefConcurrent(\Fournisseur\Entity\Fournisseur $refConcurrent = null)
     {
         $this->refConcurrent = $refConcurrent;
     
@@ -577,7 +577,7 @@ class Affaire
     /**
      * Get refConcurrent
      *
-     * @return \Affaire\Entity\Fournisseur 
+     * @return \Fournisseur\Entity\Fournisseur 
      */
     public function getRefConcurrent()
     {
@@ -587,10 +587,10 @@ class Affaire
     /**
      * Set refDevisSigne
      *
-     * @param \Affaire\Entity\Devis $refDevisSigne
+     * @param \Devis\Entity\Devis $refDevisSigne
      * @return Affaire
      */
-    public function setRefDevisSigne(\Affaire\Entity\Devis $refDevisSigne = null)
+    public function setRefDevisSigne(\Devis\Entity\Devis $refDevisSigne = null)
     {
         $this->refDevisSigne = $refDevisSigne;
     
@@ -600,7 +600,7 @@ class Affaire
     /**
      * Get refDevisSigne
      *
-     * @return \Affaire\Entity\Devis 
+     * @return \Devis\Entity\Devis 
      */
     public function getRefDevisSigne()
     {
@@ -633,10 +633,10 @@ class Affaire
     /**
      * Set refClient
      *
-     * @param \Affaire\Entity\Client $refClient
+     * @param \Client\Entity\Client $refClient
      * @return Affaire
      */
-    public function setRefClient(\Affaire\Entity\Client $refClient = null)
+    public function setRefClient(\Client\Entity\Client $refClient = null)
     {
         $this->refClient = $refClient;
     
@@ -646,7 +646,7 @@ class Affaire
     /**
      * Get refClient
      *
-     * @return \Affaire\Entity\Client 
+     * @return \Client\Entity\Client 
      */
     public function getRefClient()
     {

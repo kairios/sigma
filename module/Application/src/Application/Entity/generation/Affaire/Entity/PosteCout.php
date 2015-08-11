@@ -29,9 +29,12 @@ class PosteCout
     private $intitulePoste;
 
     /**
-     * @var integer
+     * @var \Affaire\Entity\CategoriePoste
      *
-     * @ORM\Column(name="ref_categorie", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\ManyToOne(targetEntity="Affaire\Entity\CategoriePoste")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ref_categorie", referencedColumnName="id", nullable=true)
+     * })
      */
     private $refCategorie;
 
@@ -72,10 +75,10 @@ class PosteCout
     /**
      * Set refCategorie
      *
-     * @param integer $refCategorie
+     * @param \Affaire\Entity\CategoriePoste $refCategorie
      * @return PosteCout
      */
-    public function setRefCategorie($refCategorie)
+    public function setRefCategorie(\Affaire\Entity\CategoriePoste $refCategorie = null)
     {
         $this->refCategorie = $refCategorie;
     
@@ -85,7 +88,7 @@ class PosteCout
     /**
      * Get refCategorie
      *
-     * @return integer 
+     * @return \Affaire\Entity\CategoriePoste 
      */
     public function getRefCategorie()
     {

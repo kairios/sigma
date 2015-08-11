@@ -3,6 +3,13 @@
 namespace Affaire\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+// Pour récupérer des paramètres
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Where;
+use Zend\Db\Sql\Expression;
 
 /**
  * PosteCout
@@ -92,6 +99,22 @@ class PosteCout
     public function getRefCategorie()
     {
         return $this->refCategorie;
+    }
+
+    public function getPostesCout($sm)
+    {
+        $query      = "SELECT id,intitule_poste FROM poste_cout ORDER BY intitule_poste ASC ";
+        $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+        $results    = $statement->execute();
+
+        if($results->isQueryResult())
+        {
+            $resultSet=new ResultSet;
+            $resultSet->initialize($results);
+            return $resultSet->toArray();
+        }
+
+        return array();
     }
 }
 
