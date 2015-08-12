@@ -23,9 +23,9 @@ class SaisieHeureJournee
     private $id;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="date", type="string", length=10, nullable=false)
+     * @ORM\Column(name="date", type="integer", nullable=false)
      */
     private $date;
 
@@ -269,14 +269,15 @@ class SaisieHeureJournee
         $refPersonnel   = $em->getRepository('Personnel\Entity\Personnel')->find( (int)$data['ref_personnel'] );
         $personnel      = (!empty($refPersonnel)) ? $refPersonnel : null;
 
-        $date           = (!empty($data['date'])) ? $data['date'] : null;
-        $heure_debut    = (!empty($data['heure_debut'])) ? floatval($data['heure_debut']) : null;
-        $heure_fin      = (!empty($data['heure_fin'])) ? floatval($data['heure_fin']) : null;
-        $duree_pause    = (!empty($data['duree_pause'])) ? floatval($data['duree_pause']) : null;
+        $heure_debut    = (!empty($data['heure_debut'])) ? $data['heure_debut']: null;
+        $heure_fin      = (!empty($data['heure_fin'])) ? $data['heure_fin']: null;
+        $duree_pause    = (!empty($data['duree_pause'])) ? str_replace(',','.',$data['duree_pause']) : null;
+        $nb_heure_total = $heure_fin - $heure_debut - $duree_pause;
 
-        $nb_heure_total = floatval($heure_fin - $heure_debut - $duree_pause);
-        // $nb_heure       = (!empty($data['nb_heure'])) ? $data['nb_heure'] : null; // Calculé en amont
-        
+        // On recupère la date sous forme de timestamp
+        list($y,$m,$d)  = explode('-', $data['date']); // Split day, month and year in chaines
+        $date           = mktime(4, 0, 0, (int) $m, (int) $d, (int) $y); // Retourne un timestamp
+
         $this->setId($data['id_saisie_horaire']);
         $this->setDate($date);
         $this->setHeureDebut($heure_debut);
@@ -284,6 +285,7 @@ class SaisieHeureJournee
         $this->setDureePause($duree_pause);
         $this->setNbHeureTotal($nb_heure_total);
         $this->setRefPersonnel($personnel);
+
         // $this->dateCreationModificationFiche = \DateTime::createFromFormat('Y-m-d H:i:s',date('Y-m-d H:i:s'));
     }
 

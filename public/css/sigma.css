@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:50:12
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-07-23 10:28:01
+* @Last Modified time: 2015-08-12 15:11:08
 */
 
                                                 /*********************************************************/
@@ -370,4 +370,11 @@ span.entite i:hover
 }
 .footable-visible {
     cursor: pointer;
+}
+
+
+/********************* Fiches d'heures *********************/
+
+.fc-time {
+    display:none;
 }

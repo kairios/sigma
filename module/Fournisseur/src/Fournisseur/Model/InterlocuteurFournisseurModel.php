@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-10 11:02:32
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-07-07 12:36:13
+ * @Last Modified time: 2015-08-12 14:52:27
  */
 
 namespace Fournisseur\Model;
@@ -67,11 +67,11 @@ class InterlocuteurFournisseurModel implements InputFilterAwareInterface
 				{
 					case 'int':
 						$element['filters']=array($intFilters);
-						break;
+					break;
 					case 'text' :
 						$element['filters']=$textFilters;
 						$element['validators']=array($textValidator);
-						break;
+					break;
 				}
 
 				$inputFilter->add($element);

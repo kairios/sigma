@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-29 17:40:56
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-11 18:24:25
+ * @Last Modified time: 2015-08-12 15:11:43
  */
 
 // module\FicheHeure\src\FicheHeure\Controller\IndexController.php
@@ -89,34 +89,20 @@ class IndexController extends AbstractActionController
         $request=$this->getRequest();
 
         $utilisateur = new Container('utilisateur');
-        //$utilisateurCourant = $utilisateur->offsetGet('identite');
+        // $utilisateurCourant = $utilisateur->offsetGet('identite');
 
         $id = $utilisateur->offsetGet('id');
-        $utilisateurCourant = $em->getRepository('Personnel\Entity\Personnel')->find($id);
-        if($utilisateurCourant == null)
-            throw new \Exception($translator->translate('Une erreur est survenue au chargement des heures.'));
+        // $utilisateurCourant = $em->getRepository('Personnel\Entity\Personnel')->find($id);
+        // if($utilisateurCourant == null)
+        //     throw new \Exception($translator->translate('Une erreur est survenue au chargement des heures.'));
 
-        $array = array();
-        $saisiesHoraires = $em->getRepository('FicheHeure\Entity\SaisieHeureJournee')->findAll(); // a transformer en array compréhensible par la conversion JSON.
-
-        foreach($saisiesHoraires as $saisie)
-        {
-            $id = 99;
-            $title = 'Machin';
-            $start = '2015-08-19';
-            $allDay = false;
-
-            $saisiesHoraires[0] = array('id'=>$id, 'title'=>$title, 'start'=>$start, 'allDay'=>$allDay);
-        }
-        // var_dump($saisiesHoraires[0]);die();
-
-        // $saisieHoraire      = new SaisieHeureJournee($utilisateurCourant);
-        // $form               = new SaisieHeureJourneeForm($translator,$sm,$em,$request,$saisieHoraire);
+        $saisie = new SaisieHeureProjet();
+        $saisiesHoraires = $saisie->getSaisiesHeureCalendar($id,$sm); // a transformer en array compréhensible par la conversion JSON.
 
         //Assignation de variables au layout
         $this->layout()->setVariables(array(
             'headTitle'         =>  $translator->translate('Fiche d\'heures'),
-            'breadcrumbActive'  =>  $utilisateurCourant,
+            'breadcrumbActive'  =>  $id,
             'route'             =>  array(),
             'action'            =>  'editer_fiche_heure',
             'module'            =>  'fiche_heure',
@@ -124,7 +110,7 @@ class IndexController extends AbstractActionController
         ));
 
         return new ViewModel(array(
-            'saisiesHoraires' => json_encode($saisiesHoraires)
+            'saisiesJson' => $saisiesHoraires
         ));
     }
 
@@ -152,19 +138,19 @@ class IndexController extends AbstractActionController
 
             $saisieHoraire = null;
 
+            // On recupère la date en timestamp
+            $date = $this->params()->fromRoute('date');
+            list($y,$m,$d) = explode('-', $date); // Split day, month and year in chaines
+            $timestamp = mktime(4, 0, 0, (int) $m, (int) $d, (int) $y); // Retourne un timestamp
+            
             // On reccupère l'utilisateur courant
             $idPersonnel = $utilisateur->offsetGet('id');
             $utilisateurCourant = $em->getRepository('Personnel\Entity\Personnel')->find($idPersonnel);
             if($utilisateurCourant == null)
                 throw new \Exception($translator->translate('Une erreur est survenue au chargement des horaires.'));
 
-            // On recupère la date de la saisie
-            $date_format    = $this->params()->fromRoute('date'); // 2015/08/19
-            // var_dump($date_format);die();
-            $date           = str_replace('-','',$date_format);   // 20150819
-
             // On recupère la saisie à partir de la date et du personnel
-            $saisieHoraire = $em->getRepository('FicheHeure\Entity\SaisieHeureJournee')->findOneBy(array('date'=>$date,'refPersonnel'=>$idPersonnel));
+            $saisieHoraire = $em->getRepository('FicheHeure\Entity\SaisieHeureJournee')->findOneBy(array('date'=>$timestamp,'refPersonnel'=>$idPersonnel));
             if($saisieHoraire==null)
             {
                 // On crée une nouvelle saisie d'horaires

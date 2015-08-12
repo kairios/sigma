@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:49:48
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-11 17:44:10
+* @Last Modified time: 2015-08-12 15:04:27
 */
 
 'use strict';
@@ -2346,13 +2346,11 @@ var sigma={
 				            header: {
 				                left: 'prev,next today',
 				                center: 'title',
-				                right: 'month,agendaWeek,agendaDay'
+				                right: '',
 				            },
-				            editable: true,
+				            editable: false,
 				            //droppable: true, // this allows things to be dropped onto the calendar
 				            dayClick:function(date, jsEvent, view){
-				                // $('#saisie-horaire-form #date').val(date.format());
-				                // $('#saisie-form-modal').modal('toggle');
 				                sigma.controller.ficheHeure.setFormModalSaisieHoraire(date.format());
 				            },
 				            eventClick: function(calEvent, jsEvent, view) {
@@ -2363,7 +2361,7 @@ var sigma={
 				                // change the border color just for fun
 				                $(this).css('border-color', 'red');
 				            },
-				            // events: saisiesHoraires[0],
+				            events: saisiesJson,
 				            lang: locale
 				        });
 					break;

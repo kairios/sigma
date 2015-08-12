@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-08-10 16:49:34
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-11 15:37:46
+ * @Last Modified time: 2015-08-12 14:57:32
  */
 
 namespace FicheHeure\Model;
@@ -45,7 +45,7 @@ class SaisieHeureJourneeModel implements InputFilterAwareInterface
 			
 			$intFilters=array('name'=>'Int');
 			$textFilters=array(array('name'=>'StripTags'),array('name'=>'StringTrim')); // StripTags is used to remove unwanted HTML & StringStrim is used to remove unnecessary white spaces
-			$floatValidator=array(array('name'=>'IsFloat'));
+			// $floatValidator=array(array('name'=>'IsFloat','options'=>array('locale'=>'de')));
 
 			foreach($this->fields as $field => $data)
 			{
@@ -72,7 +72,18 @@ class SaisieHeureJourneeModel implements InputFilterAwareInterface
 						$element['validators']=array($textValidator);
 					break;
 					case 'float':
-						$element['validators']=$floatValidator;
+						// $element['validators']=$floatValidator;
+						$element['validators']=array(
+							array(
+								'name'=>'Regex',
+								'options'=>array(
+									'pattern'=>'/^[0-9]+([\.,][05]){0,1}$/',
+									'messages'=>array(
+										'regexNotMatch'=>'Vous devez entrer un décimal valide (0,5 ou 1.5...)'
+									)
+								)
+							)
+						);
 					break;
 				}
 

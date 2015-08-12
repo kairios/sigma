@@ -3,7 +3,12 @@
 namespace FicheHeure\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+// Pour récupérer des paramètres
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Where;
+use Zend\Db\Sql\Expression;
 /**
  * SaisieHeureProjet
  *
@@ -20,6 +25,13 @@ class SaisieHeureProjet
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="intitule_saisie", type="string", length=200, nullable=false)
+     */
+    private $intituleSaisie;
 
     /**
      * @var float
@@ -95,6 +107,29 @@ class SaisieHeureProjet
         $this->id = $id;
 
         return $this;
+    }
+
+    /**
+     * Set intituleSaisie
+     *
+     * @param string $intituleSaisie
+     * @return SaisieHeureProjet
+     */
+    public function setIntituleSaisie($intituleSaisie)
+    {
+        $this->intituleSaisie = $intituleSaisie;
+    
+        return $this;
+    }
+
+    /**
+     * Get intituleSaisie
+     *
+     * @return string 
+     */
+    public function getIntituleSaisie()
+    {
+        return $this->intituleSaisie;
     }
 
     /**
@@ -260,6 +295,7 @@ class SaisieHeureProjet
 
         return array(
             'id_saisie_projet'      =>  $this->getId(),
+            'intitule_saisie'       =>  $this->getIntituleSaisie(),
             'nb_heure'              =>  $this->getNbHeure(),
             'ref_saisie_horaire'    =>  $idSaisieHoraire,
             'ref_libelle'           =>  $idLibelle,
@@ -284,6 +320,15 @@ class SaisieHeureProjet
         $libelle        = (!empty($refLibelle)) ? $refLibelle : null;
         $affaire        = (!empty($refAffaire)) ? $refAffaire : null;
         $poste          = (!empty($refPoste)) ? $refPoste : null;
+
+        if(!is_null($libelle))
+        {
+            $this->setIntituleSaisie($libelle->getIntituleLibelle());
+        }
+        else
+        {
+            $this->setIntutleSaisie($affaire->getRefClient()->getRaisonSociale().' - '.$affaire->getNumeroAffaire());
+        }
 
         $nbHeure        = (!empty($data['nb_heure'])) ? floatval($data['nb_heure']) : null;
         
@@ -313,13 +358,68 @@ class SaisieHeureProjet
         $affaire        = (!empty($refAffaire)) ? $refAffaire : null;
         $poste          = (!empty($refPoste)) ? $refPoste : null;
 
-        $nbHeure        = (!empty($data['nb_heure'])) ? floatval($data['nb_heure']) : null;
+        if(!is_null($libelle))
+        {
+            $this->setIntituleSaisie($libelle->getIntituleLibelle());
+        }
+        else
+        {
+            $this->setIntutleSaisie($affaire->getRefClient()->getRaisonSociale().' - '.$affaire->getNumeroAffaire());
+        }
+
+        $nbHeure = (!empty($data['nb_heure'])) ? str_replace(',','.',$data['nb_heure']) : null;
         
         // $this->setRefSaisieHoraire($saisieHoraire);
         $this->setRefLibelle($libelle);
         $this->setRefAffaire($affaire);
         $this->setRefPoste($poste);
         $this->setNbHeure($nbHeure);
+    }
+
+    public function getSaisiesHeureCalendar($personnel, $sm=null)
+    {
+        // jointure client (ajouter nom client)
+       $query =   
+            "SELECT sp.id, sj.date, sp.intitule_saisie, sp.nb_heure 
+             FROM saisie_heure_projet AS sp
+                LEFT JOIN saisie_heure_journee AS sj 
+                    ON sp.ref_saisie_horaire = sj.id
+             WHERE sp.supprime = 0 AND sj.ref_personnel = $personnel"
+        ;
+        
+        $statement = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+        $results = $statement->execute();
+
+        if($results->isQueryResult())
+        {
+            // Recupération des saisies en BD
+            $resultSet=new ResultSet;
+            $resultSet->initialize($results);
+
+            $saisiesHoraires = $resultSet->toArray();
+
+            // Conversion en JSON exploitable par sigma.js
+            $saisiesJson = '[';
+            foreach($saisiesHoraires as $key => $saisie)
+            {
+                $jour = (int) date('j', $saisie['date']); // jour numérique sans les zéros initiaux : 1 à 31
+                $mois = (int) date('n', $saisie['date']) - 1; // mois numérique sans les zéros initiaux : 1 à 12
+                $annee = (int) date('Y', $saisie['date']); // full year (4 chiffres)
+
+                $saisiesJson .= "{
+                    id: ".$saisie['id'].",
+                    title: '".$saisie['intitule_saisie']."',
+                    start: new Date(".$annee.", ".$mois.", ".$jour."),
+                    end: new Date(".$annee.", ".$mois.", ".$jour."),
+                    allDay: false
+                },";
+            }
+            $saisiesJson .= ']';
+
+            return $saisiesJson;
+        }
+
+        return '[]';
     }
 
 
