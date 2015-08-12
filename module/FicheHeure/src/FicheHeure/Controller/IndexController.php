@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-29 17:40:56
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-12 15:11:43
+ * @Last Modified time: 2015-08-12 17:39:15
  */
 
 // module\FicheHeure\src\FicheHeure\Controller\IndexController.php
@@ -20,6 +20,7 @@ use Zend\Session\Container;
 use FicheHeure\Entity\SaisieHeureJournee;
 use FicheHeure\Entity\SaisieHeureProjet;
 use FicheHeure\Form\SaisieHeureJourneeForm;
+use FicheHeure\Form\SaisieHeureForm;
 
 class IndexController extends AbstractActionController
 {
@@ -142,7 +143,7 @@ class IndexController extends AbstractActionController
             $date = $this->params()->fromRoute('date');
             list($y,$m,$d) = explode('-', $date); // Split day, month and year in chaines
             $timestamp = mktime(4, 0, 0, (int) $m, (int) $d, (int) $y); // Retourne un timestamp
-            
+
             // On reccupère l'utilisateur courant
             $idPersonnel = $utilisateur->offsetGet('id');
             $utilisateurCourant = $em->getRepository('Personnel\Entity\Personnel')->find($idPersonnel);
@@ -196,12 +197,10 @@ class IndexController extends AbstractActionController
             /************************** Affichage du formulaire sans le layout (en modal) **************************/
 
             $viewModel=new ViewModel;
-            // $view->setTemplate('fiche_heure/formulairesaisiehoraire');
             $viewModel->setVariables(array(
                 'saisieHoraire'=>$saisieHoraire,
                 'date'=>$date,
                 'form'=>$form,
-                // 'id'=>$saisieHoraire->getId()
             ))->setTerminal(true);
 
             return $viewModel;
@@ -231,14 +230,14 @@ class IndexController extends AbstractActionController
             if(!empty($id)) // Si l'ID de la saisie d'heures est transmis, on réccupère celui-ci
             {
                 // Récupération de la saisie d'heures en BD
-                $saisieHeure = $em->getRepository('FicheHeure\Entity\SaisieHeure')->find($id);
+                $saisieHeure = $em->getRepository('FicheHeure\Entity\SaisieHeureProjet')->find($id);
                 if($saisieHeure==null)
-                    throw new \Exception($translator->translate('Une erreur est survenue au chargement des heures.'));
+                    throw new \Exception($translator->translate('Une erreur est survenue au chargement du formulaire.'));
             }
             else // Sinon on crée une nouvelle saisie d'heures
             {
                 $id = null;
-                $saisieHeure = new SaisieHeure;
+                $saisieHeure = new SaisieHeureProjet;
             }
 
             /* Creation du formulaire de saisie d'heure */
@@ -256,8 +255,7 @@ class IndexController extends AbstractActionController
                     $em->flush($saisieHeure);
 
                     return new JsonModel(array(
-                        'statut'    => $statusForm,
-                        'idSaisie' => $saisieHeure->getId(),
+                        'statut'    => $statusForm
                     ));
                 }
                 else // Sinon, on retourne les erreurs au formulaire qui les affiche
@@ -282,6 +280,30 @@ class IndexController extends AbstractActionController
             ))->setTerminal(true);
 
             return $viewModel;
+        }
+        return $this->redirect()->toRoute('home');
+    }
+
+    public function supprimersaisieheureAction()
+    {
+        if($this->getRequest()->isXmlHttpRequest())
+        {
+            $id =(int)$this->params()->fromRoute('id');
+            $em = $this->getEntityManager();
+            $saisieHeure=$em->getRepository('FicheHeure\Entity\SaisieHeureProjet')->find($id);
+
+            if($saisieHeure==null)
+            {
+                throw new \Exception($this->getServiceLocator()->get('Translator')->translate('Une erreur est survenue lors de la suppression.'));
+            }
+
+            // On supprime la saisieHeure ainsi que ses adresses et interlocuteurs
+            $em->remove($saisieHeure);
+            $em->flush();
+
+            return new JsonModel(array(
+                'statut' => true
+            ));
         }
         return $this->redirect()->toRoute('home');
     }

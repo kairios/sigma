@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:50:12
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-12 15:11:08
+* @Last Modified time: 2015-08-12 17:03:26
 */
 
                                                 /*********************************************************/
@@ -103,6 +103,10 @@ button.dim a {
 .tiny-hr-bottom {
     /*margin-top: 10px;*/
     margin-bottom: -5px;
+}
+
+.modal-heure .modal-body {
+    padding: 10px 15px 0;
 }
 
 

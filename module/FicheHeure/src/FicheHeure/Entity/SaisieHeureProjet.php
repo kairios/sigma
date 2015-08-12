@@ -311,15 +311,15 @@ class SaisieHeureProjet
      */
     public function exchangeArray($data = array(),$em=null) 
     {
-        $refSaisieHoraire   = $em->getRepository('FicheHeure\Entity\SaisieHeureJournee')->find( (int)$data['ref_saisie_horaire'] );
-        $refLibelle         = $em->getRepository('FicheHeure\Entity\SaisieHeureLibelle')->find( (int)$data['ref_libelle'] );
         $refAffaire         = $em->getRepository('Affaire\Entity\Affaire')->find( (int)$data['ref_affaire'] );
         $refPoste           = $em->getRepository('Application\Entity\PosteCout')->find( (int)$data['ref_poste'] );
+        $refLibelle         = $em->getRepository('FicheHeure\Entity\SaisieHeureLibelle')->find( (int)$data['ref_libelle'] );
+        $refSaisieHoraire   = $em->getRepository('FicheHeure\Entity\SaisieHeureJournee')->find( (int)$data['ref_saisie_horaire'] );
 
-        $saisieHoraire  = (!empty($refSaisieHoraire)) ? $refSaisieHoraire : null;
-        $libelle        = (!empty($refLibelle)) ? $refLibelle : null;
         $affaire        = (!empty($refAffaire)) ? $refAffaire : null;
         $poste          = (!empty($refPoste)) ? $refPoste : null;
+        $libelle        = (!empty($refLibelle)) ? $refLibelle : null;
+        $saisieHoraire  = (!empty($refSaisieHoraire)) ? $refSaisieHoraire : null;
 
         if(!is_null($libelle))
         {
@@ -330,7 +330,7 @@ class SaisieHeureProjet
             $this->setIntutleSaisie($affaire->getRefClient()->getRaisonSociale().' - '.$affaire->getNumeroAffaire());
         }
 
-        $nbHeure        = (!empty($data['nb_heure'])) ? floatval($data['nb_heure']) : null;
+        $nbHeure = (!empty($data['nb_heure'])) ? str_replace(',','.',$data['nb_heure']) : null;
         
         $this->setId($data['id_saisie_projet']);
         $this->setRefSaisieHoraire($saisieHoraire);
@@ -369,7 +369,7 @@ class SaisieHeureProjet
 
         $nbHeure = (!empty($data['nb_heure'])) ? str_replace(',','.',$data['nb_heure']) : null;
         
-        // $this->setRefSaisieHoraire($saisieHoraire);
+        $this->setId($data['id_saisie_horaire']);
         $this->setRefLibelle($libelle);
         $this->setRefAffaire($affaire);
         $this->setRefPoste($poste);
@@ -378,7 +378,6 @@ class SaisieHeureProjet
 
     public function getSaisiesHeureCalendar($personnel, $sm=null)
     {
-        // jointure client (ajouter nom client)
        $query =   
             "SELECT sp.id, sj.date, sp.intitule_saisie, sp.nb_heure 
              FROM saisie_heure_projet AS sp

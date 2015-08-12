@@ -686,6 +686,72 @@ class Client extends \Client\Entity\Client implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
+    public function addSegment(\Client\Entity\Segment $segment)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addSegment', array($segment));
+
+        return parent::addSegment($segment);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeSegment(\Client\Entity\Segment $segment)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeSegment', array($segment));
+
+        return parent::removeSegment($segment);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSegments()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSegments', array());
+
+        return parent::getSegments();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addProduitFini(\Client\Entity\ProduitFini $produitFini)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addProduitFini', array($produitFini));
+
+        return parent::addProduitFini($produitFini);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeProduitFini(\Client\Entity\ProduitFini $produitFini)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeProduitFini', array($produitFini));
+
+        return parent::removeProduitFini($produitFini);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getProduitsFinis()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getProduitsFinis', array());
+
+        return parent::getProduitsFinis();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getArrayCopy()
     {
 
@@ -815,18 +881,6 @@ class Client extends \Client\Entity\Client implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getProduitsFinisId', array($sm));
 
         return parent::getProduitsFinisId($sm);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addSegmentsById($sm, $arrayId = array (
-))
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addSegmentsById', array($sm, $arrayId));
-
-        return parent::addSegmentsById($sm, $arrayId);
     }
 
 }

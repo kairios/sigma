@@ -659,9 +659,17 @@ class Affaire
         return $this->refClient;
     }
 
-    public function getNumerosAffaire($sm)
+    public function getAffairesFicheHeure($sm)
     {
-        $query      = "SELECT id,numero_affaire FROM affaire ORDER BY numero_affaire ASC ";
+        $query =   
+            "SELECT a.id, CONCAT_WS(' - ', c.raison_sociale, a.numero_affaire) as numero_affaire
+             FROM affaire AS a
+                LEFT JOIN client AS c
+                    ON a.ref_client = c.id
+             WHERE a.date_fin IS NULL /*AND c.supprime = 0*/
+             ORDER BY numero_affaire ASC "
+        ;
+        // $query      = "SELECT id,numero_affaire FROM affaire ORDER BY numero_affaire ASC ";
         $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
         $results    = $statement->execute();
 

@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:49:48
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-12 15:04:27
+* @Last Modified time: 2015-08-12 17:40:34
 */
 
 'use strict';
@@ -2342,6 +2342,7 @@ var sigma={
 				switch(_action)
 				{
 					case 'editer_fiche_heure':
+						$('#page-wrapper').css('height','1250px');
 				        $('.calendar').fullCalendar({
 				            header: {
 				                left: 'prev,next today',
@@ -2353,17 +2354,23 @@ var sigma={
 				            dayClick:function(date, jsEvent, view){
 				                sigma.controller.ficheHeure.setFormModalSaisieHoraire(date.format());
 				            },
-				            eventClick: function(calEvent, jsEvent, view) {
-				                alert('Event: ' + calEvent.title);
-				                alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-				                alert('View: ' + view.name);
+				            eventClick: function(saisieHeure, jsEvent, view) {
+				            	sigma.controller.ficheHeure.setFormModalSaisieProjet(saisieHeure.id);
 
-				                // change the border color just for fun
-				                $(this).css('border-color', 'red');
+				                // alert('Event: ' + saisieHeure.title);
+				                // alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+				                // alert('View: ' + view.name);
+
+				                // // change the border color just for fun
+				                // $(this).css('border-color', 'red');
 				            },
 				            events: saisiesJson,
 				            lang: locale
 				        });
+
+						$('#projet-delete-submit').on('click',function(){
+							sigma.controller.ficheHeure.supprimerSaisieHeure();
+						});
 					break;
 				}
 			},
@@ -2378,7 +2385,6 @@ var sigma={
 						$('#saisie-form-modal .modal-body').html(data);
 						$('#saisie-horaire-form #date').val(date);
 						$('#saisie-form-modal').modal('toggle');
-						//sigma.controller.client.setAutocompletionSocieteClient();
 						
 						$('#saisie-form-submit').unbind('click');
 						$('#saisie-form-submit').on('click',function(){
@@ -2394,20 +2400,13 @@ var sigma={
 							message='An error occured when retrieving data : <strong>'+error+'</strong>';
 						else
 							message='Une erreur s\'est produite lors de la récupération du formulaire : <strong>'+error+'</strong>';
-						$("#interlocuteur-modal").html(message);
+						$("#saisie-form-modal").html(message);
 					}
 				});
 			},
 			verifierSaisieHoraire:function(date)
 			{
 				$('#saisie-form-submit span').text($('#saisie-form-submit').attr('data-loading-text'));
-
-				// Les inputs de type disabled ne sont pas pris en compte par le serialize() de jQuery
-				// Il faut donc les enable le temps de la sérialisation :
-				// var form = $('#saisie-form');
-				// var disabledInputs = form.find(':input:disabled').removeAttr('disabled');
-				// var serializeForm = form.serialize();
-				// disabledInputs.attr('disabled','disabled');
 
 				if(!$('#ref_libelle').val() && !$('#ref_affaire').val())
 				{
@@ -2462,7 +2461,105 @@ var sigma={
 				});
 
 				$('#saisie-form-submit span').text($('#saisie-form-submit').attr('data-default-text'));
-			}
+			},
+			setFormModalSaisieProjet:function(numSaisie)
+			{
+				$.ajax({
+					url: '/editer-fiche-heures/formulaire-saisie-heure/'+numSaisie,
+					type: 'get',
+					dataType: 'html',
+					success:function(data, status, XMLHttpRequest)
+					{
+						$('#projet-form-modal .modal-body').html(data);
+						// $('#projet-horaire-form #date').val(date);
+						$('#projet-form-modal').modal('toggle');
+						
+						$('#projet-form-submit').unbind('click');
+						$('#projet-form-submit').on('click',function(){
+							sigma.controller.ficheHeure.verifierSaisieHeure(numSaisie);
+							return false;
+						});
+					},
+					error:function(XMLHttpRequest, status, error)
+					{
+						//sigma.language.error(233);
+						var message='';
+						if(locale=='en_US')
+							message='An error occured when retrieving data : <strong>'+error+'</strong>';
+						else
+							message='Une erreur s\'est produite lors de la récupération du formulaire : <strong>'+error+'</strong>';
+						$("#projet-form-modal").html(message);
+					}
+				});
+			},
+			verifierSaisieHeure:function(numSaisie)
+			{
+				$('#projet-form-submit span').text($('#projet-form-submit').attr('data-loading-text'));
+
+				if(!$('#ref_libelle').val() && !$('#ref_affaire').val())
+				{
+					var p = $('#ref_affaire_error').text();
+					$("label[for='ref_affaire']").after('<span class="help-inline" style="color:red;"> - '+p+'</span>');
+					$('#projet-form-submit span').text($('#projet-form-submit').attr('data-default-text'));
+					return;
+				}
+				$('span').remove('.help-inline');
+
+				var serializeForm = $('#saisie-heure-form').serialize();
+
+				$.ajax({
+					url: '/editer-fiche-heures/formulaire-saisie-heure/'+numSaisie,
+					dataType: 'json',
+					data: serializeForm,
+					type: 'post',
+					success:function(resultats)
+					{
+						if(resultats.statut==true)
+						{
+							// Si la saisie a été ajoutée, on ferme le modal
+							$('#projet-form-modal .close').trigger('click');
+							window.location.href='/editer-fiche-heures';
+						}
+						// Si c'est pas bon, on met à jour, le formulaire d'interlocuteur avec les erreurs
+						else
+						{
+							// Ici on affiche les erreurs et les champs contenant des erreurs
+							var errors=resultats.reponse;
+							$.each(errors,function(index,value){
+								$.each(value,function(codeError, messageError){
+									$("label[for='"+index+"']").after('<span class="help-inline"> - '+messageError+'</span>');
+								});
+							});
+							$("#saisie-heure-form span.help-inline").css({'color':'red'});
+						}
+					},
+					error:function(xml,status,message)
+					{
+						alert(message);
+					}
+				});
+
+				$('#projet-form-submit span').text($('#projet-form-submit').attr('data-default-text'));
+			},
+			supprimerSaisieHeure:function()
+			{
+				var numSaisie = $('#projet-form-modal #id_saisie_projet').val();
+
+				$.ajax({
+					url: '/editer-fiche-heures/supprimer-saisie-heure/'+numSaisie,
+					dataType: 'json',
+					type: 'post',
+					success:function(resultats)
+					{
+						$('#projet-form-modal .close').trigger('click');
+						window.location.href='/editer-fiche-heures';
+					},
+					error:function(xml,status,message)
+					{
+						alert(message);
+					}
+				});
+			},
 		}
 	},
 	// Initialisation de l'API Sigma V2.0

@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-29 17:42:02
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-11 16:53:32
+ * @Last Modified time: 2015-08-12 17:31:15
  */
 
 // module\FicheHeure\config\module.config.php
@@ -48,20 +48,6 @@ return array(
                             ),
                         ),
                     ),
-                    'formulaire_saisie_heure'=>array(
-                        'type'=>'Segment',
-                        'options'=>array(
-                            'route'=>'/formulaire-saisie-heure[/:id]',
-                            'constraints'=>array(
-                                'id'=>'[0-9]+'
-                            ),
-                            'defaults'=>array(
-                                '__NAMESPACE__' => 'FicheHeure\Controller',
-                                'controller'=>'Index',
-                                'action'=>'formulairesaisieheure'
-                            )
-                        )
-                    ),
                     'formulaire_saisie_horaire'=>array(
                         'type'=>'Segment',
                         'options'=>array(
@@ -76,17 +62,31 @@ return array(
                             )
                         )
                     ),
-                    'enregistrer_saisie_journee'=>array(
+                    'formulaire_saisie_heure'=>array(
                         'type'=>'Segment',
                         'options'=>array(
-                            'route'=>'/enregistrer-saisie-journee[/:id]',
+                            'route'=>'/formulaire-saisie-heure/:id',
                             'constraints'=>array(
                                 'id'=>'[0-9]+'
                             ),
                             'defaults'=>array(
                                 '__NAMESPACE__' => 'FicheHeure\Controller',
                                 'controller'=>'Index',
-                                'action'=>'enregistrersaisiejournee'
+                                'action'=>'formulairesaisieheure'
+                            )
+                        )
+                    ),
+                    'supprimer_saisie_heure'=>array(
+                        'type'=>'Segment',
+                        'options'=>array(
+                            'route'=>'/supprimer-saisie-heure/:id',
+                            'constraints'=>array(
+                                'id'=>'[0-9]+'
+                            ),
+                            'defaults'=>array(
+                                '__NAMESPACE__' => 'FicheHeure\Controller',
+                                'controller'=>'Index',
+                                'action'=>'supprimersaisieheure'
                             )
                         ),
                     ),
@@ -124,6 +124,7 @@ return array(
             'fiche_heure/editerficheheure'          => __DIR__ . '/../view/fiche-heure/index/editerficheheure.phtml',
             'fiche_heure/formulairesaisiehoraire'   => __DIR__ . '/../view/fiche-heure/index/formulairesaisiehoraire.phtml',
             'fiche_heure/formulairesaisieheure'     => __DIR__ . '/../view/fiche-heure/index/formulairesaisieheure.phtml',
+            'fiche_heure/recapitulatifpersonnel'    => __DIR__ . '/../view/fiche-heure/index/recapitulatifpersonnel.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

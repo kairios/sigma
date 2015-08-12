@@ -3,30 +3,28 @@
  * @Author: Ophelie
  * @Date:   2015-08-10 16:49:15
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-12 16:24:35
+ * @Last Modified time: 2015-08-12 16:58:49
  */
 
 namespace FicheHeure\Form;
 
 use Zend\Form\Form;
-use FicheHeure\Model\SaisieHeureJourneeModel;
+use FicheHeure\Model\SaisieHeureModel;
 use FicheHeure\Entity\SaisieHeureProjet;
 use Zend\I18n\Translator\Translator;
 
-class SaisieHeureJourneeForm extends Form
+class SaisieHeureForm extends Form
 {
 	public $fields;
 
-	public function __construct($translator,$sm,$em=null,$request=null,$saisieJournee=null)
+	public function __construct($translator,$sm,$em=null,$request=null,$saisieProjet=null)
 	{
-		parent::__construct('saisie-horaire-form');
+		parent::__construct('saisie-heure-form');
 		$this->setAttribute('method', 'post');
 
-		$saisieHeureModel=new SaisieHeureJourneeModel;
+		$saisieHeureModel=new SaisieHeureModel;
 		$this->fields=$saisieHeureModel->fields;
 		$this->setInputFilter($saisieHeureModel->getInputFilter());
-
-		$saisieHeureProjet = new SaisieHeureProjet;
 
 		// Creation des champs du formulaire à partir des champs du modèle de la saisie d'heures
 		foreach($this->fields as $field => $data)
@@ -125,6 +123,10 @@ class SaisieHeureJourneeForm extends Form
 											'label'=>$translator->translate($poste['intitule_poste'])
 										);
 									}
+									// if($saisieHeure->getRefPoste())
+									// {						
+									// 	$element['attributes']['disabled']='disabled';
+									// }
 								}
 							break;
 							case 'ref_affaire':
@@ -139,6 +141,10 @@ class SaisieHeureJourneeForm extends Form
 											'label'=>$projet['numero_affaire']
 										);
 									}
+									// if($saisieHeure->getRefAffaire())
+									// {								
+									// 	$element['attributes']['disabled']='disabled';
+									// }
 								}
 							break;
 							case 'ref_libelle':
@@ -155,32 +161,6 @@ class SaisieHeureJourneeForm extends Form
 								}
 								$element['options']['empty_option']=$translator->translate('Projet');
 							break;
-							case 'heure_debut':
-								for ($i = 8; $i<= 22; $i++) {
-									$a = $i;
-								    $options[]=array(
-										'value'=>$a,
-										'label'=>$a.'h'
-									);
-									$options[]=array(
-										'value'=>$a+0.5,
-										'label'=>$a.'h30'
-									);
-								}
-							break;
-							case 'heure_fin':
-								for ($i = 8; $i<= 22; $i++) {
-									$a = $i;
-								    $options[]=array(
-										'value'=>$a,
-										'label'=>$a.'h'
-									);
-									$options[]=array(
-										'value'=>$a+0.5,
-										'label'=>$a.'h30'
-									);
-								}
-							break;
 						}
 						$element['options']['value_options']=$options;
 					}
@@ -192,38 +172,71 @@ class SaisieHeureJourneeForm extends Form
 				break;
 			}
 
-			$value = null;
-			switch($field)
+			if( !is_null($saisieProjet) )
 			{
-				case 'id_saisie_horaire':
-					$value = $saisieJournee->getId();
-				break;
-				case 'ref_personnel':
-					$value = $saisieJournee->getRefPersonnel()->getId();
-				break;
-				case 'date':
-					$value = $saisieJournee->getDate();
+				if($field=='date')
+				{
+					$element['attributes']['value'] = date('Y-m-d',$saisieProjet->getRefSaisieHoraire()->getDate());
 					$element['attributes']['readonly']='readonly';
-				break;
-				case 'heure_debut':
-					$value = $saisieJournee->getHeureDebut();
-				break;
-				case 'heure_fin':
-					$value = $saisieJournee->getHeureFin();
-				break;
-				case 'duree_pause':
-					$value = $saisieJournee->getDureePause();
-				break;
-				// case 'ref_libelle':
-				// break;
-				// case 'ref_affaire':
-				// break;
-				// case 'ref_poste':
-				// break;
-				// case 'nb_heure':
-				// break;
+				}
+				else
+				{
+					if($data['form']['type']=='hidden')
+						$value=$saisieProjet->{'get'.$data['form']['getter']}();
+					else
+					{
+						$tab=explode('_',$field);
+						$method='';
+						foreach($tab as $part)
+						{
+							$method.=ucfirst($part);
+						}
+						$property=lcfirst($method);
+						if(property_exists($saisieProjet,$property))
+						{
+							$value=$saisieProjet->{'get'.$method}();
+						}
+					}
+
+					if(is_object($value))
+					{
+						$element['attributes']['value']=$value->getId();
+					}
+					else
+					{
+						$element['attributes']['value']=$value;
+					}
+				}
 			}
-			$element['attributes']['value'] = $value;
+
+			// $value = null;
+			// switch($field)
+			// {
+			// 	case 'id_saisie_projet':
+			// 		$value = $saisieProjet->getId();
+			// 	break;
+			// 	case 'ref_saisie_horaire':
+			// 		$value = $saisieProjet->getRefSaisieHoraire()->getId();
+			// 	break;
+			// 	case 'date':
+			// 		$value = $saisieProjet->getRefSaisieHoraire()->getDate();
+			// 		$element['attributes']['readonly']='readonly';
+			// 	break;
+			// 	case 'ref_libelle':
+			// 		$value = $saisieProjet->getRefLibelle()->getId();
+			// 	break;
+			// 	case 'ref_affaire':
+			// 		$value = $saisieProjet->getRefAffaire()->getId();
+			// 	break;
+			// 	case 'ref_poste':
+			// 		$value = $saisieProjet->getHeureFin();
+			// 	break;
+				
+			// 	case 'nb_heure':
+			// 		$value = $saisieProjet->getDureePause();
+			// 	break;
+			// }
+			// $element['attributes']['value'] = $value;
 			
 			$this->add($element);
 		}

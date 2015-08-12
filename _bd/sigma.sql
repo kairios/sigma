@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Mar 11 Août 2015 à 18:26
+-- Généré le :  Mer 12 Août 2015 à 17:43
 -- Version du serveur :  5.6.21
 -- Version de PHP :  5.5.19
 
@@ -24806,19 +24806,20 @@ INSERT INTO `raison_perte` (`id`, `intitule_raison_perte`) VALUES
 CREATE TABLE IF NOT EXISTS `saisie_heure_journee` (
 `id` int(11) NOT NULL,
   `ref_personnel` int(11) NOT NULL,
-  `date` varchar(10) NOT NULL,
+  `date` int(11) NOT NULL,
   `heure_debut` float NOT NULL,
   `heure_fin` float NOT NULL,
   `duree_pause` float NOT NULL DEFAULT '1',
   `nb_heure_total` float NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Contenu de la table `saisie_heure_journee`
 --
 
 INSERT INTO `saisie_heure_journee` (`id`, `ref_personnel`, `date`, `heure_debut`, `heure_fin`, `duree_pause`, `nb_heure_total`) VALUES
-(5, 14, '2015-08-18', 8.5, 17.5, 1, 8);
+(1, 14, 1439344800, 8.5, 17.5, 2, 7),
+(2, 14, 1439517600, 9, 18, 0.5, 8.5);
 
 -- --------------------------------------------------------
 
@@ -24851,16 +24852,18 @@ CREATE TABLE IF NOT EXISTS `saisie_heure_projet` (
   `ref_libelle` int(11) DEFAULT NULL,
   `ref_affaire` int(11) DEFAULT NULL,
   `ref_poste` int(11) DEFAULT NULL,
+  `intitule_saisie` varchar(200) NOT NULL,
   `nb_heure` float NOT NULL,
   `supprime` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Contenu de la table `saisie_heure_projet`
 --
 
-INSERT INTO `saisie_heure_projet` (`id`, `ref_saisie_horaire`, `ref_libelle`, `ref_affaire`, `ref_poste`, `nb_heure`, `supprime`) VALUES
-(1, 5, 2, NULL, NULL, 4, 0);
+INSERT INTO `saisie_heure_projet` (`id`, `ref_saisie_horaire`, `ref_libelle`, `ref_affaire`, `ref_poste`, `intitule_saisie`, `nb_heure`, `supprime`) VALUES
+(1, 1, 2, NULL, NULL, 'Congés', 6, 0),
+(3, 2, 1, NULL, NULL, 'RTT', 8.5, 0);
 
 -- --------------------------------------------------------
 
@@ -25455,7 +25458,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 -- AUTO_INCREMENT pour la table `saisie_heure_journee`
 --
 ALTER TABLE `saisie_heure_journee`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT pour la table `saisie_heure_libelle`
 --
@@ -25465,7 +25468,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 -- AUTO_INCREMENT pour la table `saisie_heure_projet`
 --
 ALTER TABLE `saisie_heure_projet`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT pour la table `segment`
 --
