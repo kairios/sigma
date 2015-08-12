@@ -8,12 +8,28 @@
 	</thead>
 	<tbody>
 		<!-- boucle ici sur les projets -->
+		<?php 
+			$recap = $this->recapitulatif;
+			$total_heure = 0;
+			foreach($recap as $ligne)
+			{
+				?>
+					<tr>
+						<td><?php echo $ligne['intitule_saisie']; ?></td>
+						<td></td>
+						<td><?php echo $ligne['nb_heure'].'h'; ?></td>
+					</tr>
+				<?php
+
+				$total_heure += floatval($ligne['nb_heure']);
+			}
+		?>
 	</tbody>
 	<tfoot>
 		<tr>
 			<th><?php echo $this->translate('Total heures'); ?></th>
 			<th></th>
-			<th></th>
+			<th><?php echo $total_heure.'h'; ?></th>
 		</tr>
 	</tfoot>
 </table>

@@ -99,6 +99,7 @@ class IndexController extends AbstractActionController
 
         $saisie = new SaisieHeureProjet();
         $saisiesHoraires = $saisie->getSaisiesHeureCalendar($id,$sm); // a transformer en array compréhensible par la conversion JSON.
+        $recapitulatif = $saisie->getRecapitulatifParProjet($id,$sm);
 
         //Assignation de variables au layout
         $this->layout()->setVariables(array(
@@ -111,7 +112,8 @@ class IndexController extends AbstractActionController
         ));
 
         return new ViewModel(array(
-            'saisiesJson' => $saisiesHoraires
+            'saisiesJson' => $saisiesHoraires,
+            'recapitulatif'=> $recapitulatif
         ));
     }
 

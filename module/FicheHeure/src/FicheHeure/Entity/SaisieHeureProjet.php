@@ -312,7 +312,7 @@ class SaisieHeureProjet
     public function exchangeArray($data = array(),$em=null) 
     {
         $refAffaire         = $em->getRepository('Affaire\Entity\Affaire')->find( (int)$data['ref_affaire'] );
-        $refPoste           = $em->getRepository('Application\Entity\PosteCout')->find( (int)$data['ref_poste'] );
+        $refPoste           = $em->getRepository('Affaire\Entity\PosteCout')->find( (int)$data['ref_poste'] );
         $refLibelle         = $em->getRepository('FicheHeure\Entity\SaisieHeureLibelle')->find( (int)$data['ref_libelle'] );
         $refSaisieHoraire   = $em->getRepository('FicheHeure\Entity\SaisieHeureJournee')->find( (int)$data['ref_saisie_horaire'] );
 
@@ -327,7 +327,8 @@ class SaisieHeureProjet
         }
         else
         {
-            $this->setIntutleSaisie($affaire->getRefClient()->getRaisonSociale().' - '.$affaire->getNumeroAffaire());
+            $intitule = $affaire->getRefClient()->getRaisonSociale().' - '.$affaire->getNumeroAffaire();
+            $this->setIntituleSaisie($intitule);
         }
 
         $nbHeure = (!empty($data['nb_heure'])) ? str_replace(',','.',$data['nb_heure']) : null;
@@ -351,7 +352,7 @@ class SaisieHeureProjet
         // $refSaisieHoraire   = $em->getRepository('FicheHeure\Entity\SaisieHeureJournee')->find( (int)$data['id_saisie_horaire'] );
         $refLibelle         = $em->getRepository('FicheHeure\Entity\SaisieHeureLibelle')->find( (int)$data['ref_libelle'] );
         $refAffaire         = $em->getRepository('Affaire\Entity\Affaire')->find( (int)$data['ref_affaire'] );
-        $refPoste           = $em->getRepository('Application\Entity\PosteCout')->find( (int)$data['ref_poste'] );
+        $refPoste           = $em->getRepository('Affaire\Entity\PosteCout')->find( (int)$data['ref_poste'] );
 
         // $saisieHoraire  = (!empty($refSaisieHoraire)) ? $refSaisieHoraire : null;
         $libelle        = (!empty($refLibelle)) ? $refLibelle : null;
@@ -364,7 +365,8 @@ class SaisieHeureProjet
         }
         else
         {
-            $this->setIntutleSaisie($affaire->getRefClient()->getRaisonSociale().' - '.$affaire->getNumeroAffaire());
+            $intitule = $affaire->getRefClient()->getRaisonSociale().' - '.$affaire->getNumeroAffaire();
+            $this->setIntituleSaisie($intitule);
         }
 
         $nbHeure = (!empty($data['nb_heure'])) ? str_replace(',','.',$data['nb_heure']) : null;
@@ -407,7 +409,7 @@ class SaisieHeureProjet
 
                 $saisiesJson .= "{
                     id: ".$saisie['id'].",
-                    title: '".$saisie['intitule_saisie']."',
+                    title: '(".$saisie['nb_heure'].'h) '.$saisie['intitule_saisie']."',
                     start: new Date(".$annee.", ".$mois.", ".$jour."),
                     end: new Date(".$annee.", ".$mois.", ".$jour."),
                     allDay: false
@@ -421,5 +423,28 @@ class SaisieHeureProjet
         return '[]';
     }
 
+    public function getRecapitulatifParProjet($personnel, $sm = null)
+    {
+        $query =   
+            "SELECT sp.intitule_saisie, SUM(sp.nb_heure) as nb_heure
+             FROM saisie_heure_projet AS sp
+                LEFT JOIN saisie_heure_journee AS sj 
+                    ON sp.ref_saisie_horaire = sj.id
+             WHERE sp.supprime = 0 AND sj.ref_personnel = $personnel
+             GROUP BY sp.intitule_saisie"
+        ;
+        
+        $statement = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+        $results = $statement->execute();
+
+        if($results->isQueryResult())
+        {
+            $resultSet=new ResultSet;
+            $resultSet->initialize($results);
+            return $resultSet->toArray();
+        }
+
+        return array();
+    }
 
 }
