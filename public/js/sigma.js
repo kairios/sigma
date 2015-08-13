@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:49:48
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-12 17:40:34
+* @Last Modified time: 2015-08-13 18:03:36
 */
 
 'use strict';
@@ -1990,134 +1990,237 @@ var sigma={
 
 					    sigma.controller.affaire.setLigneListeners();					    
 					break;
+					case 'listeaffaire':
+						// Initialisation du plugin dataTables sur la table des affaires
+						var affaireTable = $('#table-affaire').dataTable({
+				            'dom': '<"row"l>r<"table-responsive"t>ip',
+				            'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
+				            oLanguage: {
+		                    	'sUrl': '/js/Inspinia/plugins/dataTables/datatables-'+locale+'.json'
+		                	},
+		                	fnInitComplete: function(){
+								// sigma.controller.affaire.setAffaireListeners();
+
+								// $('#table-affaire').unbind();
+								// $('#table-affaire').on('order.dt page.dt', function(){
+								// 	sigma.controller.affaire.setAffaireListeners();
+								// });
+								// $('select[name="table-affaire_length"]').on('change',function(){
+								// 	sigma.controller.affaire.setAffaireListeners();
+								// });
+							},
+						});
+						$('#affaire-filter').keyup(function(){
+							affaireTable.fnFilter($(this).val());
+						});
+
+						$('.chosen-select').chosen();
+						
+
+						$('#search-affaire').on('click', function(){
+							// sigma.controller.affaire.rechercherAffaire();
+							return false;
+						});
+					break;
+					case 'formulaireaffaire':
+						$('#demande_client').summernote({
+							// toolbar: [
+							//     //[groupname, [button list]]
+							//     ['style', ['bold', 'italic', 'underline', 'clear']],
+							//     ['font', ['strikethrough', 'superscript', 'subscript']],
+							//     ['fontsize', ['fontsize']],
+							//     ['color', ['color']],
+							//     ['para', ['ul', 'ol', 'paragraph']],
+							//     ['height', ['height']],
+							// ],
+							// height: 300,
+							// lang: 'fr_FR'
+						});
+						sigma.controller.affaire.setAutocompletionClient();
+						sigma.controller.affaire.setAutocompletionInterlocuteur();
+					break;
 				}
 			},
-			verifierLigneAffaire:function()
+			setAutocompletionClient:function()
 			{
+				var codesClient=$('#code_client');
+				var societes=$('#ref_client');
 
-			},
-			addLigneAffaire:function() // A MODIFIER
-			{
-		    	var _formData = $('#ligne-form').serializeArray();
+				codesClient.on('change',function(){
+					var val=$(this).val();
+					var params={};
 
-				var _trVisible = $('#table-ligne tbody tr.footable-visible:first').clone(); // Duplique la premiere ligne du tableau
-				var _trUnVisible = $('#table-ligne tbody tr.footable-raw-detail:first').clone(); // Duplique la premiere ligne du tableau
+					if(val!=='')
+						params={codeClient:val};
 
-				console.log($('#table-ligne tbody tr.footable-row-detail:first'));
-
-				$.each(_formData, function(index, objet){
-					switch(objet.name)
-					{
-						case 'reference_produit':
-							_trVisible.find('.reference_produit').text(objet.value).prepend('<span class="fa fa-angle-right"></span>');
-						break;
-						case 'metier':
-							_trVisible.find('.metier').text(objet.value);
-						break;
-						case 'charge':
-							_trVisible.find('.charge').text(objet.value);
-							_trUnVisible.find('td div:eq(1) div:eq(2)').text(objet.value);
-						break;
-						case 'intitule_produit':
-							_trVisible.find('.intitule_produit').text(objet.value);
-						break;
-						case 'quantite':
-							_trVisible.find('.quantite').text(objet.value);
-						break;
-						case 'code_fournisseur':
-							_trVisible.find('.code_fournisseur').text(objet.value);
-						break;
-						case 'ref_fournisseur':
-							_trVisible.find('.ref_fournisseur').text(objet.value);
-						break;
-						case 'reference_devis':
-							_trVisible.find('.reference_devis').text(objet.value);
-						break;
-						case 'prix_unitaire_achat':
-							_trVisible.find('.prix_unitaire_achat').text(objet.value);
-						break;
-						case 'prix_unitaire_vente':
-							_trVisible.find('.prix_unitaire_vente').text(objet.value);
-						break;
-						case 'poids_unitaire':
-							_trVisible.find('.poids_unitaire').text(objet.value);
-						break;
-					}
+					$.ajax({
+						url:'/autocompletion_client',
+						data:params,
+						dataType:'json',
+						type:'GET',
+						success:function(resultats){
+							societes.empty();
+							$.each($.parseJSON(resultats["resultat"]),function(index,value){
+								societes.append('<option value="'+value.id+'">'+value.societe+'</option>');
+							});
+							societes.prepend('<option value="">Société</option>'); // Traduire "société"
+						},
+					});
 				});
-				// Azjouter les actions Modifier, Supprimer et ecouteur sur la nouvelle ligne !!
+			},
+			setAutocompletionInterlocuteur:function()
+			{
+				var societes = $('#ref_client');
+				var interlocuteurs = $('#ref_interlocuteur');
 
-				_trVisible.appendTo('#table-ligne tbody');
-				_trUnVisible.appendTo('#table-ligne tbody');
+				societes.on('change',function(){
+					var val = $(this).val();
+					var params = {};
+
+					if(val!=='')
+						params={client:val};
+
+					$.ajax({
+						url:'/autocompletion_interlocuteur',
+						data:params,
+						dataType:'json',
+						type:'GET',
+						success:function(resultats){
+							interlocuteurs.empty();
+							$.each($.parseJSON(resultats["resultat"]),function(index,value){
+								interlocuteurs.append('<option value="'+value.id+'">'+value.nom_complet+'</option>');
+							});
+							interlocuteurs.prepend('<option value="">Interlocuteur</option>'); // Traduire "société"
+						},
+					});
+				});
+			},
+			// verifierLigneAffaire:function()
+			// {
+
+			// },
+			// addLigneAffaire:function() // A MODIFIER
+			// {
+		 //    	var _formData = $('#ligne-form').serializeArray();
+
+			// 	var _trVisible = $('#table-ligne tbody tr.footable-visible:first').clone(); // Duplique la premiere ligne du tableau
+			// 	var _trUnVisible = $('#table-ligne tbody tr.footable-raw-detail:first').clone(); // Duplique la premiere ligne du tableau
+
+			// 	console.log($('#table-ligne tbody tr.footable-row-detail:first'));
+
+			// 	$.each(_formData, function(index, objet){
+			// 		switch(objet.name)
+			// 		{
+			// 			case 'reference_produit':
+			// 				_trVisible.find('.reference_produit').text(objet.value).prepend('<span class="fa fa-angle-right"></span>');
+			// 			break;
+			// 			case 'metier':
+			// 				_trVisible.find('.metier').text(objet.value);
+			// 			break;
+			// 			case 'charge':
+			// 				_trVisible.find('.charge').text(objet.value);
+			// 				_trUnVisible.find('td div:eq(1) div:eq(2)').text(objet.value);
+			// 			break;
+			// 			case 'intitule_produit':
+			// 				_trVisible.find('.intitule_produit').text(objet.value);
+			// 			break;
+			// 			case 'quantite':
+			// 				_trVisible.find('.quantite').text(objet.value);
+			// 			break;
+			// 			case 'code_fournisseur':
+			// 				_trVisible.find('.code_fournisseur').text(objet.value);
+			// 			break;
+			// 			case 'ref_fournisseur':
+			// 				_trVisible.find('.ref_fournisseur').text(objet.value);
+			// 			break;
+			// 			case 'reference_devis':
+			// 				_trVisible.find('.reference_devis').text(objet.value);
+			// 			break;
+			// 			case 'prix_unitaire_achat':
+			// 				_trVisible.find('.prix_unitaire_achat').text(objet.value);
+			// 			break;
+			// 			case 'prix_unitaire_vente':
+			// 				_trVisible.find('.prix_unitaire_vente').text(objet.value);
+			// 			break;
+			// 			case 'poids_unitaire':
+			// 				_trVisible.find('.poids_unitaire').text(objet.value);
+			// 			break;
+			// 		}
+			// 	});
+			// 	// Azjouter les actions Modifier, Supprimer et ecouteur sur la nouvelle ligne !!
+
+			// 	_trVisible.appendTo('#table-ligne tbody');
+			// 	_trUnVisible.appendTo('#table-ligne tbody');
 
 				
-				/*
+				
 
-		    	// Le premier champ est un numéro de ligne
-		    	_tr.find('td').eq(0).text(+$('#table-ligne tbody tr:last td:first').text()+1); // Le premier + permet de forcer la conversion du string en nombre et de faire la somma avec 1
-		    	_tr.find('td').eq(1).html('<a href="#" class="delete-ligne"><i class="fa fa-times"></i></a>'); 
-		    	// On rempli les autres champs avec les données du formulaire
-		    	// (Utiliser des variables au lieu d'une boucle !!!)
-		    	var _i = 1;
-		    	$.each(_formData,function(index, objet){
-		    		_i++;
-		    		_tr.find('td').eq(_i).text(objet.value);
-		    	});
-				_tr.appendTo('#table-ligne tbody');
+		 //    	// Le premier champ est un numéro de ligne
+		 //    	_tr.find('td').eq(0).text(+$('#table-ligne tbody tr:last td:first').text()+1); // Le premier + permet de forcer la conversion du string en nombre et de faire la somma avec 1
+		 //    	_tr.find('td').eq(1).html('<a href="#" class="delete-ligne"><i class="fa fa-times"></i></a>'); 
+		 //    	// On rempli les autres champs avec les données du formulaire
+		 //    	// (Utiliser des variables au lieu d'une boucle !!!)
+		 //    	var _i = 1;
+		 //    	$.each(_formData,function(index, objet){
+		 //    		_i++;
+		 //    		_tr.find('td').eq(_i).text(objet.value);
+		 //    	});
+			// 	_tr.appendTo('#table-ligne tbody');
 
-				// On réinitialise les écouteurs de ligne
-				sigma.controller.affaire.setLigneListeners();*/
-			},
-			deleteLigneAffaire:function(){
+			// 	// On réinitialise les écouteurs de ligne
+			// 	sigma.controller.affaire.setLigneListeners();
+			// },
+			// deleteLigneAffaire:function(){
 
-			},
-			editLigneAffaire:function(){
+			// },
+			// editLigneAffaire:function(){
 
-			},
-			setLigneListeners:function(){
-				/* Set consultation listeners */
-				$('#table-ligne tbody tr').unbind();
-				$('#table-ligne tbody tr').on('click', function(){
-					var rowDetail = $(this).next('.footable-row-detail');
-					if(rowDetail.css('display')=='table-row')
-					{
-						rowDetail.css('display','none');
-						$(this).find(':first span').removeClass('fa-angle-down').addClass('fa-angle-right');
-					}
-					else
-					{
-						rowDetail.css('display','table-row');
-						$(this).find(':first span').removeClass('fa-angle-right').addClass('fa-angle-down');
-					}
-					//sigma.controller.affaire.setModalLigneAffaire($(this));
-				});
+			// },
+			// setLigneListeners:function(){
+			// 	/* Set consultation listeners */
+			// 	$('#table-ligne tbody tr').unbind();
+			// 	$('#table-ligne tbody tr').on('click', function(){
+			// 		var rowDetail = $(this).next('.footable-row-detail');
+			// 		if(rowDetail.css('display')=='table-row')
+			// 		{
+			// 			rowDetail.css('display','none');
+			// 			$(this).find(':first span').removeClass('fa-angle-down').addClass('fa-angle-right');
+			// 		}
+			// 		else
+			// 		{
+			// 			rowDetail.css('display','table-row');
+			// 			$(this).find(':first span').removeClass('fa-angle-right').addClass('fa-angle-down');
+			// 		}
+			// 		//sigma.controller.affaire.setModalLigneAffaire($(this));
+			// 	});
 
-				/* Set deletion listeners */
-				$('#table-ligne tbody tr a.delete-ligne').unbind();
-				$('#table-ligne tbody tr a.delete-ligne').on('click', function(){	// Attention, la suppression doit également supprimer le TR généré !!!
-					var n = $('#table-ligne tbody tr').length;
-					console.log($('#table-ligne tbody tr'));
-					if(n > 1) {
-						$(this).closest('tr').remove();
-					}
-					else
-					{
-						// Faire un toast de notification
-						alert('Une affaire doit comporter au moins une ligne');
-					}
-				});
+			// 	/* Set deletion listeners */
+			// 	$('#table-ligne tbody tr a.delete-ligne').unbind();
+			// 	$('#table-ligne tbody tr a.delete-ligne').on('click', function(){	// Attention, la suppression doit également supprimer le TR généré !!!
+			// 		var n = $('#table-ligne tbody tr').length;
+			// 		console.log($('#table-ligne tbody tr'));
+			// 		if(n > 1) {
+			// 			$(this).closest('tr').remove();
+			// 		}
+			// 		else
+			// 		{
+			// 			// Faire un toast de notification
+			// 			alert('Une affaire doit comporter au moins une ligne');
+			// 		}
+			// 	});
 
-				/* Set edition listeners */
-				$('#table-ligne tbody tr a.edit-ligne').unbind();
-				$('#table-ligne tbody tr a.edit-ligne').on('click', function(){	// Attention, la suppression doit également supprimer le TR généré !!!
-					return false;
-				});
-			},
-			updateLigneData:function(){ // cette méthode va permettre de mettre à jour les données d'une ligne après modification (PTA, PTV, PT)
+			// 	/* Set edition listeners */
+			// 	$('#table-ligne tbody tr a.edit-ligne').unbind();
+			// 	$('#table-ligne tbody tr a.edit-ligne').on('click', function(){	// Attention, la suppression doit également supprimer le TR généré !!!
+			// 		return false;
+			// 	});
+			// },
+			// updateLigneData:function(){ // cette méthode va permettre de mettre à jour les données d'une ligne après modification (PTA, PTV, PT)
 
-			},
-			updateAffaireData:function(){ // cette méthode va permettre de mettre à jour les données d'une affaire (Total frais hors port, etc)
+			// },
+			// updateAffaireData:function(){ // cette méthode va permettre de mettre à jour les données d'une affaire (Total frais hors port, etc)
 
-			},
+			// },
 			setModalLigneAffaire:function(){
 				// Requète ajax
 			},

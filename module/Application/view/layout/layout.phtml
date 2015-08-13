@@ -62,12 +62,25 @@
                     case 'fullcalendar':
                         $this->headLink()->appendStylesheet('/css/Inspinia/plugins/fullcalendar/fullcalendar.css');
                     break;
+                    // case 'summernote':
+                    //     $this->headLink()
+                    //         ->appendStylesheet('/css/Inspinia/plugins/summernote/summernote.css')
+                    //         ->appendStylesheet('/css/Inspinia/plugins/summernote/summernote-bs3.css')
+                    //     ;
+                    // break;
                 }
             }
 
             $this->headLink()
                  //->appendStylesheet($this->basePath('css/Inspinia/plugins/toastr/toastr.min.js'))
-                 ->appendStylesheet($this->basePath('css/Inspinia/animate.css'))
+                 ->appendStylesheet($this->basePath('css/Inspinia/animate.css'));
+            if(in_array('summernote',$plugins)){
+                $this->headLink()
+                    ->appendStylesheet('/css/Inspinia/plugins/summernote/summernote.css')
+                    ->appendStylesheet('/css/Inspinia/plugins/summernote/summernote-bs3.css')
+                ;
+            }
+            $this->headLink()
                  ->appendStylesheet($this->basePath('css/Inspinia/style.css'))
                  ->appendStylesheet($this->basePath('css/sigma.css'))
             ;
@@ -400,6 +413,10 @@
                         $this->headScript()
                             ->appendFile($this->basePath('js/Inspinia/plugins/morris/raphael-2.1.0.min.js'))
                             ->appendFile($this->basePath('js/Inspinia/plugins/morris/morris.js'));
+                    break;
+                    case 'summernote':
+                        $this->headScript()
+                            ->appendFile($this->basePath('js/Inspinia/plugins/summernote/summernote.min.js'));
                     break;
                     // case 'footable':
                     //     $this->headScript()

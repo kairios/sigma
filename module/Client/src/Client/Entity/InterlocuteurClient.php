@@ -434,4 +434,28 @@ class InterlocuteurClient
 
         return array();
     }
+
+    public function getNomsInterlocuteurs($sm,$client=null,$limit=100)
+    {
+        $query =   
+            "SELECT id, CONCAT_WS(' ', titre_civilite, prenom, nom) as nom_complet
+             FROM interlocuteur_client "
+        ;
+        if(!is_null($client))
+        {
+            $query.= " WHERE ref_societe_client = $client ";
+        }
+
+        $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+        $results    = $statement->execute();
+
+        if($results->isQueryResult())
+        {
+            $resultSet=new ResultSet;
+            $resultSet->initialize($results);
+            return $resultSet->toArray();
+        }
+
+        return array();
+    }
 }

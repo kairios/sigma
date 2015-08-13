@@ -273,6 +273,25 @@ class Personnel
 
         return array();
     }
+
+    public function getNomsPersonnels($sm,$limit=100)
+    {
+        $query =   
+            "SELECT id, CONCAT_WS(' ', prenom, nom) as nom_complet
+             FROM personnel "
+        ;
+        $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+        $results    = $statement->execute();
+
+        if($results->isQueryResult())
+        {
+            $resultSet=new ResultSet;
+            $resultSet->initialize($results);
+            return $resultSet->toArray();
+        }
+
+        return array();
+    }
 }
 
 ?>

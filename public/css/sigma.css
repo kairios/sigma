@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:50:12
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-12 17:03:26
+* @Last Modified time: 2015-08-13 17:42:32
 */
 
                                                 /*********************************************************/
@@ -381,4 +381,9 @@ span.entite i:hover
 
 .fc-time {
     display:none;
+}
+
+/* Affaire */
+.note-editor {
+    border: 1px solid #ddd;
 }

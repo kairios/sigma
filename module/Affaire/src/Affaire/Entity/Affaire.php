@@ -45,6 +45,13 @@ class Affaire
     /**
      * @var integer
      *
+     * @ORM\Column(name="date_creation_modification_fiche", type="integer", nullable=false)
+     */
+    private $dateCreationModificationFiche;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="exercice", type="integer", nullable=false)
      */
     private $exercice;
@@ -92,16 +99,16 @@ class Affaire
     private $suiviBudgetActif = 0;
 
     /**
-     * @var \DateTime
+     * @var integer
      *
-     * @ORM\Column(name="date_debut", type="date", nullable=false)
+     * @ORM\Column(name="date_debut", type="integer", nullable=false)
      */
     private $dateDebut;
 
     /**
-     * @var \DateTime
+     * @var integer
      *
-     * @ORM\Column(name="date_fin", type="date", nullable=true)
+     * @ORM\Column(name="date_fin", type="integer", nullable=true)
      */
     private $dateFin;
 
@@ -243,6 +250,27 @@ class Affaire
     public function getDesignationAffaire()
     {
         return $this->designationAffaire;
+    }
+
+    /**
+     * Get dateCreationModificationFiche
+     *
+     * @return integer 
+     */
+    public function getDateCreationModificationFiche()
+    {
+        return $this->dateCreationModificationFiche;
+    }
+
+    /**
+     * Set dateCreationModificationFiche
+     *
+     * @param integer $dateCreationModificationFiche
+     * @return Affaire
+     */
+    public function setDateCreationModificationFiche($dateCreationModificationFiche)
+    {
+        $this->dateCreationModificationFiche=$dateCreationModificationFiche;
     }
 
     /**
@@ -409,7 +437,7 @@ class Affaire
     /**
      * Set dateDebut
      *
-     * @param \DateTime $dateDebut
+     * @param integer $dateDebut
      * @return Affaire
      */
     public function setDateDebut($dateDebut)
@@ -422,7 +450,7 @@ class Affaire
     /**
      * Get dateDebut
      *
-     * @return \DateTime 
+     * @return integer 
      */
     public function getDateDebut()
     {
@@ -432,7 +460,7 @@ class Affaire
     /**
      * Set dateFin
      *
-     * @param \DateTime $dateFin
+     * @param integer $dateFin
      * @return Affaire
      */
     public function setDateFin($dateFin)
@@ -445,7 +473,7 @@ class Affaire
     /**
      * Get dateFin
      *
-     * @return \DateTime 
+     * @return integer 
      */
     public function getDateFin()
     {
@@ -659,6 +687,183 @@ class Affaire
         return $this->refClient;
     }
 
+    public function __construct()
+    {
+        $this->dateDebut = time();
+    }
+
+    /**
+     * Convert the object to an array.
+     *
+     * @return array
+     */
+    public function getArrayCopy() 
+    {
+        $idCentre = $this->getRefCentreProfit();
+        if(!(empty($idCentre)))
+            $idCentre=$idCentre->getId();
+
+        $idClient = $this->getRefClient();
+        if(!(empty($idClient)))
+            $idClient=$idClient->getId();
+
+        $idInterlocuteur = $this->getRefInterlocuteur();
+        if(!(empty($idInterlocuteur)))
+            $idInterlocuteur=$idInterlocuteur->getId();
+
+        $idPersonnel = $this->getRefPersonnel();
+        if(!(empty($idPersonnel)))
+            $idPersonnel=$idPersonnel->getId();
+
+        $idConcurrent = $this->getRefConcurrent();
+        if(!(empty($idConcurrent)))
+            $idConcurrent=$idConcurrent->getId();
+
+        $idDevis = $this->getRefDevisSigne();
+        if(!(empty($idDevis)))
+            $idDevis=$idDevis->getId();
+
+        $idConditionReglement = $this->getRefConditionReglement();
+        if(!(empty($idConditionReglement)))
+            $idConditionReglement=$idConditionReglement->getId();
+
+        // $idModeReglement = $this->getRefModeReglement();
+        // if(!(empty($idModeReglement)))
+        //     $idModeReglement=$idModeReglement->getId();
+
+        return array(
+            'id_affaire'                =>  $this->getId(),
+            'numero_affaire'            =>  $this->getNumeroAffaire(),
+            'designation_affaire'       =>  $this->getDesignationAffaire(),
+            'exercice'                  =>  $this->getExercice(),
+            'demande_client'            =>  $this->getDemandeClient(),
+            'remise'                    =>  $this->getRemise(),
+            'frais_port'                =>  $this->getFraisPort(),
+            'reference_commande_client' =>  $this->getReferenceCommandeClient(),
+            'reference_demande_prix'    =>  $this->getReferenceDemandePrix(),
+            'suivi_budget_actif'        =>  $this->getSuiviBudgetActif(),
+            'date_debut'                =>  $this->getDateDebut(),
+            'date_fin'                  =>  $this->getDateFin(),
+            'etat_affaire'              =>  $this->getEtatAffaire(),
+            'raison_perte'              =>  $this->getRaisonPerte(),
+
+            'ref_centre_profit'         =>  $idCentre,
+            'ref_client'                =>  $idClient,
+            'ref_interlocuteur'         =>  $idInterlocuteur,
+            'ref_condition_reglement'   =>  $idConditionReglement,
+            'ref_personnel'             =>  $idPersonnel,
+            'ref_concurrent'            =>  $idConcurrent,
+            'ref_devis_signe'           =>  $idDevis
+        );
+    }
+  
+    /**
+     * Populate from an array.
+     *
+     * @param array $data
+     */
+    public function exchangeArray($data = array(),$em=null) 
+    {
+        $refCentreProfit                    = $em->getRepository('Affaire\Entity\CentreDeProfit')->find( (int)$data['ref_centre_profit'] );
+        $refClient                          = $em->getRepository('Client\Entity\Client')->find( (int)$data['ref_client'] );
+        $refInterlocuteur                   = $em->getRepository('Client\Entity\InterlocuteurClient')->find( (int)$data['ref_interlocuteur'] );
+        $refPersonnel                       = $em->getRepository('Personnel\Entity\Personnel')->find( (int)$data['ref_personnel'] );
+        $refConditionReglement              = $em->getRepository('Application\Entity\ConditionReglement')->find( (int)$data['ref_condition_reglement'] );
+        $refConcurrent                      = $em->getRepository('Fournisseur\Entity\Fournisseur')->find( (int)$data['ref_concurrent'] );
+        // $refModeReglement                   = $em->getRepository('Application\Entity\ModeReglement')->find( (int)$data['ref_mode_reglement'] );
+        // $refDevisSigne                      = $em->getRepository('Devis\Entity\Devis')->find( (int)$data['ref_devis_signe'] ); // Mis à jour lorsqu'un devis de l'affaire est signé
+        $centreProfit                       = (!empty($refCentreProfit)) ? $refCentreProfit : null;
+        $client                             = (!empty($refClient)) ? $refClient : null;
+        $interlocuteur                      = (!empty($refInterlocuteur)) ? $refInterlocuteur : null;
+        $personnel                          = (!empty($refPersonnel)) ? $refPersonnel : null;
+        $conditionReglement                 = (!empty($refConditionReglement)) ? $refConditionReglement : null;
+        $concurrent                         = (!empty($refConcurrent)) ? $refConcurrent : null;
+
+        $numeroAffaire                      = (!empty($data['numero_affaire'])) ? $data['numero_affaire'] : null;
+        $designationAffaire                 = (!empty($data['designation_affaire'])) ? $data['designation_affaire'] : null;
+        $exercice                           = (!empty($data['exercice'])) ? $data['exercice'] : null; // date('Y', $data['date_creation'])
+        $demandeClient                      = (!empty($data['demande_client'])) ? $data['demande_client'] : null;
+        $remise                             = (!empty($data['remise'])) ? $data['remise'] : null;
+        $fraisPort                          = (!empty($data['frais_port'])) ? $data['frais_port'] : null;
+        $referenceCommandeClient            = (!empty($data['reference_commande_client'])) ? $data['reference_commande_client'] : null;
+        $referenceDemandePrix               = (!empty($data['reference_demande_prix'])) ? $data['reference_demande_prix'] : null;
+        $dateFin                            = (!empty($data['date_fin'])) ? $data['date_fin'] : null;
+        $etatAffaire                        = (!empty($data['etat_affaire'])) ? $data['etat_affaire'] : null; // refEtatAffaire ? Pour la recherche dans le listing, mieux vaux avoir une reference
+        $raisonPerte                        = (!empty($data['raison_perte'])) ? $data['raison_perte'] : null;
+        $dateCreationModificationFiche      = time();        
+
+        $this->id = $data['id_affaire'];
+        $this->setNumeroAffaire($numeroAffaire);
+        $this->setDesignationAffaire($designationAffaire);
+        $this->setExercice($exercice);
+        $this->setDemandeClient($demandeClient);
+        $this->setRemise($remise);
+        $this->setFraisPort($fraisPort);
+        $this->setReferenceCommandeClient($referenceCommandeClient);
+        $this->setReferenceDemandePrix($referenceDemandePrix);
+        $this->setDateFin($dateFin);
+        $this->setEtatAffaire($etatAffaire);
+        $this->setRaisonPerte($raisonPerte);
+        $this->setRefCentreProfit($centreProfit);
+        $this->setRefClient($client);
+        $this->setRefInterlocuteur($interlocuteur);
+        $this->setRefPersonnel($personnel);
+        $this->setRefConditionReglement($conditionReglement);
+        $this->setRefConcurrent($concurrent);
+        $this->setActif($data['suivi_budget_actif']);
+        $this->setDateCreationModificationFiche($dateCreationModificationFiche);
+
+        // $this->setSupprime($data['supprime']);
+    }
+
+    public function getListeAffaire($sm, $motCle = null, $activites = null, $categories = null)
+    {
+        $query =   
+            "SELECT a.id, a.numero_affaire, c.raison_sociale, ad.code_postal, ad.ville, ad.pays, a.date_debut, a.ref_devis_signe, a.etat_affaire
+             FROM affaire AS a
+                LEFT JOIN client AS c
+                    ON a.ref_client = c.id
+                    LEFT JOIN adresse AS ad
+                        ON ad.ref_client = c.id
+             WHERE ad.adresse_principale = 1 OR ad.adresse_principale IS NULL "
+        ;
+
+        if(!is_null($activites))
+        {
+            $idActivites = implode(',', $activites);
+            $query.= " AND f.ref_activite IN ($idActivites) ";
+        }
+
+        if(!is_null($categories))
+        {
+            $idCategories = implode(',', $categories);
+            $query.= " AND f.ref_categorie IN ($idCategories) ";
+        }
+
+        if(!is_null($motCle))
+        {
+            $query.=
+                " AND (f.code_fournisseur LIKE '%$motCle%' 
+                  OR f.raison_sociale LIKE '%$motCle%' 
+                  OR a.code_postal LIKE '%$motCle%' 
+                  OR a.ville LIKE '%$motCle%' 
+                  OR a.pays LIKE '%$motCle%')
+                ";
+        }
+        
+        $statement = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+        $results = $statement->execute();
+
+        if($results->isQueryResult())
+        {
+            $resultSet=new ResultSet;
+            $resultSet->initialize($results);
+            return $resultSet->toArray();
+        }
+
+        return array();
+    }
+
     public function getAffairesFicheHeure($sm)
     {
         $query =   
@@ -670,6 +875,22 @@ class Affaire
              ORDER BY numero_affaire ASC "
         ;
         // $query      = "SELECT id,numero_affaire FROM affaire ORDER BY numero_affaire ASC ";
+        $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+        $results    = $statement->execute();
+
+        if($results->isQueryResult())
+        {
+            $resultSet=new ResultSet;
+            $resultSet->initialize($results);
+            return $resultSet->toArray();
+        }
+
+        return array();
+    }
+
+    public function getEtatsAffaire($sm)
+    {
+        $query = "SELECT DISTINCT(etat_affaire) FROM affaire ORDER BY etat_affaire ASC ";
         $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
         $results    = $statement->execute();
 

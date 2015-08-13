@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-05-20 10:28:42
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-07-10 17:17:24
+ * @Last Modified time: 2015-08-13 17:59:53
  */
 
 // module\Client\config\module.config.php
@@ -188,6 +188,16 @@ return array(
                     'defaults'=>array(
                         'controller'=>'Client\Controller\Index',
                         'action'=>'autocompletionclient'
+                    ),
+                ),
+            ),
+            'autocompletion_interlocuteur'=>array(
+                'type'=>'Literal',
+                'options'=>array(
+                    'route'=>'/autocompletion_interlocuteur',
+                    'defaults'=>array(
+                        'controller'=>'Client\Controller\Index',
+                        'action'=>'autocompletioninterlocuteur'
                     ),
                 ),
             ),

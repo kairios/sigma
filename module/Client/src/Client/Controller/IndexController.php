@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-05-20 10:29:46
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-07-28 10:38:39
+ * @Last Modified time: 2015-08-13 18:00:50
  */
 
 // module\Client\src\Client\Controller\IndexController.php
@@ -794,6 +794,38 @@ class IndexController extends AbstractActionController
         //return;
         return $this->redirect()->toRoute('home'); // Ou on redirige l'utilisateur vers une autre page
 	}
+
+
+	/**
+     * Permet de trouver la liste des interlocuteurs ayant pour client celui spécifié en paramètre
+     */
+    public function autocompletioninterlocuteurAction()
+    {
+        //Si la requète est de type AJAX, on effectue la recherche
+        if($this->getRequest()->isXmlHttpRequest())
+        {
+            $interlocuteur = new InterlocuteurClient();
+            $interlocuteurs = array();
+
+            if(isset($_GET["client"]))
+            {
+                $interlocuteurs = $interlocuteur->getNomsInterlocuteurs($this->getServiceLocator(), (int)$_GET["client"]);
+            }
+            else
+            {
+                $interlocuteurs = $interlocuteur->getNomsInterlocuteurs($this->getServiceLocator());
+            }
+
+            return new JsonModel(array(
+                'resultat'=>json_encode($interlocuteurs)
+            ));
+        }
+
+        //Si l'utilisateur tente d'accéder à l'url de l'action, on lui envoie une erreur 404
+        //$this->getResponse()->setStatusCode(404);
+        //return;
+        return $this->redirect()->toRoute('home'); // Ou on redirige l'utilisateur vers une autre page
+    }
 
 	/**
 	 * Permet de supprimer un interlocuteur définitivement

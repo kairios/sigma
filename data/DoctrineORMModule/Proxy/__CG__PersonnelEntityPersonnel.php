@@ -442,4 +442,15 @@ class Personnel extends \Personnel\Entity\Personnel implements \Doctrine\ORM\Pro
         return parent::getListeUtilisateurs($sm);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getNomsPersonnels($sm, $limit = 100)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNomsPersonnels', array($sm, $limit));
+
+        return parent::getNomsPersonnels($sm, $limit);
+    }
+
 }

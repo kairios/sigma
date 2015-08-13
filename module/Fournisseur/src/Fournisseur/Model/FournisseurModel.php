@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-05-26 12:06:52
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-05 14:00:03
+ * @Last Modified time: 2015-08-13 14:31:51
  */
 
 namespace Fournisseur\Model;
@@ -11,8 +11,6 @@ namespace Fournisseur\Model;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-// Autres entités du formulaire d'ajout fournisseur
-use Adresse\Model\AdresseModel;
 
 class FournisseurModel implements InputFilterAwareInterface
 {
@@ -77,11 +75,24 @@ class FournisseurModel implements InputFilterAwareInterface
 				{
 					case 'int':
 						$element['filters']=array($intFilters);
-						break;
+					break;
 					case 'text' :
 						$element['filters']=$textFilters;
 						$element['validators']=array($textValidator);
-						break;
+					break;
+					case 'float':
+						$element['validators']=array(
+							array(
+								'name'=>'Regex',
+								'options'=>array(
+									'pattern'=>'/^[0-9]+([\.,][05]){0,1}$/',
+									'messages'=>array(
+										'regexNotMatch'=>'Vous devez entrer un décimal valide (0,5 ou 1.5...)'
+									)
+								)
+							)
+						);
+					break;
 				}
 
 				$inputFilter->add($element);

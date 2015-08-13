@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-30 09:23:52
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-07-01 10:14:48
+ * @Last Modified time: 2015-08-13 14:05:08
  */
 
 // module\Affaire\config\module.config.php
@@ -37,24 +37,40 @@ return array(
 					'defaults'=>array(
 						'__NAMESPACE__'	=>'Affaire\Controller',
 						'controller'	=>'Index',
-						'action'		=>'index',
+						'action'		=>'listeaffaire',
 					),
 				),
 				'may_terminate'=>true,
 				'child_routes'=>array(
-					'consulter_affaire'=>array(
+					'affaire'=>array(
 						'type'=>'Segment',
 						'options'=>array(
-							'route'=>'/:id',
+							'route'=>'[/:action][/:id]',
 							'constraints'=>array(
+								'action'=>'[a-zA-Z][a-zA-Z0-9_-]*',
 								'id'=>'[0-9]+',
 							),
 							'defaults'=>array(
+								'__NAMESPACE__' => 'Affaire\Controller',
                         		'controller'    => 'Index',
-                        		'action'        => 'index',
+                        		'action'        => 'listeaffaire',
                         	),
-                        ),
-                    ),
+						),
+					),
+					'consulter_affaire'=>array(
+						'type'=>'Segment',
+						'options'=>array(
+							'route'=>'/affaire-:id',
+							'constraints'=>array(
+								'id'=>'[0-9]+'
+							),
+							'defaults'=>array(
+								'__NAMESPACE__' => 'Affaire\Controller',
+								'controller'=>'Index',
+								'action'=>'consulteraffaire',
+							),
+						),
+					),
 				),
 			),
 			'formulaire_affaire'=>array(
@@ -67,7 +83,7 @@ return array(
 					'defaults'=>array(
 						'__NAMESPACE__' => 'Affaire\Controller',
 						'controller'=>'Index',
-						'action'=>'index',
+						'action'=>'formulaireaffaire',
 					)
 				),
 			),
@@ -113,7 +129,7 @@ return array(
 	'view_manager'=>array(
 		'template_map' => array(
             'affaire/index'           					=> __DIR__ . '/../view/affaire/index/index.phtml',
-            'affaire/affaire'			 				=> __DIR__ . '/../view/affaire/index/affaire.phtml',
+            'affaire/affaire'			 				=> __DIR__ . '/../view/affaire/index/listeaffaire.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

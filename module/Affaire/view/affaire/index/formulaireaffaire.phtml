@@ -1,0 +1,153 @@
+<!-- module\Affaire\view\affaire\index\formulaireaffaire.phtml -->
+
+<?php
+	use Zend\Session\Container;
+	$affaire=$this->affaire;
+	// $session=new Container('societeSession');
+?>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>
+					<?php echo $this->translate('Nouvelle affaire'); ?>
+				</h5>
+				<div class="ibox-tools">
+					<a href="<?php echo $this->url('affaire'); ?>"><i class="fa fa-arrow-left"></i> <?php echo $this->translate('Retour'); ?></a>
+				</div>
+			</div>
+			<div class="ibox-content">
+				<?php
+					$form=$this->form;
+					$errors=$form->getMessages();
+
+					$form->setAttribute('action', $this->url('formulaire_affaire',array('id'=>$this->id)));
+					// $form->setAttribute('class','form-horizontal');
+					$form->get('submit')->setAttribute('value',$this->translate('Enregistrer'));
+					$form->prepare();
+
+					echo $this->form()->openTag($form);
+					echo $this->formInput($form->get('id_affaire')); 
+				?>
+
+					<div class="row">
+						<div class="form-group col-sm-3">
+							<?php
+								echo $this->formLabel($form->get('ref_centre_profit')).'*';
+								echo $this->formSelect($form->get('ref_centre_profit'));
+							 ?>
+						</div>
+						<div class="form-group col-sm-9">
+							<?php 
+								echo $this->formLabel($form->get('designation_affaire'));
+								echo $this->formInput($form->get('designation_affaire')); 
+							?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-sm-3">
+							<?php 
+								echo $this->formLabel($form->get('code_client'));
+								echo $this->formSelect($form->get('code_client')); 
+							?>
+						</div>
+						<div class="form-group col-sm-5">
+							<?php 
+								echo $this->formLabel($form->get('ref_client')).'*';
+								echo $this->formSelect($form->get('ref_client')); 
+							?>
+						</div>
+						<div class="form-group col-sm-4">
+							<?php 
+								echo $this->formLabel($form->get('ref_interlocuteur'));
+								echo $this->formSelect($form->get('ref_interlocuteur')); 
+							?>
+						</div>
+					</div>
+					<div class="hr-line-dashed"></div>
+
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+							<?php 
+								echo $this->formLabel($form->get('ref_personnel')).'*';
+								echo $this->formSelect($form->get('ref_personnel')); 
+							?>
+							</div>
+							<div class="form-group">
+							<?php 
+								echo $this->formLabel($form->get('exercice')).'*';
+								echo $this->formInput($form->get('exercice')); 
+							?>
+							</div>
+							<div class="form-group">
+							<?php 
+								echo $this->formLabel($form->get('ref_condition_reglement'));
+								echo $this->formSelect($form->get('ref_condition_reglement')); 
+							?>
+							</div>
+							<div class="form-group">
+							<?php 
+								// echo $this->formLabel()->openTag($form->get('suivi_budget_actif')/*)->getLabel()->setLabelAttributes(array('class' => 'control-label checkbox-inline'))*/);
+								// echo $this->formCheckbox($form->get('suivi_budget_actif')).$this->formLabel($form->get('suivi_budget_actif'));
+								// // echo $data['form']['label'];
+								// echo $this->formLabel()->closeTag();
+							?>
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<div class="form-group">
+							<?php 
+								echo $this->formLabel($form->get('demande_client'));
+								echo $this->formTextarea($form->get('demande_client')); 
+							?>
+							</div>
+						</div>
+					</div>
+					<div class="hr-line-dashed"></div>
+
+					<div class="row">
+						<div class="form-group col-sm-3">
+							<?php
+								echo $this->formLabel($form->get('remise'));
+								echo $this->formInput($form->get('remise'));
+							 ?>
+						</div>
+						<div class="form-group col-sm-3">
+							<?php
+								echo $this->formLabel($form->get('frais_port'));
+								echo $this->formInput($form->get('frais_port'));
+							 ?>
+						</div>
+						<div class="form-group col-sm-3">
+							<?php
+								echo $this->formLabel($form->get('reference_commande_client'));
+								echo $this->formInput($form->get('reference_commande_client'));
+							 ?>
+						</div>
+						<div class="form-group col-sm-3">
+							<?php
+								echo $this->formLabel($form->get('reference_demande_prix'));
+								echo $this->formInput($form->get('reference_demande_prix'));
+							 ?>
+						</div>
+					</div>
+
+				<div class="hr-line-dashed"></div>
+				<div class="row">
+					<div class="col-md-12">		
+					<?php
+						echo 
+							$this->formButton()->openTag($form->get('submit')).
+							'<i class="fa fa-check"></i> '.$form->get('submit')->getLabel().
+							$this->formButton()->closeTag(); 
+					?>
+					<a id="annuler" href="<?php echo $this->url('affaire'); ?>" class="btn btn-default pull-right"><i class="fa fa-times"></i> <?php echo $this->translate('Annuler'); ?></a>
+					</div>
+				</div>
+				<?php echo $this->form()->closeTag($form); ?>
+			</div>
+		</div>
+	</div>
+</div>

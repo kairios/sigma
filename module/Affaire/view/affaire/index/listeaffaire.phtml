@@ -1,0 +1,116 @@
+ <!-- module\Affaire\view\affaire\index\listeaffaire.phtml -->
+
+ <div class="row">
+	<div class="col-lg-12">
+		<div class="ibox">
+			<div class="ibox-content" style="padding: 15px 30px 20px;">
+				<div class="row">
+                	<a class="btn btn-primary btn-sm pull-right" href="<?php echo $this->url('formulaire_affaire'); ?>">
+                		<i class="fa fa-plus"></i>
+                		<?php echo $this->translate('Nouvelle affaire') ?>
+                	</a>
+                    <h3><?php echo $this->translate('Rechercher une affaire') ?></h3>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- Formulaire de recherche d'Affaire -->
+						<form action="" class="form-inline">
+							<div class="form-group">
+								<select id="centre_profit-select" name="centre_profit-select" class="chosen-select" multiple="" data-placeholder="<?php echo $this->translate('Par centre de profit'); ?>">
+									<option value=""></option>
+									<?php foreach($this->centres as $centre) : ?>
+										<option value="<?php echo $centre->getId(); ?>"><?php echo $centre->getNumero().' - '.$this->translate($centre->getIntituleCentre()); ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+							<div class="form-group">
+								<select id="etat_affaire-select" name="etat_affaire-select" class="chosen-select" data-placeholder="<?php echo $this->translate('Etat affaire'); ?>">
+									<option value=""></option>
+									<?php foreach($this->etats as $key => $etat) : ?>
+										<option value="<?php echo $etat['etat_affaire'] ?>"><?php echo $etat['etat_affaire'] ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+							<div class="form-group m-r-xs">
+								<input id="mot_cle-input" name="search" placeholder="<?php echo $this->translate('Par mot clé'); ?>" type="search" class="form-control input-sm" aria-controls="table-affaire">
+							</div>
+							<button id="search-affaire" class="btn btn-white" type="submit">
+								<i class="fa fa-search"></i>
+								<?php echo $this->translate('Rechercher'); ?>
+							</button>
+						</form>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-xs-12">
+						<button class="btn btn-white btn-sm pull-right hidden-xs" type="submit">
+							<?php echo $this->translate('Exporter'); ?>
+						</button>
+						<div class="form-group m-r-xs pull-right">
+							<input id="affaire-filter" name="affaire-filter" placeholder="<?php echo $this->translate('Filtrer les résultats affichés'); ?>" type="search" class="form-control input-sm" aria-controls="table-affaire">
+						</div>
+						
+						<?php if(sizeof($this->affaires)>0): ?>
+						<table id="table-affaire" class="table table-bordered table-hover table-striped table-condensed dataTable">
+							<thead>
+								<tr>
+									<th><?php echo $this->translate('N° affaire'); ?></th>
+									<th><?php echo $this->translate('Date'); ?></th>
+									<th><?php echo $this->translate('Client'); ?></th>
+									<th><?php echo $this->translate('Code postale'); ?></th>
+									<th><?php echo $this->translate('Ville'); ?></th>
+									<th><?php echo $this->translate('Pays'); ?></th>
+									<th><?php echo $this->translate('Signature'); ?></th>
+									<th><?php echo $this->translate('État projet'); ?></th>
+									<th class="actions"><?php echo $this->translate('Actions'); ?></th>
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th><?php echo $this->translate('N° affaire'); ?></th>
+									<th><?php echo $this->translate('Date'); ?></th>
+									<th><?php echo $this->translate('Client'); ?></th>
+									<th><?php echo $this->translate('Code postale'); ?></th>
+									<th><?php echo $this->translate('Ville'); ?></th>
+									<th><?php echo $this->translate('Pays'); ?></th>
+									<th><?php echo $this->translate('Signature'); ?></th>
+									<th><?php echo $this->translate('État projet'); ?></th>
+									<th class="actions"><?php echo $this->translate('Actions'); ?></th>
+								</tr>
+							</tfoot>
+							<tbody>
+								<?php foreach($this->affaires as $affaire): ?>
+									<tr>
+										<td><?php echo (isset($affaire['numero_affaire']))?$affaire['numero_affaire']:''; ?></td>
+										<td><?php echo (isset($affaire['date_debut']))? date('d-m-Y',$affaire['date_debut']):''; ?></td>
+										<td><?php echo (isset($affaire['raison_sociale']))?$affaire['raison_sociale']:''; ?></td>
+										<td><?php echo (isset($affaire['code_postal']))?$affaire['code_postal']:''; ?></td>
+										<td><?php echo (isset($affaire['ville']))?$affaire['ville']:''; ?></td>
+										<td><?php echo (isset($affaire['pays']))?$affaire['pays']:''; ?></td>
+										<td><?php echo (isset($affaire['ref_devis_signe']) && !is_null($affaire['ref_devis_signe']) ) ? $this->translate('Oui'):$this->translate('Non'); ?></td> <!-- fa-check instead -->
+										<td><?php echo (isset($affaire['etat_affaire']))?$affaire['etat_affaire']:''; ?></td>
+										<td class="actions">
+                                            <a href="<?php echo $this->url('affaire/consulter_affaire',array('id'=>$affaire['id'])); ?>"><i class="fa fa-eye fa-lg"></i></a>
+                                            <a href="<?php echo $this->url('formulaire_affaire',array('id'=>$affaire['id'])); ?>"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+                                            <a href="#" class="affaire-delete-toggle affaire" data-target="#affaire-delete-modal" data-action="delete" data-id="<?php echo $affaire['id']; ?>"><i class="fa fa-trash-o fa-lg"></i></a> 
+                                        </td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+						<?php else: ?>
+							<p><?php echo $this->translate('Aucune donnée n\'a été trouvée.'); ?></p>
+						<?php endif; ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php	
+	// echo $this->render('affaire/suppression_client'); // Modal de confirmation suppression affaire
+	// echo $this->render('affaire/suppression_interlocuteur'); // Modal de confirmation suppression interlocuteur
+?>

@@ -232,4 +232,15 @@ class CentreDeProfit extends \Affaire\Entity\CentreDeProfit implements \Doctrine
         return parent::getIntituleCentre();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getCentresProfit($sm)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCentresProfit', array($sm));
+
+        return parent::getCentresProfit($sm);
+    }
+
 }
