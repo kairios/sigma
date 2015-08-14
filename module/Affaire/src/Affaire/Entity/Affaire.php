@@ -552,12 +552,12 @@ class Affaire
     /**
      * Set refEtatAffaire
      *
-     * @param \Affaire\Entity\EtatAffaire $etatAffaire
+     * @param \Affaire\Entity\EtatAffaire $refEtatAffaire
      * @return Affaire
      */
-    public function setRefEtatAffaire($etatAffaire)
+    public function setRefEtatAffaire($refEtatAffaire)
     {
-        $this->etatAffaire = $etatAffaire;
+        $this->refEtatAffaire = $refEtatAffaire;
     
         return $this;
     }
@@ -569,7 +569,7 @@ class Affaire
      */
     public function getRefEtatAffaire()
     {
-        return $this->etatAffaire;
+        return $this->refEtatAffaire;
     }
 
     /**
