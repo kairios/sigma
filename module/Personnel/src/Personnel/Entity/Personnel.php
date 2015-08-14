@@ -108,6 +108,11 @@ class Personnel
         $this->nom = $nom;
     }
 
+    public function getPrenomNom()
+    {
+        return $this->prenom.' '.$this->nom;
+    }
+
     public function getEmail()
     {
         return $this->email;
@@ -278,7 +283,8 @@ class Personnel
     {
         $query =   
             "SELECT id, CONCAT_WS(' ', prenom, nom) as nom_complet
-             FROM personnel "
+             FROM personnel 
+             ORDER BY nom_complet ASC "
         ;
         $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
         $results    = $statement->execute();

@@ -29,6 +29,13 @@ class Affaire
     private $id;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="numero_auto", type="integer", nullable=false)
+     */
+    private $numeroAuto;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="numero_affaire", type="string", length=30, nullable=false)
@@ -115,16 +122,19 @@ class Affaire
     /**
      * @var string
      *
-     * @ORM\Column(name="etat_affaire", type="string", length=30, nullable=false)
-     */
-    private $etatAffaire;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="raison_perte", type="string", length=150, nullable=true)
      */
     private $raisonPerte;
+
+    /**
+     * @var \Affaire\Entity\EtatAffaire
+     *
+     * @ORM\ManyToOne(targetEntity="Affaire\Entity\EtatAffaire")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ref_etat_affaire", referencedColumnName="id")
+     * })
+     */
+    private $refEtatAffaire;
 
     /**
      * @var \Client\Entity\InterlocuteurClient
@@ -204,6 +214,42 @@ class Affaire
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return Affaire
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Set numeroAuto
+     *
+     * @param integer $numeroAuto
+     * @return Affaire
+     */
+    public function setNumeroAuto($numeroAuto)
+    {
+        $this->numeroAuto = $numeroAuto;
+    
+        return $this;
+    }
+
+    /**
+     * Get numeroAuto
+     *
+     * @return string 
+     */
+    public function getNumeroAuto()
+    {
+        return $this->numeroAuto;
     }
 
     /**
@@ -481,29 +527,6 @@ class Affaire
     }
 
     /**
-     * Set etatAffaire
-     *
-     * @param string $etatAffaire
-     * @return Affaire
-     */
-    public function setEtatAffaire($etatAffaire)
-    {
-        $this->etatAffaire = $etatAffaire;
-    
-        return $this;
-    }
-
-    /**
-     * Get etatAffaire
-     *
-     * @return string 
-     */
-    public function getEtatAffaire()
-    {
-        return $this->etatAffaire;
-    }
-
-    /**
      * Set raisonPerte
      *
      * @param string $raisonPerte
@@ -524,6 +547,29 @@ class Affaire
     public function getRaisonPerte()
     {
         return $this->raisonPerte;
+    }
+
+    /**
+     * Set refEtatAffaire
+     *
+     * @param \Affaire\Entity\EtatAffaire $etatAffaire
+     * @return Affaire
+     */
+    public function setRefEtatAffaire($etatAffaire)
+    {
+        $this->etatAffaire = $etatAffaire;
+    
+        return $this;
+    }
+
+    /**
+     * Get refEtatAffaire
+     *
+     * @return \Affaire\Entity\EtatAffaire 
+     */
+    public function getRefEtatAffaire()
+    {
+        return $this->etatAffaire;
     }
 
     /**
@@ -715,6 +761,10 @@ class Affaire
         if(!(empty($idPersonnel)))
             $idPersonnel=$idPersonnel->getId();
 
+        $idEtat = $this->getRefEtatAffaire();
+        if(!(empty($idEtat)))
+            $idEtat=$idEtat->getId();
+
         $idConcurrent = $this->getRefConcurrent();
         if(!(empty($idConcurrent)))
             $idConcurrent=$idConcurrent->getId();
@@ -733,6 +783,7 @@ class Affaire
 
         return array(
             'id_affaire'                =>  $this->getId(),
+            'numero_auto'               =>  $this->getNumeroAuto(),
             'numero_affaire'            =>  $this->getNumeroAffaire(),
             'designation_affaire'       =>  $this->getDesignationAffaire(),
             'exercice'                  =>  $this->getExercice(),
@@ -744,7 +795,6 @@ class Affaire
             'suivi_budget_actif'        =>  $this->getSuiviBudgetActif(),
             'date_debut'                =>  $this->getDateDebut(),
             'date_fin'                  =>  $this->getDateFin(),
-            'etat_affaire'              =>  $this->getEtatAffaire(),
             'raison_perte'              =>  $this->getRaisonPerte(),
 
             'ref_centre_profit'         =>  $idCentre,
@@ -752,6 +802,7 @@ class Affaire
             'ref_interlocuteur'         =>  $idInterlocuteur,
             'ref_condition_reglement'   =>  $idConditionReglement,
             'ref_personnel'             =>  $idPersonnel,
+            'ref_etat_affaire'              =>  $idEtat(),
             'ref_concurrent'            =>  $idConcurrent,
             'ref_devis_signe'           =>  $idDevis
         );
@@ -762,14 +813,15 @@ class Affaire
      *
      * @param array $data
      */
-    public function exchangeArray($data = array(),$em=null) 
+    public function exchangeArray($data = array(),$sm=null,$em=null) 
     {
         $refCentreProfit                    = $em->getRepository('Affaire\Entity\CentreDeProfit')->find( (int)$data['ref_centre_profit'] );
         $refClient                          = $em->getRepository('Client\Entity\Client')->find( (int)$data['ref_client'] );
         $refInterlocuteur                   = $em->getRepository('Client\Entity\InterlocuteurClient')->find( (int)$data['ref_interlocuteur'] );
         $refPersonnel                       = $em->getRepository('Personnel\Entity\Personnel')->find( (int)$data['ref_personnel'] );
         $refConditionReglement              = $em->getRepository('Application\Entity\ConditionReglement')->find( (int)$data['ref_condition_reglement'] );
-        $refConcurrent                      = $em->getRepository('Fournisseur\Entity\Fournisseur')->find( (int)$data['ref_concurrent'] );
+        $refEtatAffaire                     = $em->getRepository('Affaire\Entity\EtatAffaire')->find( (int)$data['ref_etat_affaire'] );
+        // $refConcurrent                      = $em->getRepository('Fournisseur\Entity\Fournisseur')->find( (int)$data['ref_concurrent'] );
         // $refModeReglement                   = $em->getRepository('Application\Entity\ModeReglement')->find( (int)$data['ref_mode_reglement'] );
         // $refDevisSigne                      = $em->getRepository('Devis\Entity\Devis')->find( (int)$data['ref_devis_signe'] ); // Mis à jour lorsqu'un devis de l'affaire est signé
         $centreProfit                       = (!empty($refCentreProfit)) ? $refCentreProfit : null;
@@ -777,22 +829,25 @@ class Affaire
         $interlocuteur                      = (!empty($refInterlocuteur)) ? $refInterlocuteur : null;
         $personnel                          = (!empty($refPersonnel)) ? $refPersonnel : null;
         $conditionReglement                 = (!empty($refConditionReglement)) ? $refConditionReglement : null;
-        $concurrent                         = (!empty($refConcurrent)) ? $refConcurrent : null;
+        $etat                               = (!empty($refEtatAffaire)) ? $refEtatAffaire : $em->getRepository('Affaire\Entity\EtatAffaire')->findOneBy(array('intituleEtat'=>'En cours'));
+        // $concurrent                         = (!empty($refConcurrent)) ? $refConcurrent : null;
 
-        $numeroAffaire                      = (!empty($data['numero_affaire'])) ? $data['numero_affaire'] : null;
+        $numeroAuto                         = (!empty($data['numero_auto'])) ? $data['numero_auto'] : $this->createNumeroAuto($em);
+        $numeroAffaire                      = (!empty($data['numero_affaire'])) ? $data['numero_affaire'] : $centreProfit->getNumero().'-'.$numeroAuto;
         $designationAffaire                 = (!empty($data['designation_affaire'])) ? $data['designation_affaire'] : null;
         $exercice                           = (!empty($data['exercice'])) ? $data['exercice'] : null; // date('Y', $data['date_creation'])
         $demandeClient                      = (!empty($data['demande_client'])) ? $data['demande_client'] : null;
-        $remise                             = (!empty($data['remise'])) ? $data['remise'] : null;
-        $fraisPort                          = (!empty($data['frais_port'])) ? $data['frais_port'] : null;
+        $remise                             = (!empty($data['remise'])) ? $data['remise'] : 0;
+        $fraisPort                          = (!empty($data['frais_port'])) ? $data['frais_port'] : 0;
         $referenceCommandeClient            = (!empty($data['reference_commande_client'])) ? $data['reference_commande_client'] : null;
         $referenceDemandePrix               = (!empty($data['reference_demande_prix'])) ? $data['reference_demande_prix'] : null;
-        $dateFin                            = (!empty($data['date_fin'])) ? $data['date_fin'] : null;
-        $etatAffaire                        = (!empty($data['etat_affaire'])) ? $data['etat_affaire'] : null; // refEtatAffaire ? Pour la recherche dans le listing, mieux vaux avoir une reference
-        $raisonPerte                        = (!empty($data['raison_perte'])) ? $data['raison_perte'] : null;
-        $dateCreationModificationFiche      = time();        
+        // $dateFin                            = (!empty($data['date_fin'])) ? $data['date_fin'] : null;
+        // $etatAffaire                        = (!empty($data['etat_affaire'])) ? $data['etat_affaire'] : null; // refEtatAffaire ? Pour la recherche dans le listing, mieux vaux avoir une reference
+        // $raisonPerte                        = (!empty($data['raison_perte'])) ? $data['raison_perte'] : null;
+        $dateCreationModificationFiche      = time();
 
         $this->id = $data['id_affaire'];
+        $this->setNumeroAuto($numeroAuto);
         $this->setNumeroAffaire($numeroAffaire);
         $this->setDesignationAffaire($designationAffaire);
         $this->setExercice($exercice);
@@ -801,53 +856,65 @@ class Affaire
         $this->setFraisPort($fraisPort);
         $this->setReferenceCommandeClient($referenceCommandeClient);
         $this->setReferenceDemandePrix($referenceDemandePrix);
-        $this->setDateFin($dateFin);
-        $this->setEtatAffaire($etatAffaire);
-        $this->setRaisonPerte($raisonPerte);
+        // $this->setDateFin($dateFin);
+        // $this->setRaisonPerte($raisonPerte);
         $this->setRefCentreProfit($centreProfit);
         $this->setRefClient($client);
         $this->setRefInterlocuteur($interlocuteur);
         $this->setRefPersonnel($personnel);
+        $this->setEtatAffaire($etat);
         $this->setRefConditionReglement($conditionReglement);
-        $this->setRefConcurrent($concurrent);
-        $this->setActif($data['suivi_budget_actif']);
+        // $this->setRefConcurrent($concurrent);
+        $this->setSuiviBudgetActif($data['suivi_budget_actif']);
         $this->setDateCreationModificationFiche($dateCreationModificationFiche);
-
-        // $this->setSupprime($data['supprime']);
     }
 
-    public function getListeAffaire($sm, $motCle = null, $activites = null, $categories = null)
+    public function getListeAffaire($sm, $motCle = null, $centres = null, $etat = null, $projetSigne = null)
     {
         $query =   
-            "SELECT a.id, a.numero_affaire, c.raison_sociale, ad.code_postal, ad.ville, ad.pays, a.date_debut, a.ref_devis_signe, a.etat_affaire
+            "SELECT a.id, a.numero_affaire, c.raison_sociale, ad.code_postal, ad.ville, ad.pays, FROM_UNIXTIME(a.date_debut,'%d/%m/%Y') as date_debut, a.ref_devis_signe, e.intitule_etat
              FROM affaire AS a
+                LEFT JOIN etat_affaire AS e
+                    ON a.ref_etat_affaire = e.id
                 LEFT JOIN client AS c
                     ON a.ref_client = c.id
                     LEFT JOIN adresse AS ad
                         ON ad.ref_client = c.id
-             WHERE ad.adresse_principale = 1 OR ad.adresse_principale IS NULL "
+             WHERE ( ad.adresse_principale = 1 OR ad.adresse_principale IS NULL ) "
         ;
 
-        if(!is_null($activites))
+        if(!is_null($centres))
         {
-            $idActivites = implode(',', $activites);
-            $query.= " AND f.ref_activite IN ($idActivites) ";
+            $idCentres = implode(',', $centres);
+            $query.= " AND a.ref_centre_profit IN ($idCentres) ";
         }
 
-        if(!is_null($categories))
+        if(!is_null($etat))
         {
-            $idCategories = implode(',', $categories);
-            $query.= " AND f.ref_categorie IN ($idCategories) ";
+            $query.= " AND a.ref_etat_affaire = $etat ";
+        }
+
+        if(!is_null($projetSigne))
+        {
+            if($projetSigne)
+            {
+                $query.= " AND a.ref_devis_signe IS NOT NULL ";
+            }
+            else
+            {
+                $query.= " AND a.ref_devis_signe IS NULL ";
+            }
         }
 
         if(!is_null($motCle))
         {
             $query.=
-                " AND (f.code_fournisseur LIKE '%$motCle%' 
-                  OR f.raison_sociale LIKE '%$motCle%' 
-                  OR a.code_postal LIKE '%$motCle%' 
-                  OR a.ville LIKE '%$motCle%' 
-                  OR a.pays LIKE '%$motCle%')
+                " AND (a.numero_affaire LIKE '%$motCle%' 
+                  OR FROM_UNIXTIME(a.date_debut,'%d/%m/%Y') LIKE '%$motCle%'
+                  OR c.raison_sociale LIKE '%$motCle%' 
+                  OR ad.code_postal LIKE '%$motCle%' 
+                  OR ad.ville LIKE '%$motCle%' 
+                  OR ad.pays LIKE '%$motCle%')
                 ";
         }
         
@@ -874,7 +941,6 @@ class Affaire
              WHERE a.date_fin IS NULL /*AND c.supprime = 0*/
              ORDER BY numero_affaire ASC "
         ;
-        // $query      = "SELECT id,numero_affaire FROM affaire ORDER BY numero_affaire ASC ";
         $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
         $results    = $statement->execute();
 
@@ -888,20 +954,26 @@ class Affaire
         return array();
     }
 
-    public function getEtatsAffaire($sm)
+    public function createNumeroAuto($em)
     {
-        $query = "SELECT DISTINCT(etat_affaire) FROM affaire ORDER BY etat_affaire ASC ";
-        $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
-        $results    = $statement->execute();
+        $query = $em->createQuery("SELECT MAX(a.numeroAuto) as numero_auto FROM Affaire\Entity\Affaire a");
+        $numero = (int) $query->getSingleScalarResult() + 1; // retourne plusieurs résultat sous forme de tableau
 
-        if($results->isQueryResult())
+        while($this->alreadyExisteNumero($numero,$em))
         {
-            $resultSet=new ResultSet;
-            $resultSet->initialize($results);
-            return $resultSet->toArray();
+            $numero++;
         }
 
-        return array();
+        return $numero;
+    }
+
+     public function alreadyExisteNumero($numero, $em = null)
+    {
+        $query = $em->createQuery("SELECT COUNT(a.numeroAuto) as numero_max FROM Affaire\Entity\Affaire a WHERE a.numeroAuto = :numero");
+        $query->setParameter('numero',$numero);
+        $numeroExiste = (bool)$query->getSingleScalarResult();
+
+        return $numeroExiste;
     }
 
 

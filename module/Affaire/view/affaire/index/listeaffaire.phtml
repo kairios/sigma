@@ -25,11 +25,18 @@
 								</select>
 							</div>
 							<div class="form-group">
-								<select id="etat_affaire-select" name="etat_affaire-select" class="chosen-select" data-placeholder="<?php echo $this->translate('Etat affaire'); ?>">
+								<select id="etat_affaire-select" name="etat_affaire-select" class="chosen-single-select" data-placeholder="<?php echo $this->translate('Etat affaire'); ?>">
 									<option value=""></option>
-									<?php foreach($this->etats as $key => $etat) : ?>
-										<option value="<?php echo $etat['etat_affaire'] ?>"><?php echo $etat['etat_affaire'] ?></option>
+									<?php foreach($this->etats as $etat) : ?>
+										<option value="<?php echo $etat->getId(); ?>"><?php echo $etat->getIntituleEtat(); ?></option>
 									<?php endforeach; ?>
+								</select>
+							</div>
+							<div class="form-group">
+								<select id="projet_signe-select" name="projet_signe-select" class="chosen-single-select" data-placeholder="<?php echo $this->translate('Projet signé'); ?>">
+									<option value=""></option>
+									<option value="1"><?php echo $this->translate('Oui'); ?></option>
+									<option value="0"><?php echo $this->translate('Non'); ?></option>
 								</select>
 							</div>
 							<div class="form-group m-r-xs">
@@ -62,7 +69,7 @@
 									<th><?php echo $this->translate('Code postale'); ?></th>
 									<th><?php echo $this->translate('Ville'); ?></th>
 									<th><?php echo $this->translate('Pays'); ?></th>
-									<th><?php echo $this->translate('Signature'); ?></th>
+									<th class="bool"><?php echo $this->translate('Signature'); ?></th>
 									<th><?php echo $this->translate('État projet'); ?></th>
 									<th class="actions"><?php echo $this->translate('Actions'); ?></th>
 								</tr>
@@ -75,7 +82,7 @@
 									<th><?php echo $this->translate('Code postale'); ?></th>
 									<th><?php echo $this->translate('Ville'); ?></th>
 									<th><?php echo $this->translate('Pays'); ?></th>
-									<th><?php echo $this->translate('Signature'); ?></th>
+									<th class="bool"><?php echo $this->translate('Signature'); ?></th>
 									<th><?php echo $this->translate('État projet'); ?></th>
 									<th class="actions"><?php echo $this->translate('Actions'); ?></th>
 								</tr>
@@ -84,13 +91,13 @@
 								<?php foreach($this->affaires as $affaire): ?>
 									<tr>
 										<td><?php echo (isset($affaire['numero_affaire']))?$affaire['numero_affaire']:''; ?></td>
-										<td><?php echo (isset($affaire['date_debut']))? date('d-m-Y',$affaire['date_debut']):''; ?></td>
+										<td><?php echo (isset($affaire['date_debut']))? /*date('d/m/Y',*/$affaire['date_debut']/*)*/:''; ?></td>
 										<td><?php echo (isset($affaire['raison_sociale']))?$affaire['raison_sociale']:''; ?></td>
 										<td><?php echo (isset($affaire['code_postal']))?$affaire['code_postal']:''; ?></td>
 										<td><?php echo (isset($affaire['ville']))?$affaire['ville']:''; ?></td>
 										<td><?php echo (isset($affaire['pays']))?$affaire['pays']:''; ?></td>
-										<td><?php echo (isset($affaire['ref_devis_signe']) && !is_null($affaire['ref_devis_signe']) ) ? $this->translate('Oui'):$this->translate('Non'); ?></td> <!-- fa-check instead -->
-										<td><?php echo (isset($affaire['etat_affaire']))?$affaire['etat_affaire']:''; ?></td>
+										<td><?php echo (isset($affaire['ref_devis_signe']) && !is_null($affaire['ref_devis_signe']) ) ? '<i class="fa fa-check"></i>' : ''; ?></td> <!-- fa-check instead -->
+										<td><?php echo (isset($affaire['intitule_etat']))?$affaire['intitule_etat']:''; ?></td>
 										<td class="actions">
                                             <a href="<?php echo $this->url('affaire/consulter_affaire',array('id'=>$affaire['id'])); ?>"><i class="fa fa-eye fa-lg"></i></a>
                                             <a href="<?php echo $this->url('formulaire_affaire',array('id'=>$affaire['id'])); ?>"><i class="fa fa-pencil-square-o fa-lg"></i></a>

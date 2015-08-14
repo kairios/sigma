@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-29 17:40:56
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-12 17:39:15
+ * @Last Modified time: 2015-08-14 15:28:34
  */
 
 // module\FicheHeure\src\FicheHeure\Controller\IndexController.php
@@ -106,7 +106,7 @@ class IndexController extends AbstractActionController
             'headTitle'         =>  $translator->translate('Fiche d\'heures'),
             'breadcrumbActive'  =>  $id,
             'route'             =>  array(),
-            'action'            =>  'editer_fiche_heure',
+            'action'            =>  'editerficheheure',
             'module'            =>  'fiche_heure',
             'plugins'           =>  array('fullcalendar'),
         ));

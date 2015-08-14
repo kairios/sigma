@@ -1,5 +1,9 @@
 
 <!-- module\Application\view\application\breadcrumb.phtml -->
+<?php
+    use Zend\Session\Container;
+    $utilisateurCourant = new Container('utilisateur');
+?>
 
 <ol class="breadcrumb">
 
@@ -44,6 +48,31 @@
 				<li><a href="'.$this->url('home').'">'.$this->translate('Accueil').'</a></li>
 				<li><a href="'.$this->url('fournisseur').'">'.$this->translate('Fournisseurs et interlocuteurs').'</a></li>
 				<li class="active">'.$this->translate('Fiche fournisseur').'</li>';  
+		break;
+		/** Module Affaire */
+		case 'listeaffaire':
+			echo '
+				<li><a href="'.$this->url('home').'">'.$this->translate('Accueil').'</a></li>
+				<li class="active">'.$this->translate('Affaires').'</li>';                       
+		break;
+		case 'formulaireaffaire':
+			$affaire = $this->affaire;
+			echo '
+				<li><a href="'.$this->url('home').'">'.$this->translate('Accueil').'</a></li>
+				<li><a href="'.$this->url('affaire').'">'.$this->translate('Affaires').'</a></li>
+				<li class="active">'.$this->translate('Formulaire').'</li>';
+		break;
+		case 'consulteraffaire':
+			echo '
+				<li><a href="'.$this->url('home').'">'.$this->translate('Accueil').'</a></li>
+				<li><a href="'.$this->url('affaire').'">'.$this->translate('Affaires').'</a></li>
+				<li class="active">'.$this->translate('Fiche affaire').'</li>';
+		break;
+		/** Module FicheHeure */
+		case 'editerficheheure':
+			echo '
+				<li><a href="'.$this->url('home').'">'.$this->translate('Accueil').'</a></li>
+				<li class="active">'.$this->translate('Fiche d\'heures ')/*.$utilisateurCourant->offsetGet('identite')*/.'</li>';                       
 		break;
 	}
 

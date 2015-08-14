@@ -1,0 +1,74 @@
+<div class="ibox float-e-margins">
+	<div class="ibox-title">
+		<h5>Devis</h5>
+		<div class="ibox-tools">
+			<a class="collapse-link">
+				<i class="fa fa-chevron-up"></i>
+			</a>
+			<a class="close-link">
+				<i class="fa fa-times"></i>
+			</a>
+		</div>
+	</div>
+	<div class="ibox-content table-responsive">
+		<em class="text-info">
+			<i class="fa fa-pencil"></i>
+			<?php echo $this->translate('Date signature:'); ?> 03/07/2015
+		</em>
+		<table class="table table-hover no-margins">
+			<thead>
+				<th>Code devis</th>
+				<th>Date creation</th>
+				<th class="bool">Version</th>
+				<th class="bool">Envoyé</th>
+				<th class="bool">Signé</th>
+				<th class="bool">#</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>13-1234-1</td>
+					<td>
+						<i class="fa fa-clock-o"></i>
+						10/06/2015
+					</td>
+					<td class="bool">1</td>
+					<td class="bool">
+						<input type="checkbox" name="etat" value="1" checked>
+					</td>
+					<td class="bool">
+						<input type="checkbox" name="etat" value="1">
+					</td>
+					<td class="bool">
+						<a href="#"><i class="fa fa-eye"></i></a>
+						<a href="#"><i class="fa fa-pencil"></i></a>
+						<a href="#"><i class="fa fa-trash"></i></a>
+					</td>
+				</tr>
+				<tr>
+					<td>13-1234-2</td>
+					<td>
+						<i class="fa fa-clock-o"></i>
+						30/06/2015
+					</td>
+					<td class="bool">2</td>
+					<td class="bool">
+						<input type="checkbox" name="etat" value="1" checked>
+					</td>
+					<td class="bool">
+						<input type="checkbox" name="etat" value="1" checked>
+					</td>
+					<td class="bool">
+						<a href="#"><i class="fa fa-eye"></i></a>
+						<a href="#"><i class="fa fa-pencil"></i></a>
+						<a href="#"><i class="fa fa-trash"></i></a>
+					</td>
+				</tr>
+				<tr></tr>
+			</tbody>
+		</table>
+		<a href="#">
+			<i class="fa fa-plus"></i>
+			<?php echo $this->translate('Ajouter'); ?>
+		</a>
+	</div>
+</div>

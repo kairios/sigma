@@ -1,0 +1,73 @@
+<div class="ibox float-e-margins">
+	<div class="ibox-title">
+		<h5>Factures</h5>
+		<div class="ibox-tools">
+			<a class="collapse-link">
+				<i class="fa fa-chevron-up"></i>
+			</a>
+			<a class="close-link">
+				<i class="fa fa-times"></i>
+			</a>
+		</div>
+	</div>
+	<div class="ibox-content table-responsive">
+		<div>
+			<span><?php echo $this->translate('Réglées'); ?></span>
+			<small class="pull-right">0/2</small>
+		</div>
+		<div class="progress progress-small">
+			<div class="progress-bar progress-bar-danger" style="width: 20%;"></div>
+		</div>
+
+		<table class="table table-hover no-margins">
+			<thead>
+				<th>Code facture</th>
+				<th>Type</th>
+				<th>Date creation</th>
+				<th>Nb ligne</th>
+				<th class="bool">Réglée</th>
+				<th class="bool">#</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>(F-13-1234-1)</td>
+					<td>Proformat</td>
+					<td>
+						<i class="fa fa-clock-o"></i>
+						30/06/2015
+					</td>
+					<td>4 / 12</td>
+					<td class="bool">
+						<input type="checkbox" name="etat" value="1">
+					</td>
+					<td class="bool">
+						<a href="#"><i class="fa fa-eye"></i></a>
+						<a href="#"><i class="fa fa-pencil"></i></a>
+						<a href="#"><i class="fa fa-trash"></i></a>
+					</td>
+				</tr>
+				<tr>
+					<td>F-13-1234-2</td>
+					<td>Classique</td>
+					<td>
+						<i class="fa fa-clock-o"></i>
+						01/07/2015
+					</td>
+					<td>5 / 12</td>
+					<td class="bool">
+						<input type="checkbox" name="etat" value="1">
+					</td>
+					<td class="bool">
+						<a href="#"><i class="fa fa-eye"></i></a>
+						<a href="#"><i class="fa fa-pencil"></i></a>
+						<a href="#"><i class="fa fa-trash"></i></a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<a href="#">
+			<i class="fa fa-plus"></i>
+			<?php echo $this->translate('Ajouter'); ?>
+		</a>
+	</div>
+</div>

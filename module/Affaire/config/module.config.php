@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-30 09:23:52
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-13 14:05:08
+ * @Last Modified time: 2015-08-14 14:28:46
  */
 
 // module\Affaire\config\module.config.php
@@ -60,7 +60,7 @@ return array(
 					'consulter_affaire'=>array(
 						'type'=>'Segment',
 						'options'=>array(
-							'route'=>'/affaire-:id',
+							'route'=>'/:id',
 							'constraints'=>array(
 								'id'=>'[0-9]+'
 							),
@@ -130,6 +130,12 @@ return array(
 		'template_map' => array(
             'affaire/index'           					=> __DIR__ . '/../view/affaire/index/index.phtml',
             'affaire/affaire'			 				=> __DIR__ . '/../view/affaire/index/listeaffaire.phtml',
+            'affaire/historique'						=> __DIR__ . '/../view/affaire/index/historique.phtml',
+            'affaire/listedevis'						=> __DIR__ . '/../view/affaire/index/listedevis.phtml',
+            'affaire/listecommande'						=> __DIR__ . '/../view/affaire/index/listecommande.phtml',
+            'affaire/listeconfirmation'					=> __DIR__ . '/../view/affaire/index/listeconfirmation.phtml',
+            'affaire/listebordereau'					=> __DIR__ . '/../view/affaire/index/listebordereau.phtml',
+            'affaire/listefacture'						=> __DIR__ . '/../view/affaire/index/listefacture.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

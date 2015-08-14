@@ -409,7 +409,7 @@ class SaisieHeureProjet
 
                 $saisiesJson .= "{
                     id: ".$saisie['id'].",
-                    title: '(".$saisie['nb_heure'].'h) '.$saisie['intitule_saisie']."',
+                    title: '".$saisie['nb_heure'].'h: '.$saisie['intitule_saisie']."',
                     start: new Date(".$annee.", ".$mois.", ".$jour."),
                     end: new Date(".$annee.", ".$mois.", ".$jour."),
                     allDay: false

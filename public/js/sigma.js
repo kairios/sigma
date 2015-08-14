@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:49:48
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-13 18:03:36
+* @Last Modified time: 2015-08-14 18:00:01
 */
 
 'use strict';
@@ -1976,20 +1976,6 @@ var sigma={
 			init:function(){
 				switch(_action)
 				{
-					case 'index':
-						$('.scrollable').slimScroll({
-					        height: '300px',
-					        alwaysVisible:true,
-					        railOpacity: 0.4,
-					        wheelStep: 10
-					    });
-						$('#ligne-form-submit').on('click', function(){
-							sigma.controller.affaire.addLigneAffaire();
-					    	return false;
-					    });
-
-					    sigma.controller.affaire.setLigneListeners();					    
-					break;
 					case 'listeaffaire':
 						// Initialisation du plugin dataTables sur la table des affaires
 						var affaireTable = $('#table-affaire').dataTable({
@@ -2015,31 +2001,165 @@ var sigma={
 						});
 
 						$('.chosen-select').chosen();
+						$('.chosen-single-select').chosen({
+							width: "100%",
+							allow_single_deselect: true
+						});
 						
 
 						$('#search-affaire').on('click', function(){
-							// sigma.controller.affaire.rechercherAffaire();
+							sigma.controller.affaire.rechercherAffaire();
 							return false;
 						});
 					break;
 					case 'formulaireaffaire':
-						$('#demande_client').summernote({
-							// toolbar: [
-							//     //[groupname, [button list]]
-							//     ['style', ['bold', 'italic', 'underline', 'clear']],
-							//     ['font', ['strikethrough', 'superscript', 'subscript']],
-							//     ['fontsize', ['fontsize']],
-							//     ['color', ['color']],
-							//     ['para', ['ul', 'ol', 'paragraph']],
-							//     ['height', ['height']],
-							// ],
-							// height: 300,
-							// lang: 'fr_FR'
-						});
+						// $('#demande_client').summernote({
+						// 	// toolbar: [
+						// 	//     //[groupname, [button list]]
+						// 	//     ['style', ['bold', 'italic', 'underline', 'clear']],
+						// 	//     ['font', ['strikethrough', 'superscript', 'subscript']],
+						// 	//     ['fontsize', ['fontsize']],
+						// 	//     ['color', ['color']],
+						// 	//     ['para', ['ul', 'ol', 'paragraph']],
+						// 	//     ['height', ['height']],
+						// 	// ],
+						// 	// height: 300,
+						// 	// lang: 'fr_FR'
+						// });
+						// $('.i-checks').iCheck({
+		    			//                 checkboxClass: 'icheckbox_square-green',
+		    			//                 radioClass: 'iradio_square-green',
+		    			//             });
 						sigma.controller.affaire.setAutocompletionClient();
 						sigma.controller.affaire.setAutocompletionInterlocuteur();
+						$('#affaire-submit-button').on('click',function(){
+							$('#affaire-form').find(':input:disabled').removeAttr('disabled');
+						});
+					break;
+					case 'consulteraffaire':
+						$('.scrollable').slimScroll({
+					        height: '300px',
+					        alwaysVisible:true,
+					        railOpacity: 0.4,
+					        wheelStep: 10
+					    });
+						$('#ligne-form-submit').on('click', function(){
+							sigma.controller.affaire.addLigneAffaire();
+					    	return false;
+					    });
+
+					    // sigma.controller.affaire.setLigneListeners();
 					break;
 				}
+			},
+			setDataTableAffaire:function(params)
+			{
+				$.ajax({
+					url: '/affaires',
+					data:params,
+					type: 'get',
+					dataType: 'json',
+					success:function(data, status, XMLHttpRequest)
+					{
+						var _affaires=$.parseJSON(data["resultat"]);
+						$('#table-affaire').dataTable().fnDestroy();
+						var clientTable = $('#table-affaire').dataTable( {
+						    data: _affaires,
+						    columns: [
+						        { 'data': 'numero_affaire' },
+						        { 'data': 'date_debut' },
+						        { 'data': 'raison_sociale' },
+						        { 'data': 'code_postal' },
+						        { 'data': 'ville' },
+						        { 'data': 'pays' },
+						        { 'data': 'ref_devis_signe' },
+						        { 'data': 'intitule_etat' },
+						        { 'data': 'id' },
+						    ],
+						    columnDefs:
+						    [
+							    {
+							    	'targets':6,
+							    	'className':'bool',
+							    	'data':_affaires.accepte_infos,
+							    	'render': function (data){
+							    		return (data)? '<i class="fa fa-check"></i>':'';
+							    	}
+							    },
+						    	{
+							    	'targets':8,
+							    	'className':'actions',
+							    	'searchable':false,
+							    	'data':_affaires.id,
+							    	'render': function ( data, type, full, meta ) {
+								      	return 	'<a href="affaires/'+data+'"><i class="fa fa-eye fa-lg"></i></a> '+
+	                                        	'<a href="formulaire-affaire/'+data+'"><i class="fa fa-pencil-square-o fa-lg"></i></a> '+
+	                                        	'<a href="#" class="affaire-delete-toggle affaire" data-target="#affaire-delete-modal" data-action="delete" data-id="'+data+'"><i class="fa fa-trash-o fa-lg"></i></a>  ';
+								    },
+						    	}
+						    ],
+						    'dom': '<"row"l>r<"table-responsive"t>ip',
+				            'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
+				            oLanguage: {
+		                    	'sUrl': '/js/Inspinia/plugins/dataTables/datatables-'+locale+'.json'
+		                	},
+		                	// Fonction de callback
+		                	'fnInitComplete': function(){
+								// sigma.controller.affaire.setAffaireListeners();
+
+								// $('#table-affaire').unbind();
+								// $('#table-affaire').on('order.dt page.dt', function(){
+								// 	sigma.controller.affaire.setAffaireListeners();
+								// });
+								// $('select[name="table-client_length"]').on('change',function(){
+								// 	sigma.controller.affaire.setAffaireListeners();
+								// });
+							},
+						});
+					},
+					error:function(XMLHttpRequest, status, error)
+					{
+						var message='';
+						if(locale=='en_US')
+							message='An error occured when retrieving data : <strong>'+error+'</strong>';
+						else
+							message='Une erreur s\'est produite lors de la récupération des données : <strong>'+error+'</strong>';
+						$("#clients").html(message);
+					}
+				});
+			},
+			setAffaireListeners:function()
+			{
+				$('.affaire').unbind('click');
+				$('.affaire').on('click',function(e){
+					var numAffaire=$(this).attr('data-id');
+					if($(this).attr('data-action')=='delete')
+					{
+						sigma.controller.affaire.setModalDeleteAffaire(numAffaire);
+					}
+					return false;
+				});
+			},
+			rechercherAffaire:function()
+			{
+				var params 		= {};
+				var centres 	= $('#centre_profit-select').val();
+				var etat 		= $('#etat_affaire-select').val();
+				var projetSigne = $('#projet_signe-select').val();
+				var motCle 		= $('#mot_cle-input').val();
+
+				if(centres)
+					params.centres = centres;
+				if(etat)
+					params.etat = etat;
+				if(projetSigne)
+					params.projetSigne = projetSigne;
+				if(motCle)
+					params.motCle = motCle;
+
+				params.maxRows = 500;
+
+				sigma.controller.affaire.setDataTableAffaire(params);
 			},
 			setAutocompletionClient:function()
 			{
@@ -2444,8 +2564,8 @@ var sigma={
 			init:function(){
 				switch(_action)
 				{
-					case 'editer_fiche_heure':
-						$('#page-wrapper').css('height','1250px');
+					case 'editerficheheure':
+						$('#page-wrapper').css('height','1300px');
 				        $('.calendar').fullCalendar({
 				            header: {
 				                left: 'prev,next today',

@@ -18,9 +18,13 @@
         <!-- Le styles -->
         <?php 
 
-            if(!isset($this->plugins))
+            if(isset($this->plugins))
             {
-                $this->plugins=array();
+                $plugins = $this->plugins;
+            }
+            else
+            {
+                $plugins = array();
             }
 
             $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() .'/img/index.png'))
@@ -28,7 +32,7 @@
                  ->appendStylesheet($this->basePath('css/font-awesome/css/font-awesome.min.css')) // Font Awesome 4.3.0
             ;
 
-            foreach($this->plugins as $plugin)
+            foreach($plugins as $plugin)
             {
                 switch($plugin)
                 {
@@ -62,6 +66,9 @@
                     case 'fullcalendar':
                         $this->headLink()->appendStylesheet('/css/Inspinia/plugins/fullcalendar/fullcalendar.css');
                     break;
+                    case 'iCheck':
+                        $this->headLink()->appendStylesheet('/css/Inspinia/plugins/iCheck/custom.css');
+                    break;
                     // case 'summernote':
                     //     $this->headLink()
                     //         ->appendStylesheet('/css/Inspinia/plugins/summernote/summernote.css')
@@ -71,23 +78,25 @@
                 }
             }
 
-            $this->headLink()
-                 //->appendStylesheet($this->basePath('css/Inspinia/plugins/toastr/toastr.min.js'))
-                 ->appendStylesheet($this->basePath('css/Inspinia/animate.css'));
+            $this->headLink()->appendStylesheet($this->basePath('css/Inspinia/animate.css'));
             if(in_array('summernote',$plugins)){
                 $this->headLink()
                     ->appendStylesheet('/css/Inspinia/plugins/summernote/summernote.css')
                     ->appendStylesheet('/css/Inspinia/plugins/summernote/summernote-bs3.css')
                 ;
             }
-            $this->headLink()
-                 ->appendStylesheet($this->basePath('css/Inspinia/style.css'))
-                 ->appendStylesheet($this->basePath('css/sigma.css'))
+            $this->headLink()->appendStylesheet($this->basePath('css/Inspinia/style.css'));
+            if(in_array('awesome-bootstrap-checkbox',$plugins)){
+                $this->headLink()->appendStylesheet('/css/Inspinia/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css');
+            }
+            $this->headLink()->appendStylesheet($this->basePath('css/sigma.css'))
             ;
 
             echo $this->headLink();
         ?>
+
     </head>
+    
     <body class="pace-done">
         <div class="wrapper">
             <!-- Barre de navigation principale sur le coté gauche -->
@@ -268,13 +277,6 @@
                 <div class="row border-bottom white-bg page-heading">
                     <div class="col-lg-10">
                         <h2><?php echo $this->translate($this->headTitle); ?></h2>
-                        <!--
-                        <ol class="breadcrumb">
-                            <?php //foreach($this->route as $r): ?>
-                                <li><a href="<?php //echo $this->url("$this->module"); ?>"><?php //echo $r; ?></a></li>
-                            <?php //endforeach; ?>
-                            <li class="active"><?php //echo $this->breadcrumbActive; ?></li>
-                        </ol>-->
                         <?php echo $this->render('application/breadcrumb'); ?>
                     </div>
                     <div class="col-lg-2">
@@ -426,8 +428,11 @@
             }
             $this->headScript()
                 ->appendFile($this->basePath('js/Inspinia/inspinia.js'))
-                ->appendFile($this->basePath('js/Inspinia/plugins/pace/pace.min.js'))
-                //->appendFile($this->basePath('js/Inspinia/plugins/toastr/toastr.min.js')) // Plugin de notification JQuery
+                ->appendFile($this->basePath('js/Inspinia/plugins/pace/pace.min.js'));
+            if(in_array('iCheck',$plugins)){
+                $this->headScript()->appendFile($this->basePath('js/Inspinia/plugins/iCheck/icheck.min.js'));
+            }
+            $this->headScript()
                 ->appendFile($this->basePath('js/sigma.js'))
             ;
 

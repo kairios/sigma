@@ -1,4 +1,19 @@
-<!-- module\Affaire\view\affaire\index\index.phtml -->
+<!-- module\Affaire\view\affaire\index\consulteraffaire.phtml -->
+
+<?php
+    use Zend\Session\Container;
+    $utilisateurCourant = new Container('utilisateur');
+    $admin = $utilisateurCourant->offsetGet('admin');
+    $fonction = $utilisateurCourant->offsetGet('fonction');
+?>
+
+<?php 
+    $affaire 		= $this->affaire;
+    // $interlocuteurs = $client->getInterlocuteurs();
+    // $adresses       = $client->getAdresses();
+    // $segments       = $client->getSegments();
+    // $produits       = $client->getProduitsFinis();
+?>
 
 <div class="row">
 	<div class="col-lg-12">
@@ -40,90 +55,138 @@
 							 	<span class="text-muted small pull-right">
 				                    <?php echo $this->translate('Dernière modification'); ?>
 				                    <i class="fa fa-clmock-o"></i>
-				                    30/06/2015
+				                    <?php echo date('d/m/Y H:m:s',$affaire->getDateCreationModificationFiche()); ?>
+				                    <!-- 30/06/2015 -->
 				                </span>
-				                <h3> Pétrin continu ligne Mikado [A13-1234] </h3>
-				                <button class="btn btn-primary btn-xs">
+				                <h3>
+				                	<?php echo $affaire->getDesignationAffaire(); ?>
+				                	[<?php echo $affaire->getNumeroAffaire(); ?>]
+				                	<!-- Pétrin continu ligne Mikado [A13-1234] -->
+				                </h3>
+				                <a href="<?php echo $this->url('formulaire_affaire',array('id'=>$this->id)); ?>" class="btn btn-primary btn-xs">
 				                	<i class="fa fa-pencil"></i>
-				                	<?php echo $this->translate('Modifier l\'affaire'); ?>
-				                </button>
+				                	<!-- <a href="<?php echo $this->url('formulaire_affaire',array('id'=>$this->id)); ?>"> -->
+				                		<?php echo $this->translate('Modifier l\'affaire'); ?>
+				                	<!-- </a> -->
+				                </a>
 				                <hr class="tiny-hr">
 								<div class="row">
 									<div class="col-md-4 col-sm-7 b-r">
 				                		<h4><?php echo $this->translate('Informations générales'); ?></h4>
-				                		<p><?php echo $this->translate('Créée le').' '.'10/06/2015'; ?></p>
+				                		<p><?php echo $this->translate('Créée le').' '.date('d/m/Y',$affaire->getDateDebut()); ?></p>
 				                		<ul class="list-group clear-list m-t">
 											<li class="list-group-item fist-item">
-												<span class="pull-right"> Pétrin continu ligne Mikado </span>
-												<span class="label label-info">1</span>
-												<strong>Nom affaire</strong>
+												<span class="pull-right"> <?php echo $affaire->getDesignationAffaire(); ?> </span>
+												<!-- <span class="label label-info">1</span> -->
+												<strong><?php echo $this->translate('Nom affaire'); ?></strong>
 											</li>
 											<li class="list-group-item">
-												<span class="pull-right"> Installation [13] </span>
-												<span class="label label-success">2</span>
-												<strong>Centre de profit</strong>
+												<span class="pull-right"> <?php echo $this->translate($affaire->getRefCentreProfit()->getIntituleCentre()); ?> [<?php echo $this->translate($affaire->getRefCentreProfit()->getNumero()); ?>] </span>
+												<!-- <span class="label label-success">2</span> -->
+												<strong><?php echo $this->translate('Centre de profit'); ?></strong>
 											</li>
 											<li class="list-group-item">
-												<span class="pull-right"> 11/12/2015 </span>
-												<span class="label label-primary">3</span>
-												<strong>Date de création</strong>
+												<span class="pull-right"> 
+													<?php echo $affaire->getRefClient()->getRaisonSociale(); ?>
+													<?php if($this->adresse) : ?>
+														(<?php echo $this->adresse->getVille(); ?>)
+													<?php endif; ?>
+												</span>
+												<!-- <span class="label label-primary">4</span> -->
+												<strong><?php echo $this->translate('Client'); ?></strong>
 											</li>
 											<li class="list-group-item">
-												<span class="pull-right"> MONDALEZ FRANCE (Verpillière) </span>
-												<span class="label label-default">4</span>
-												<strong>Client</strong>
+												<span class="pull-right"><?php echo ($affaire->getRefConditionReglement()) ? $this->translate($affaire->getRefConditionReglement()->getIntituleConditionReglement()) : ''; ?></span>
+												<!-- <span class="label label-default">5</span> -->
+												<strong><?php echo $this->translate('Conditions de règlement'); ?></strong>
 											</li>
 											<li class="list-group-item">
-												<span class="pull-right"> Virement </span>
-												<span class="label label-default">5</span>
-												<strong>Mode de règlement</strong>
+												<span class="pull-right"><?php echo ($affaire->getReferenceCommandeClient()) ? $this->translate($affaire->getReferenceCommandeClient()) : ''; ?></span>
+												<!-- <span class="label label-default">5</span> -->
+												<strong><?php echo $this->translate('Référence commande client'); ?></strong>
 											</li>
 											<li class="list-group-item">
+												<span class="pull-right"><?php echo ($affaire->getReferenceDemandePrix()) ? $this->translate($affaire->getReferenceDemandePrix()) : ''; ?></span>
+												<!-- <span class="label label-default">5</span> -->
+												<strong><?php echo $this->translate('Référence demande de prix'); ?></strong>
+											</li>
+											<!-- <li class="list-group-item">
 												<span class="pull-right"> 20 % à la commande </span>
 												<span class="label label-primary">6</span>
-												<strong>Conditions de règlement</strong>
-											</li>
+												<strong><?php //echo $this->translate('Mode de règlement'); ?></strong>
+											</li> -->
 										</ul>
 				                	</div>
 				                	<div class="col-md-4 col-sm-5 b-r">
 				                		<h4><?php echo $this->translate('Chargé d\'affaire'); ?></h4>
 				                		<div class="widget gray-bg">
 				                			<h3>
-				                				Laurence Noir
-				                				<a href="#"><i class="fa fa-pencil"></i></a>
+				                				<?php echo $affaire->getRefPersonnel()->getPrenomNom(); ?>
+				                				<?php if($admin) : ?>
+				                					<a href="#"><i class="fa fa-pencil"></i></a>
+				                				<?php endif; ?>
 				                			</h3>
 				                		</div>
 										<h4><?php echo $this->translate('Interlocuteur client'); ?></h4>
-				                		<div class="widget gray-bg">
-				                			<h3>
-				                				Janeth Smith
-				                				<a href="#"><i class="fa fa-pencil"></i></a>
-				                			</h3>
-				                			<p>MONDALEZ FRANCE</p>
-				                			<p>Responsable comptabilité</p>
-				                			<ul class="list-unstyled m-t-md">
-				                				<li>
-				                					<span class="fa fa-envelope m-r-xs"></span>
-				                					<label>Email :</label>
-				                					mike@mail.com
-				                				</li>
-				                				<li>
-				                					<span class="fa fa-fax m-r-xs"></span>
-				                					<label>Fax :</label>
-				                					mike@mail.com
-				                				</li>
-				                				<li>
-				                					<span class="fa fa-mobile m-r-xs"></span>
-				                					<label>Mobile :</label>
-				                					mike@mail.com
-				                				</li>
-				                				<li>
-				                					<span class="fa fa-mobile m-r-xs"></span>
-				                					<label>Téléphone :</label>
-				                					mike@mail.com
-				                				</li>
-				                			</ul>
-				                		</div>
+										<?php 
+											if($affaire->getRefInterlocuteur()) 
+											{ 
+												$interlocuteur = $affaire->getRefInterlocuteur();
+										?>
+					                		<div class="widget gray-bg">
+					                			<h3>
+					                				<?php echo $interlocuteur->getPrenomNom(); ?>
+					                				<a class="interlocuteur-form-toggle interlocuteur" data-id="<?php echo $interlocuteur->getId(); ?>" data-action="edit" data-target="#interlocuteur-form-modal" href="#">
+					                					<i class="fa fa-pencil"></i>
+					                				</a>
+					                			</h3>
+					                			<p class="text-uppercase"><?php echo $affaire->getRefClient()->getRaisonSociale(); ?></p>
+					                			<?php if($interlocuteur->getRefFonction()) : ?>
+						                			<p><?php echo $this->translate($interlocuteur->getRefFonction()->getIntituleFonction()); ?></p>
+						                		<?php endif; ?>
+					                			<ul class="list-unstyled m-t-md">
+					                				<?php if($interlocuteur->getEmail()) : ?>
+					                				<li>
+					                					<span class="fa fa-envelope m-r-xs"></span>
+					                					<label><?php echo $this->translate('Email'); ?> :</label>
+					                					<?php echo $interlocuteur->getEmail(); ?>
+					                				</li>
+					                				<?php endif; ?>
+					                				<?php if($interlocuteur->getEmail2()) : ?>
+					                				<li>
+					                					<span class="fa fa-envelope m-r-xs"></span>
+					                					<label><?php echo $this->translate('Email2'); ?> :</label>
+					                					<?php echo $interlocuteur->getEmail2(); ?>
+					                				</li>
+					                				<?php endif; ?>
+					                				<?php if($interlocuteur->getFax()) : ?>
+					                				<li>
+					                					<span class="fa fa-fax m-r-xs"></span>
+					                					<label><?php echo $this->translate('Fax'); ?> :</label>
+					                					<?php echo $interlocuteur->getFax(); ?>
+					                				</li>
+					                				<?php endif; ?>
+					                				<?php if($interlocuteur->getPortable()) : ?>
+					                				<li>
+					                					<span class="fa fa-mobile m-r-xs"></span>
+					                					<label><?php echo $this->translate('Mobile'); ?> :</label>
+					                					<?php echo $interlocuteur->getPortable(); ?>
+					                				</li>
+					                				<?php endif; ?>
+					                				<?php if($interlocuteur->getTelephone()) : ?>
+					                				<li>
+					                					<span class="fa fa-mobile m-r-xs"></span>
+					                					<label><?php echo $this->translate('Téléphone'); ?> :</label>
+					                					<?php echo $interlocuteur->getTelephone(); ?>
+					                				</li>
+					                				<?php endif; ?>
+					                			</ul>
+					                		</div>
+					                	<?php 
+					                		} else { 
+					                	?>
+					                		<?php echo $this->translate('Aucun interlocuteur pour cette affaire.'); ?>
+					                	<?php } ?>
 				                	</div>
 				                	<div class="col-md-4 col-sm-12">
 				                		<div class="pull-right dropdown">
@@ -131,63 +194,11 @@
 				                				<i class="fa fa-angle-down"></i>
 				                			</button>
 				                			<ul class="dropdown-menu">
-				                				<li><a href="#">Mettre à jour l'état</a></li>
+				                				<li><a href="#"><?php echo $this->translate('Mettre à jour l\'état'); ?></a></li>
 				                			</ul>
 				                		</div>
 				                		<h4><?php echo $this->translate('Historique'); ?></h4>
-										<div id="vertical-timeline" class="scrollable vertical-container dark-timeline">
-											<p class="etat-courant">En attente des envois de commandes</p>
-											<!--<p class="autre-etat">En attente de facturation<br><s>En attente de commande fournisseur</s></p>-->
-											<div class="vertical-timeline-block">
-												<div class="vertical-timeline-icon navy-bg">
-													<i class="fa fa-check"></i>
-												</div>
-												<div class="vertical-timeline-content">
-													<strong>Affaire signée</strong>
-													<p>
-														<i class="fa fa-paperclip"></i>
-														Devis n°<a href="">13-1234-2</a>
-													</p>
-													<p class="small text-muted">
-														<i class="fa fa-clock-o"></i>
-														03/07/2015
-													</p>
-												</div>
-											</div>
-											<p class="autre-etat"><s>En attente de réponse client</s></p>
-											<div class="vertical-timeline-block">
-												<div class="vertical-timeline-icon gray-bg">
-													<i class="fa fa-envelope"></i>
-												</div>
-												<div class="vertical-timeline-content">
-													<strong>Devis envoyé(s)</strong>
-													<p>
-														<i class="fa fa-paperclip"></i>
-														Devis n°<a href="">13-1234-1</a>
-													<br>
-														<i class="fa fa-paperclip"></i>
-														Devis n°<a href="">13-1234-2</a>
-													</p>
-													<p class="small text-muted">
-														<i class="fa fa-clock-o"></i>
-														01/07/2015
-													</p>
-												</div>
-											</div>
-											<p class="autre-etat"><s>En attente des envois de devis</s></p>
-											<div class="vertical-timeline-block">
-												<div class="vertical-timeline-icon gray-bg">
-													<i class="fa fa-flag"></i>
-												</div>
-												<div class="vertical-timeline-content">
-													<strong>Affaire créée</strong>
-													<p class="small text-muted">
-														<i class="fa fa-clock-o"></i>
-														10/06/2015
-													</p>
-												</div>
-											</div>
-										</div>
+										<?php echo $this->render('affaire/historique'); ?>
 				                	</div>
 				                </div>
 							</div>
@@ -200,331 +211,13 @@
 								<h3><?php echo $this->translate('Documents de gestion'); ?></h3>
 				            	<hr>
 								<div class="col-lg-6">
-									<div class="ibox float-e-margins">
-										<div class="ibox-title">
-											<h5>Devis</h5>
-											<div class="ibox-tools">
-												<a class="collapse-link">
-													<i class="fa fa-chevron-up"></i>
-												</a>
-												<a class="close-link">
-													<i class="fa fa-times"></i>
-												</a>
-											</div>
-										</div>
-										<div class="ibox-content table-responsive">
-											<em class="text-info">
-												<i class="fa fa-pencil"></i>
-												<?php echo $this->translate('Date signature:'); ?> 03/07/2015
-											</em>
-											<table class="table table-hover no-margins">
-												<thead>
-													<th>Code devis</th>
-													<th>Date creation</th>
-													<th class="bool">Version</th>
-													<th class="bool">Envoyé</th>
-													<th class="bool">Signé</th>
-													<th class="bool">#</th>
-												</thead>
-												<tbody>
-													<tr>
-														<td>13-1234-1</td>
-														<td>
-															<i class="fa fa-clock-o"></i>
-															10/06/2015
-														</td>
-														<td class="bool">1</td>
-														<td class="bool">
-															<input type="checkbox" name="etat" value="1" checked>
-														</td>
-														<td class="bool">
-															<input type="checkbox" name="etat" value="1">
-														</td>
-														<td class="bool">
-															<a href="#"><i class="fa fa-eye"></i></a>
-															<a href="#"><i class="fa fa-pencil"></i></a>
-															<a href="#"><i class="fa fa-trash"></i></a>
-														</td>
-													</tr>
-													<tr>
-														<td>13-1234-2</td>
-														<td>
-															<i class="fa fa-clock-o"></i>
-															30/06/2015
-														</td>
-														<td class="bool">2</td>
-														<td class="bool">
-															<input type="checkbox" name="etat" value="1" checked>
-														</td>
-														<td class="bool">
-															<input type="checkbox" name="etat" value="1" checked>
-														</td>
-														<td class="bool">
-															<a href="#"><i class="fa fa-eye"></i></a>
-															<a href="#"><i class="fa fa-pencil"></i></a>
-															<a href="#"><i class="fa fa-trash"></i></a>
-														</td>
-													</tr>
-													<tr></tr>
-												</tbody>
-											</table>
-											<a href="#">
-												<i class="fa fa-plus"></i>
-												<?php echo $this->translate('Ajouter'); ?>
-											</a>
-										</div>
-									</div>
-									<div class="ibox float-e-margins">
-										<div class="ibox-title">
-											<h5>Factures</h5>
-											<div class="ibox-tools">
-												<a class="collapse-link">
-													<i class="fa fa-chevron-up"></i>
-												</a>
-												<a class="close-link">
-													<i class="fa fa-times"></i>
-												</a>
-											</div>
-										</div>
-										<div class="ibox-content table-responsive">
-											<div>
-												<span><?php echo $this->translate('Réglées'); ?></span>
-												<small class="pull-right">0/2</small>
-											</div>
-											<div class="progress progress-small">
-												<div class="progress-bar progress-bar-danger" style="width: 20%;"></div>
-											</div>
-
-											<table class="table table-hover no-margins">
-												<thead>
-													<th>Code facture</th>
-													<th>Type</th>
-													<th>Date creation</th>
-													<th>Nb ligne</th>
-													<th class="bool">Réglée</th>
-													<th class="bool">#</th>
-												</thead>
-												<tbody>
-													<tr>
-														<td>(F-13-1234-1)</td>
-														<td>Proformat</td>
-														<td>
-															<i class="fa fa-clock-o"></i>
-															30/06/2015
-														</td>
-														<td>4 / 12</td>
-														<td class="bool">
-															<input type="checkbox" name="etat" value="1">
-														</td>
-														<td class="bool">
-															<a href="#"><i class="fa fa-eye"></i></a>
-															<a href="#"><i class="fa fa-pencil"></i></a>
-															<a href="#"><i class="fa fa-trash"></i></a>
-														</td>
-													</tr>
-													<tr>
-														<td>F-13-1234-2</td>
-														<td>Classique</td>
-														<td>
-															<i class="fa fa-clock-o"></i>
-															01/07/2015
-														</td>
-														<td>5 / 12</td>
-														<td class="bool">
-															<input type="checkbox" name="etat" value="1">
-														</td>
-														<td class="bool">
-															<a href="#"><i class="fa fa-eye"></i></a>
-															<a href="#"><i class="fa fa-pencil"></i></a>
-															<a href="#"><i class="fa fa-trash"></i></a>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-											<a href="#">
-												<i class="fa fa-plus"></i>
-												<?php echo $this->translate('Ajouter'); ?>
-											</a>
-										</div>
-									</div>
-									<div class="ibox float-e-margins">
-										<div class="ibox-title">
-											<h5>Confirmations de commande</h5>
-											<div class="ibox-tools">
-												<a class="collapse-link">
-													<i class="fa fa-chevron-up"></i>
-												</a>
-												<a class="close-link">
-													<i class="fa fa-times"></i>
-												</a>
-											</div>
-										</div>
-										<div class="ibox-content table-responsive">
-											<div>
-												<span><?php echo $this->translate('Envoyées'); ?></span>
-												<small class="pull-right">0/1</small>
-											</div>
-											<div class="progress progress-small">
-												<div class="progress-bar progress-bar-danger" style="width: 0%;"></div>
-											</div>
-											<table class="table table-hover no-margins">
-												<thead>
-													<th>Code confirmation</th>
-													<th>Date creation</th>
-													<th class="bool">Envoyée</th>
-													<th class="bool">#</th>
-												</thead>
-												<tbody>
-													<tr>
-														<td>13-1234-1</td>
-														<td>
-															<i class="fa fa-clock-o"></i>
-															30/06/2015
-														</td>
-														<td class="bool">
-															<input type="checkbox" name="etat" value="1">
-														</td>
-														<td class="bool">
-															<a href="#"><i class="fa fa-eye"></i></a>
-															<a href="#"><i class="fa fa-pencil"></i></a>
-															<a href="#"><i class="fa fa-trash"></i></a>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-											<a href="#">
-												<i class="fa fa-plus"></i>
-												<?php echo $this->translate('Ajouter'); ?>
-											</a>
-										</div>
-									</div>
+									<?php echo $this->render('affaire/listedevis'); ?>
+									<?php echo $this->render('affaire/listefacture'); ?>
+									<?php echo $this->render('affaire/listeconfirmation'); ?>									
 								</div>
 								<div class="col-lg-6">
-									<div class="ibox float-e-margins">
-										<div class="ibox-title">
-											<h5>Commandes fournisseur</h5>
-											<div class="ibox-tools">
-												<a class="collapse-link">
-													<i class="fa fa-chevron-up"></i>
-												</a>
-												<a class="close-link">
-													<i class="fa fa-times"></i>
-												</a>
-											</div>
-										</div>
-										<div class="ibox-content table-responsive">
-											<div>
-												<span><?php echo $this->translate('Envoyées'); ?></span>
-												<small class="pull-right">2/2</small>
-											</div>
-											<div class="progress progress-small">
-												<div class="progress-bar" style="width: 100%;"></div>
-											</div>
-											<table class="table table-hover no-margins">
-												<thead>
-													<th>Code commande</th>
-													<th>Date</th>
-													<th>Fournisseur</th>
-													<th>Montant</th>
-													<th class="bool">Envoyée</th>
-													<th class="bool">#</th>
-												</thead>
-												<tbody>
-													<tr>
-														<td>CF13-1234-1</td>
-														<td>
-															<i class="fa fa-clock-o"></i>
-															30/06/2015
-														</td>
-														<td>Mikado France</td>
-														<td>1 512.36 €</td>
-														<td class="bool">
-															<input type="checkbox" name="etat" value="1" checked>
-														</td>
-														<td class="bool">
-															<a href="#"><i class="fa fa-eye"></i></a>
-															<a href="#"><i class="fa fa-pencil"></i></a>
-															<a href="#"><i class="fa fa-trash"></i></a>
-														</td>
-													</tr>
-													<tr>
-														<td>CF13-1234-1</td>
-														<td>
-															<i class="fa fa-clock-o"></i>
-															30/06/2015
-														</td>
-														<td>Pestashop</td>
-														<td>45 021.20 €</td>
-														<td class="bool">
-															<input type="checkbox" name="etat" value="1" checked>
-														</td>
-														<td class="bool">
-															<a href="#"><i class="fa fa-eye"></i></a>
-															<a href="#"><i class="fa fa-pencil"></i></a>
-															<a href="#"><i class="fa fa-trash"></i></a>
-														</td>
-													</tr>
-													<tr></tr>
-												</tbody>
-											</table>
-											<a href="#">
-												<i class="fa fa-plus"></i>
-												<?php echo $this->translate('Ajouter'); ?>
-											</a>
-										</div>
-									</div>
-									<div class="ibox float-e-margins">
-										<div class="ibox-title">
-											<h5>Bordereaux de livraison</h5>
-											<div class="ibox-tools">
-												<a class="collapse-link">
-													<i class="fa fa-chevron-up"></i>
-												</a>
-												<a class="close-link">
-													<i class="fa fa-times"></i>
-												</a>
-											</div>
-										</div>
-										<div class="ibox-content table-responsive">
-											<div>
-												<span><?php echo $this->translate('Livrés'); ?></span>
-												<small class="pull-right">0/1</small>
-											</div>
-											<div class="progress progress-small">
-												<div class="progress-bar progress-bar-danger" style="width: 0%;"></div>
-											</div>
-											<table class="table table-hover no-margins">
-												<thead>
-													<th>Code bordereaux</th>
-													<th>Date creation</th>
-													<th class="bool">Livré</th>
-													<th class="bool">#</th>
-												</thead>
-												<tbody>
-													<tr>
-														<td>13-1234-1</td>
-														<td>
-															<i class="fa fa-clock-o"></i>
-															30/06/2015
-														</td>
-														<td class="bool">
-															<input type="checkbox" name="etat" value="1">
-														</td>
-														<td class="bool">
-															<a href="#"><i class="fa fa-eye"></i></a>
-															<a href="#"><i class="fa fa-pencil"></i></a>
-															<a href="#"><i class="fa fa-trash"></i></a>
-														</td>
-													</tr>
-												</tbody>
-												</tbody>
-											</table>
-											<a href="#">
-												<i class="fa fa-plus"></i>
-												<?php echo $this->translate('Ajouter'); ?>
-											</a>
-										</div>
-									</div>
+									<?php echo $this->render('affaire/listecommande'); ?>
+									<?php echo $this->render('affaire/listebordereau'); ?>
 								</div>
 							</div>
 						</div>
@@ -1018,7 +711,7 @@
 							</div>
 						</div>
 
-						<!-- Panel de suivi de budget
+						<!-- Panel de suivi de budget -->
 						<div id="suivi-budget" class="tab-pane">
 							<div class="row">
 
@@ -1026,7 +719,9 @@
 							</div>
 							<hr>
 							<div class="col-lg-12">
-								<button class="btn btn-primary btn-md"><?php echo $this->translate('Activer le suivi de budget'); ?></button>
+								<?php if(!$affaire->getSuiviBudgetActif()) : ?>
+									<button class="btn btn-primary btn-md"><?php echo $this->translate('Activer le suivi de budget'); ?></button>
+								<?php endif; ?>
 							</div>
 						</div>
 
@@ -1037,17 +732,8 @@
 							</div>
 							<hr>
 							<div class="col-lg-12">
-
-
-
-
 								<!-- Morris Line Chart -->
 								<div id="morris-line-chart" style="height:250px;"></div>
-
-
-
-
-
 							</div>
 						</div>
 					</div>
@@ -1056,3 +742,8 @@
 		</div>
 	</div>
 </div>
+
+<?php	
+	echo $this->render('personnel/overlay_formulaire_personnel');
+	echo $this->render('client/overlay_formulaire_interlocuteur');
+?>

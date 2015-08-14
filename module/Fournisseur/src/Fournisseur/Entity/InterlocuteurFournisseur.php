@@ -153,6 +153,11 @@ class InterlocuteurFournisseur
         $this->prenom=$prenom;
     }
 
+    public function getPrenomNom()
+    {
+        return $this->prenom.' '.$this->nom;
+    }
+
     public function getTelephone()
     {
         return $this->telephone;

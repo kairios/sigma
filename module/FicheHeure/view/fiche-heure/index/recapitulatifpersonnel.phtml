@@ -2,8 +2,8 @@
 	<thead>
 		<tr>
 			<th><?php echo $this->translate('Projets'); ?></th>
-			<th><?php echo $this->translate('Temps prévu'); ?></th>
-			<th><?php echo $this->translate('Temps passé'); ?></th>
+			<th><?php echo $this->translate('Temps prévu (h)'); ?></th>
+			<th><?php echo $this->translate('Temps passé (h)'); ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -11,13 +11,14 @@
 		<?php 
 			$recap = $this->recapitulatif;
 			$total_heure = 0;
+			$total_prevu = 0;
 			foreach($recap as $ligne)
 			{
 				?>
 					<tr>
 						<td><?php echo $ligne['intitule_saisie']; ?></td>
-						<td></td>
-						<td><?php echo $ligne['nb_heure'].'h'; ?></td>
+						<td>10</td>
+						<td class="<?php echo ($ligne['nb_heure'] > 10) ? 'text-danger':''; ?>"><?php echo $ligne['nb_heure']; ?></td>
 					</tr>
 				<?php
 
@@ -28,8 +29,8 @@
 	<tfoot>
 		<tr>
 			<th><?php echo $this->translate('Total heures'); ?></th>
-			<th></th>
-			<th><?php echo $total_heure.'h'; ?></th>
+			<th><?php echo $total_prevu; ?></th>
+			<th class="<?php echo ($total_heure > $total_prevu) ? 'text-danger':''; ?>"><?php echo $total_heure; ?></th>
 		</tr>
 	</tfoot>
 </table>

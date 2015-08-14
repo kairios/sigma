@@ -246,6 +246,17 @@ class Personnel extends \Personnel\Entity\Personnel implements \Doctrine\ORM\Pro
     /**
      * {@inheritDoc}
      */
+    public function getPrenomNom()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPrenomNom', array());
+
+        return parent::getPrenomNom();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getEmail()
     {
 

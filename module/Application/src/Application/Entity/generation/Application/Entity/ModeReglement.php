@@ -15,7 +15,7 @@ class ModeReglement
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,41 +24,9 @@ class ModeReglement
     /**
      * @var string
      *
-     * @ORM\Column(name="intitule_mode_reglement", type="string", length=300, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="intitule_mode_reglement", type="string", length=300, nullable=false)
      */
     private $intituleModeReglement;
 
 
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set intituleModeReglement
-     *
-     * @param string $intituleModeReglement
-     * @return ModeReglement
-     */
-    public function setIntituleModeReglement($intituleModeReglement)
-    {
-        $this->intituleModeReglement = $intituleModeReglement;
-    
-        return $this;
-    }
-
-    /**
-     * Get intituleModeReglement
-     *
-     * @return string 
-     */
-    public function getIntituleModeReglement()
-    {
-        return $this->intituleModeReglement;
-    }
 }

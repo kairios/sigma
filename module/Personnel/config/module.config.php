@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-23 13:34:29
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-07-28 17:51:37
+ * @Last Modified time: 2015-08-14 13:56:52
  */
 
 // module\Personnel\config\module.config.php
@@ -126,9 +126,10 @@ return array(
 	// Permet d'appeler des vues plus simplement
 	'view_manager'=>array(
 		'template_map' => array(
-            'personnel/index'                   => __DIR__ . '/../view/personnel/index/index.phtml',
-            'personnel/profil'	                => __DIR__ . '/../view/personnel/index/profil.phtml',
-            'personnel/formulaire-password'     => __DIR__ . '/../view/personnel/index/formulairepassword.phtml',
+            'personnel/index'                               => __DIR__ . '/../view/personnel/index/listepersonnel.phtml',
+            'personnel/profil'	                            => __DIR__ . '/../view/personnel/index/profil.phtml',
+            'personnel/formulaire-password'                 => __DIR__ . '/../view/personnel/index/formulairepassword.phtml',
+            'personnel/overlay_formulaire_personnel'        => __DIR__ . '/../view/personnel/modal/overlay-formulaire-personnel.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

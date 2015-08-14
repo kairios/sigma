@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-13 10:30:54
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-13 17:56:20
+ * @Last Modified time: 2015-08-14 16:14:17
  */
 
 namespace Affaire\Form;
@@ -288,7 +288,7 @@ class AffaireForm extends Form
 			'name'=>'submit',
 			'type'=>'Submit',
 			'attributes'=>array(
-				'id'=>'task-submit-button',
+				'id'=>'affaire-submit-button',
 				'type'=>'submit',
 				'class'=>'btn btn-primary pull-right',
 				'value'=>$translator->translate('Valider')

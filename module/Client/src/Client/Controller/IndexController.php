@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-05-20 10:29:46
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-13 18:00:50
+ * @Last Modified time: 2015-08-14 15:17:06
  */
 
 // module\Client\src\Client\Controller\IndexController.php
@@ -453,8 +453,14 @@ class IndexController extends AbstractActionController
 
 			if($request->isPost())
 			{
-				// On supprime le client ainsi que ses adresses et interlocuteurs
-				$em->remove($client);
+				// On supprime le client ainsi que ses adresses et interlocuteurs en mettant leur champ "Supprimé" à TRUE
+				foreach($client->getInterlocuteurs() as $interlocuteur)
+				{
+					$interlocuteur->setSupprime(true);
+					$em->persist($interlocuteur);
+				}
+				$client->setSupprime(true);
+				$em->persist($client);
 				$em->flush();
 
 				return new JsonModel(array(

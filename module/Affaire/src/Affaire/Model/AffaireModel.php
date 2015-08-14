@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-13 10:31:47
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-13 18:04:40
+ * @Last Modified time: 2015-08-14 17:02:19
  */
 
 namespace Affaire\Model;
@@ -19,6 +19,9 @@ class AffaireModel implements InputFilterAwareInterface
 	public $fields=array(
 		// Champs de l'affaire
 		'id_affaire'						=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'Id')),
+		'numero_auto'						=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'NumeroAuto')),
+		'numero_affaire'					=>array('type'=>'text',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'NumeroAffaire')),
+		'ref_etat_affaire'					=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'RefEtatAffaire')),
 		'ref_centre_profit'					=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>true,'label'=>'Centre de profit','parent'=>'generalite')),
 		'code_client'						=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>false,'label'=>'Code client','static'=>true)),
 		'ref_client'						=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>true,'label'=>'Client','parent'=>'coordonnees')),
@@ -36,7 +39,6 @@ class AffaireModel implements InputFilterAwareInterface
 		// 'numero_affaire'					=>array('type'=>'text','max'=>10,	'form'=>array('type'=>'text','required'=>false,'label'=>'Code fournisseur','parent'=>'generalite')), // Généré par Sigma grâce au numéro de centre de profit
 		// 'date_fin'						=>array('type'=>'text',				'form'=>array('type'=>'text','required'=>false,'label'=>'Date de fin','parent'=>'generalite')),
 		// 'raison_perte'					=>array('type'=>'text','max'=>150,	'form'=>array('type'=>'text','required'=>false,'label'=>'Activité','parent'=>'generalite')),
-		// 'ref_etat_affaire'				=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>false,'label'=>'Activité','parent'=>'generalite')),
 		// 'ref_concurrent'					=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>false,'label'=>'Activité','parent'=>'generalite')),
 		// 'ref_devis_signe'				=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>false,'label'=>'Activité','parent'=>'generalite')),
 	);

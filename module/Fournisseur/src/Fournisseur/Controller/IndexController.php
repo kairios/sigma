@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-05 10:45:58
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-07-24 19:28:02
+ * @Last Modified time: 2015-08-14 15:20:44
  */
 
 // module\Fournisseur\src\Fournisseur\Controller\IndexContoller.phtml
@@ -396,8 +396,14 @@ class IndexController extends AbstractActionController
 
 			if($request->isPost())
 			{
-				// On supprime le fournisseur ainsi que ses adresses et interlocuteurs
-				$em->remove($fournisseur);
+				// On supprime le fournisseur ainsi que ses interlocuteurs en mettant leur champ "Supprimé" à TRUE
+				foreach($fournisseur->getInterlocuteurs() as $interlocuteur)
+				{
+					$interlocuteur->setSupprime(true);
+					$em->persist($interlocuteur);
+				}
+				$fournisseur->setSupprime(true);
+				$em->persist($fournisseur);
 				$em->flush();
 
 				return new JsonModel(array(

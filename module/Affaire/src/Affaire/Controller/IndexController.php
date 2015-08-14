@@ -3,13 +3,14 @@
  * @Author: Ophelie
  * @Date:   2015-06-30 09:31:09
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-13 17:50:04
+ * @Last Modified time: 2015-08-14 18:11:42
  */
 
 namespace Affaire\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 // EntityManager
 use Doctrine\ORM\EntityManager;
 // Session
@@ -25,6 +26,8 @@ class IndexController extends AbstractActionController
      * @var DoctrineORMEntityManager
      */
     protected $em;
+
+    protected $flashArray = array('errors'=>array(),'success'=>array());
 
     // Permet la redirection en cas d'utilisateur non authentifié à l'envoi
     // On utilise cette méthode car ce n'est pas possible de le faire dans le constructeur du controller
@@ -101,79 +104,31 @@ class IndexController extends AbstractActionController
                 'route'             =>  array('Affaires'),
                 'action'            =>  'listeaffaire',
                 'module'            =>  'affaire',
-                'plugins'           =>  array('dataTable','chosen'),
-                //'userId'          =>  $userId,
-                //'login'           =>  $login,                                 
+                'plugins'           =>  array('dataTable','chosen'),                      
             ));
 
-            // $types          = $this->getEntityManager()->getRepository('Client\Entity\TypeSegment')->findBy(array(), array('intituleTypeSegment'=>'ASC'));
-            // $segments       = $this->getEntityManager()->getRepository('Client\Entity\Segment')->findBy(array(), array('intituleSegment'=>'ASC'));
-            // $produitsFinis  = $this->getEntityManager()->getRepository('Client\Entity\ProduitFini')->findBy(array(), array('intituleProduitFini'=>'ASC'));
-            $etats = $affaire->getEtatsAffaire($this->getServiceLocator());
+            $etats = $this->getEntityManager()->getRepository('Affaire\Entity\EtatAffaire')->findAll();
             $centres = $this->getEntityManager()->getRepository('Affaire\Entity\CentreDeProfit')->findBy(array(),array('numero'=>'ASC'));
 
             return new ViewModel(array(
-                'affaires'           => $affaire->getListeAffaire($this->getServiceLocator()),
-                // 'types_segment'     => $types,
-                // 'segments'          => $segments,
-                // 'produits_finis'    => $produitsFinis
-                'etats' => $etats,
-                'centres' => $centres
+                'affaires'  => $affaire->getListeAffaire($this->getServiceLocator()),
+                'etats'     => $etats,
+                'centres'   => $centres
             ));
         }
 
         // S'il s'agit d'une recherche
 
-        $resultat   = array();
-        // $motCle     = isset($_GET['motCle']) ? $_GET['motCle'] : null;
+        $resultat       = array();
+        $centres        = isset($_GET['centres']) ? $_GET['centres'] : null;
+        $etatAffaire    = isset($_GET['etat']) ? $_GET['etat'] : null;
+        $projetSigne    = isset($_GET['projetSigne']) ? (bool) $_GET['projetSigne'] : null;
+        $motCle         = isset($_GET['motCle']) ? $_GET['motCle'] : null;
 
-        // // Avec type de segment
-
-        // if (isset($_GET['produitsFinis']))
-        // {
-        //     $arrayProduits = $_GET['produitsFinis'];
-
-        //     $resultat = $client->getClientsByProduitsFinisAndMotCle(
-        //         $this->getServiceLocator(),
-        //         $arrayProduits,
-        //         $motCle
-        //     );
-        // }
-        // else if(isset($_GET['segments']))
-        // {
-        //     $arraySegments = $_GET['segments'];
-
-        //     $resultat = $client->getClientsBySegmentsAndMotCle(
-        //         $this->getServiceLocator(),
-        //         $arraySegments,
-        //         $motCle
-        //     );
-        // }
-        // else if(isset($_GET['typesSegment']))
-        // {
-        //     $arrayTypes = $_GET['typesSegment'];
-
-        //     $resultat = $client->getClientsByTypesSegmentAndMotCle(
-        //         $this->getServiceLocator(),
-        //         $arrayTypes,
-        //         $motCle
-        //     );
-        // }
-        // else if(!is_null($motCle))
-        // {
-        //     $resultat = $client->getClients(
-        //         $this->getServiceLocator(),
-        //         '%'.addslashes($motCle).'%',
-        //         intval($_GET['maxRows'])
-        //     );
-        // }
-        // else
-        // {
-        //     $resultat = $client->getListeClient($this->getServiceLocator());
-        // }
+        $resultat       = $affaire->getListeAffaire($this->getServiceLocator(), $motCle, $centres, $etatAffaire, $projetSigne);
 
         return new JsonModel(array(
-            'resultat'  => json_encode($resultat),
+            'resultat'=>json_encode($resultat)
         ));
     }
 
@@ -210,7 +165,7 @@ class IndexController extends AbstractActionController
                 'breadcrumbActive'  =>  $affaire->getDesignationAffaire(),
                 'action'            =>  'formulaireaffaire',                            
                 'module'            =>  'affaire',
-                'plugins'           =>  array(),
+                'plugins'           =>  array('summernote','awesome-bootstrap-checkbox'/*,'iCheck'*/),
             ));
         }
         else
@@ -224,7 +179,7 @@ class IndexController extends AbstractActionController
                 'breadcrumbActive'  =>  $translator->translate('Nouvelle affaire'),
                 'action'            =>  'formulaireaffaire',                            
                 'module'            =>  'affaire',
-                'plugins'           =>  array('summernote'),
+                'plugins'           =>  array('summernote','awesome-bootstrap-checkbox'/*,'iCheck'*/),
             ));
         }
 
@@ -232,22 +187,21 @@ class IndexController extends AbstractActionController
         $form = new AffaireForm($translator,$sm,$em,$request,$affaire);   
         if($request->isPost())
         {
-            //$adresse=new \Application\Entity\Adresse;
             $form->setData($request->getPost());
             if($form->isValid())
             {
                 /* Hydratation de l'objet affaire avec les données du formulaire */
 
-                $affaire->exchangeArray($form->getData(),$em);
-
+                $affaire->exchangeArray($form->getData(),$sm,$em);
+                
                 try
                 {
-                    $em->persist($affaire); // Persiste les adresses et les interlocuteurs en cascade avec le affaire
+                    $em->persist($affaire);
                     $em->flush();
                 }
                 catch(\Exception $e)
                 {
-                    $erreurMessage = $translator->translate('Une erreur est survenue durant la sauvegarde du affaire. Vérifiez que tous les champs sont valides (Informations générales, interlocuteurs, adresses..).')/*.$e->getMessage()*/;
+                    $erreurMessage = $translator->translate('Une erreur est survenue durant la sauvegarde du affaire. Vérifiez que tous les champs sont valides.').$e->getMessage();
                     $messagesFlash = $this->flashArray;
                     $messagesFlash['errors'][] = $erreurMessage;
                     $utilisateur->offsetSet('messagesFlash', $messagesFlash);
@@ -272,7 +226,30 @@ class IndexController extends AbstractActionController
     
     public function consulteraffaireAction()
     {
+        $id = (int)$this->params()->fromRoute('id');
+        $affaire = $this->getEntityManager()->getRepository('Affaire\Entity\Affaire')->find($id);
+        if($affaire==null)
+        {
+            throw new \Exception($this->getServiceLocator()->get('Translator')->translate('Cette affaire n\'existe pas'));
+        }
 
+        //Assign variables to layout
+        $this->layout()->setVariables(array(
+            'headTitle'         =>  $this->getServiceLocator()->get('Translator')->translate('Fiche affaire'),
+            'breadcrumbActive'  =>  'Détails affaire : '.$affaire->getNumeroAffaire(),
+            'route'             =>  array(),
+            'action'            =>  'consulteraffaire',
+            'module'            =>  'affaire',
+            'plugins'           =>  array(),                              
+        ));
+
+        $adressePrincipale = $this->getEntityManager()->getRepository('Adresse\Entity\Adresse')->findOneBy(array('refClient'=>$affaire->getRefClient()->getId(),'adressePrincipale'=>true));
+        
+        return new ViewModel(array(
+            'id'=>$id,
+            'affaire'=>$affaire,
+            'adresse'=>$adressePrincipale
+        ));
     }
 }
 

@@ -1,0 +1,73 @@
+<div class="ibox float-e-margins">
+	<div class="ibox-title">
+		<h5>Commandes fournisseur</h5>
+		<div class="ibox-tools">
+			<a class="collapse-link">
+				<i class="fa fa-chevron-up"></i>
+			</a>
+			<a class="close-link">
+				<i class="fa fa-times"></i>
+			</a>
+		</div>
+	</div>
+	<div class="ibox-content table-responsive">
+		<div>
+			<span><?php echo $this->translate('Envoyées'); ?></span>
+			<small class="pull-right">2/2</small>
+		</div>
+		<div class="progress progress-small">
+			<div class="progress-bar" style="width: 100%;"></div>
+		</div>
+		<table class="table table-hover no-margins">
+			<thead>
+				<th>Code commande</th>
+				<th>Date</th>
+				<th>Fournisseur</th>
+				<th>Montant</th>
+				<th class="bool">Envoyée</th>
+				<th class="bool">#</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>CF13-1234-1</td>
+					<td>
+						<i class="fa fa-clock-o"></i>
+						30/06/2015
+					</td>
+					<td>Mikado France</td>
+					<td>1 512.36 €</td>
+					<td class="bool">
+						<input type="checkbox" name="etat" value="1" checked>
+					</td>
+					<td class="bool">
+						<a href="#"><i class="fa fa-eye"></i></a>
+						<a href="#"><i class="fa fa-pencil"></i></a>
+						<a href="#"><i class="fa fa-trash"></i></a>
+					</td>
+				</tr>
+				<tr>
+					<td>CF13-1234-1</td>
+					<td>
+						<i class="fa fa-clock-o"></i>
+						30/06/2015
+					</td>
+					<td>Pestashop</td>
+					<td>45 021.20 €</td>
+					<td class="bool">
+						<input type="checkbox" name="etat" value="1" checked>
+					</td>
+					<td class="bool">
+						<a href="#"><i class="fa fa-eye"></i></a>
+						<a href="#"><i class="fa fa-pencil"></i></a>
+						<a href="#"><i class="fa fa-trash"></i></a>
+					</td>
+				</tr>
+				<tr></tr>
+			</tbody>
+		</table>
+		<a href="#">
+			<i class="fa fa-plus"></i>
+			<?php echo $this->translate('Ajouter'); ?>
+		</a>
+	</div>
+</div>

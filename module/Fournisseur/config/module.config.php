@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-05 10:41:54
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-07-03 15:43:05
+ * @Last Modified time: 2015-08-14 14:00:57
  */
 
 // module\Fournisseur\config\module.config.php
@@ -228,6 +228,7 @@ return array(
             'fournisseur/formulaire_interlocuteur_session'          => __DIR__ . '/../view/fournisseur/index/formulaireinterlocuteursession.phtml',
             'fournisseur/suppression_fournisseur'                   => __DIR__ . '/../view/fournisseur/modal/overlay-confirmation-suppression-fournisseur.phtml',
             'fournisseur/suppression_interlocuteur'                 => __DIR__ . '/../view/fournisseur/modal/overlay-confirmation-suppression-interlocuteur.phtml',
+            'fournisseur/overlay_formulaire_interlocuteur'          => __DIR__ . '/../view/fournisseur/modal/overlay-formulaire-interlocuteur.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

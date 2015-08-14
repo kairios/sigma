@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-05-20 10:28:42
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-13 17:59:53
+ * @Last Modified time: 2015-08-14 13:55:08
  */
 
 // module\Client\config\module.config.php
@@ -275,6 +275,7 @@ return array(
             'client/formulaire_interlocuteur_session'	=> __DIR__ . '/../view/client/index/formulaireinterlocuteursession.phtml',
             'client/suppression_client'					=> __DIR__ . '/../view/client/modal/overlay-confirmation-suppression-client.phtml',
             'client/suppression_interlocuteur'			=> __DIR__ . '/../view/client/modal/overlay-confirmation-suppression-interlocuteur.phtml',
+            'client/overlay_formulaire_interlocuteur'	=> __DIR__ . '/../view/client/modal/overlay-formulaire-interlocuteur.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

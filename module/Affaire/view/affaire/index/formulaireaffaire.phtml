@@ -28,40 +28,48 @@
 					$form->prepare();
 
 					echo $this->form()->openTag($form);
-					echo $this->formInput($form->get('id_affaire')); 
+					echo $this->formInput($form->get('id_affaire'));
+					echo $this->formInput($form->get('numero_auto'));
+					echo $this->formInput($form->get('numero_affaire'));
+					echo $this->formInput($form->get('ref_etat_affaire'));
 				?>
 
 					<div class="row">
-						<div class="form-group col-sm-3">
+						<div class="form-group col-sm-3 <?php if(isset($errors['ref_centre_profit'])) { echo 'has-error'; } ?>">
 							<?php
 								echo $this->formLabel($form->get('ref_centre_profit')).'*';
 								echo $this->formSelect($form->get('ref_centre_profit'));
+								echo $this->formElementErrors($form->get('ref_centre_profit'), array('class' => 'liste-erreurs'));
 							 ?>
 						</div>
-						<div class="form-group col-sm-9">
+						<div class="form-group col-sm-9 <?php if(isset($errors['designation_affaire'])) { echo 'has-error'; } ?>">
 							<?php 
 								echo $this->formLabel($form->get('designation_affaire'));
 								echo $this->formInput($form->get('designation_affaire')); 
+								echo $this->formElementErrors($form->get('designation_affaire'), array('class' => 'liste-erreurs'));
 							?>
 						</div>
 					</div>
 					<div class="row">
-						<div class="form-group col-sm-3">
+						<div class="form-group col-sm-3 <?php if(isset($errors['code_client'])) { echo 'has-error'; } ?>">
 							<?php 
 								echo $this->formLabel($form->get('code_client'));
 								echo $this->formSelect($form->get('code_client')); 
+								echo $this->formElementErrors($form->get('code_client'), array('class' => 'liste-erreurs'));
 							?>
 						</div>
-						<div class="form-group col-sm-5">
+						<div class="form-group col-sm-5 <?php if(isset($errors['ref_client'])) { echo 'has-error'; } ?>">
 							<?php 
 								echo $this->formLabel($form->get('ref_client')).'*';
 								echo $this->formSelect($form->get('ref_client')); 
+								echo $this->formElementErrors($form->get('ref_client'), array('class' => 'liste-erreurs'));
 							?>
 						</div>
-						<div class="form-group col-sm-4">
+						<div class="form-group col-sm-4 <?php if(isset($errors['ref_interlocuteur'])) { echo 'has-error'; } ?>">
 							<?php 
 								echo $this->formLabel($form->get('ref_interlocuteur'));
 								echo $this->formSelect($form->get('ref_interlocuteur')); 
+								echo $this->formElementErrors($form->get('ref_interlocuteur'), array('class' => 'liste-erreurs'));
 							?>
 						</div>
 					</div>
@@ -69,38 +77,47 @@
 
 					<div class="row">
 						<div class="col-sm-4">
-							<div class="form-group">
+							<div class="form-group <?php if(isset($errors['ref_personnel'])) { echo 'has-error'; } ?>">
 							<?php 
 								echo $this->formLabel($form->get('ref_personnel')).'*';
 								echo $this->formSelect($form->get('ref_personnel')); 
+								echo $this->formElementErrors($form->get('ref_personnel'), array('class' => 'liste-erreurs'));
 							?>
 							</div>
-							<div class="form-group">
-							<?php 
+							<div class="form-group <?php if(isset($errors['exercice'])) { echo 'has-error'; } ?>">
+							<?php
 								echo $this->formLabel($form->get('exercice')).'*';
 								echo $this->formInput($form->get('exercice')); 
+								echo $this->formElementErrors($form->get('exercice'), array('class' => 'liste-erreurs'));
 							?>
 							</div>
-							<div class="form-group">
+							<div class="form-group <?php if(isset($errors['ref_condition_reglement'])) { echo 'has-error'; } ?>">
 							<?php 
 								echo $this->formLabel($form->get('ref_condition_reglement'));
 								echo $this->formSelect($form->get('ref_condition_reglement')); 
+								echo $this->formElementErrors($form->get('ref_condition_reglement'), array('class' => 'liste-erreurs'));
 							?>
 							</div>
 							<div class="form-group">
-							<?php 
-								// echo $this->formLabel()->openTag($form->get('suivi_budget_actif')/*)->getLabel()->setLabelAttributes(array('class' => 'control-label checkbox-inline'))*/);
-								// echo $this->formCheckbox($form->get('suivi_budget_actif')).$this->formLabel($form->get('suivi_budget_actif'));
-								// // echo $data['form']['label'];
-								// echo $this->formLabel()->closeTag();
-							?>
+								<div class="checkbox m-r-xs">
+									<?php
+										// echo $this->formLabel(
+										// 	$form->get('suivi_budget_actif')->setLabelAttributes(array('class' => 'control-label checkbox-inline')), 
+										// 	$this->formCheckbox($form->get('suivi_budget_actif')),
+										// 	'append'
+										// );
+										echo $this->formCheckbox($form->get('suivi_budget_actif'));
+										echo $this->formLabel($form->get('suivi_budget_actif'));
+									?>
+								</div>
 							</div>
 						</div>
 						<div class="col-sm-8">
-							<div class="form-group">
-							<?php 
+							<div class="form-group <?php if(isset($errors['demande_client'])) { echo 'has-error'; } ?>">
+							<?php
 								echo $this->formLabel($form->get('demande_client'));
 								echo $this->formTextarea($form->get('demande_client')); 
+								echo $this->formElementErrors($form->get('demande_client'), array('class' => 'liste-erreurs'));
 							?>
 							</div>
 						</div>
@@ -108,28 +125,32 @@
 					<div class="hr-line-dashed"></div>
 
 					<div class="row">
-						<div class="form-group col-sm-3">
+						<div class="form-group col-sm-3 <?php if(isset($errors['remise'])) { echo 'has-error'; } ?>">
 							<?php
 								echo $this->formLabel($form->get('remise'));
 								echo $this->formInput($form->get('remise'));
+								echo $this->formElementErrors($form->get('remise'), array('class' => 'liste-erreurs'));
 							 ?>
 						</div>
-						<div class="form-group col-sm-3">
+						<div class="form-group col-sm-3 <?php if(isset($errors['frais_port'])) { echo 'has-error'; } ?>">
 							<?php
 								echo $this->formLabel($form->get('frais_port'));
 								echo $this->formInput($form->get('frais_port'));
+								echo $this->formElementErrors($form->get('frais_port'), array('class' => 'liste-erreurs'));
 							 ?>
 						</div>
-						<div class="form-group col-sm-3">
+						<div class="form-group col-sm-3 <?php if(isset($errors['reference_commande_client'])) { echo 'has-error'; } ?>">
 							<?php
 								echo $this->formLabel($form->get('reference_commande_client'));
 								echo $this->formInput($form->get('reference_commande_client'));
+								echo $this->formElementErrors($form->get('reference_commande_client'), array('class' => 'liste-erreurs'));
 							 ?>
 						</div>
-						<div class="form-group col-sm-3">
+						<div class="form-group col-sm-3 <?php if(isset($errors['reference_demande_prix'])) { echo 'has-error'; } ?>">
 							<?php
 								echo $this->formLabel($form->get('reference_demande_prix'));
 								echo $this->formInput($form->get('reference_demande_prix'));
+								echo $this->formElementErrors($form->get('reference_demande_prix'), array('class' => 'liste-erreurs'));
 							 ?>
 						</div>
 					</div>
