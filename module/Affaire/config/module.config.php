@@ -101,6 +101,16 @@ return array(
 					)
 				)
 			),
+			'autocompletion_affaire'=>array(
+                'type'=>'Literal',
+                'options'=>array(
+                    'route'=>'/autocompletion_affaire',
+                    'defaults'=>array(
+                        'controller'=>'Affaire\Controller\Index',
+                        'action'=>'autocompletionaffaire'
+                    ),
+                ),
+            ),
 		),
 	),
 	// Doctrine configuration

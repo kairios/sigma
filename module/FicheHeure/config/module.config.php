@@ -121,10 +121,11 @@ return array(
     'view_manager' => array(
         'template_map' => array(
             'fiche_heure/index'                     => __DIR__ . '/../view/fiche-heure/index/index.phtml',
-            'fiche_heure/editerficheheure'          => __DIR__ . '/../view/fiche-heure/index/editerficheheure.phtml',
-            'fiche_heure/formulairesaisiehoraire'   => __DIR__ . '/../view/fiche-heure/index/formulairesaisiehoraire.phtml',
-            'fiche_heure/formulairesaisieheure'     => __DIR__ . '/../view/fiche-heure/index/formulairesaisieheure.phtml',
-            'fiche_heure/recapitulatifpersonnel'    => __DIR__ . '/../view/fiche-heure/index/recapitulatifpersonnel.phtml',
+            'fiche_heure/editer-fiche-heure'          => __DIR__ . '/../view/fiche-heure/index/editerficheheure.phtml',
+            'fiche_heure/formulaire-saisie-horaire'   => __DIR__ . '/../view/fiche-heure/index/formulairesaisiehoraire.phtml',
+            'fiche_heure/formulaire-saisie-heure'     => __DIR__ . '/../view/fiche-heure/index/formulairesaisieheure.phtml',
+            'fiche_heure/recapitulatif-personnel'    => __DIR__ . '/../view/fiche-heure/index/recapitulatifpersonnel.phtml',
+            'fiche_heure/recapitulatif-projet'    => __DIR__ . '/../view/fiche-heure/index/recapitulatifprojet.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

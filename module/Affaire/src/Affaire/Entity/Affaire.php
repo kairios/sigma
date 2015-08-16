@@ -931,16 +931,24 @@ class Affaire
         return array();
     }
 
-    public function getAffairesFicheHeure($sm)
+    public function getAffairesFicheHeure($sm, $motCle = null)
     {
         $query =   
             "SELECT a.id, CONCAT_WS(' - ', c.raison_sociale, a.numero_affaire) as numero_affaire
              FROM affaire AS a
                 LEFT JOIN client AS c
                     ON a.ref_client = c.id
-             WHERE a.date_fin IS NULL /*AND c.supprime = 0*/
-             ORDER BY numero_affaire ASC "
+             WHERE a.date_fin IS NULL /*AND c.supprime = 0*/"
         ;
+
+        if(!is_null($motCle))
+        {
+            $query.=  " AND (a.numero_affaire LIKE '%$motCle%'
+                        OR c.raison_sociale LIKE '%$motCle%') ";
+        }
+
+        $query.=  " ORDER BY numero_affaire ASC ";
+
         $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
         $results    = $statement->execute();
 

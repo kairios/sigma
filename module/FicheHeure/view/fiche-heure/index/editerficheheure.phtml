@@ -1,5 +1,10 @@
 <!-- module\FicheHeure\viw\fiche-heure\index\editerficheheure.phtml -->
 
+<?php
+    use Zend\Session\Container;
+    $utilisateurCourant = new Container('utilisateur');
+?>
+
 <div class="col-lg-12">
 	<div class="col-lg-8">
 		<div class="ibox">
@@ -15,22 +20,44 @@
 				</div>
 			</div>
 			<div class="ibox-content ibox-heading">
-				<p><?php echo $this->translate('Consulter selon :'); ?></p>
-				<form action="#" class="form-inline" role="form">
-					<select name="critere" id="critere" class="form-control">
-						<option value="1"><?php echo $this->translate('Personnel'); ?></option>
-						<option value="2"><?php echo $this->translate('Projet'); ?></option>
-					</select>
-					<div class="form-group">
-						
-					</div>
-					<button id="search-heures" class="btn btn-white" type="submit">
-						<i class="fa fa-search"></i>
-						<?php echo $this->translate('Rechercher'); ?>
-					</button>
+				<form action="<?php echo $this->url('editer_fiche_heures'); ?>" class="form-inline" method="get" role="form">
+					<!-- <p> -->
+						<?php echo $this->translate('Consulter selon : '); ?>
+						<label class="radio-inline">
+							<input id="option-personnel" type="radio" value="personnel" name="critere[]" <?php echo ($this->critere[0] == 'personnel') ? 'checked': ''; ?>>
+							<?php echo $this->translate('Personnel'); ?>
+						</label>
+						<label class="radio-inline">
+							<input id="option-projet" type="radio" value="projet" name="critere[]" <?php echo ($this->critere[0] == 'projet') ? 'checked': ''; ?>>
+							<?php echo $this->translate('Projet'); ?>
+						</label>
+					<!-- </p> -->
+					<!-- <div class="form-inline"> -->
+						<div class="form-group">
+							<select name="ref_personnel" id="ref_personnel" class="form-control">
+								<option value=""><?php echo $this->translate('Personnel'); ?></option>
+								<?php foreach($personnels as $personnel) : ?>
+									<option value="<?php echo $personnel['id']; ?>" <?php if($personnel['id'] == $this->idPersonnel) { echo 'selected="selected"' ;} ?>><?php echo $personnel['nom_complet']; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="hidden" name="ref_affaire" id="ref_affaire" value="<?php echo $this->refAffaire; ?>">
+							<label class="sr-only" for="numero_affaire"><?php echo $this->translate('Numéro affaire'); ?></label>
+							<input name="numero_affaire" id="numero_affaire" class="form-control" type="text" placeholder="<?php echo $this->translate('Entrez un numéro de projet...'); ?>" value="<?php echo $this->numeroAffaire; ?>">
+						</div>
+						<button id="search-heures" class="btn btn-white" type="submit">
+							<i class="fa fa-search"></i>
+							<?php echo $this->translate('Rechercher'); ?>
+						</button>
+					<!-- </div> -->
 				</form>
 			</div>
 			<div class="ibox-content">
+				<button class="btn btn-white btn-sm pull-right hidden-xs" type="submit">
+					<i class="fa fa-share"></i>
+					<?php echo $this->translate('Exporter'); ?>
+				</button>
 				<div class="calendar fc fc-ltr fc-unthemed"></div>
 			</div>
 		</div>
@@ -49,7 +76,16 @@
 				</div>
 			</div>
 			<div class="ibox-content">
-				<?php echo $this->render('fiche_heure/recapitulatifpersonnel'); ?>
+				<?php 
+					if($this->critere[0] == 'personnel') 
+					{
+						echo $this->render('fiche_heure/recapitulatif-personnel');
+					}
+					else
+					{
+						echo $this->render('fiche_heure/recapitulatif-projet');
+					}
+				?>
 			</div>
 		</div>
 	</div>

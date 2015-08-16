@@ -17,6 +17,7 @@ use Zend\View\Model\JsonModel;
 use Doctrine\ORM\EntityManager;
 // Session
 use Zend\Session\Container;
+use Personnel\Entity\Personnel;
 use FicheHeure\Entity\SaisieHeureJournee;
 use FicheHeure\Entity\SaisieHeureProjet;
 use FicheHeure\Form\SaisieHeureJourneeForm;
@@ -80,44 +81,103 @@ class IndexController extends AbstractActionController
 
     public function editerficheheureAction()
     {
-        // Récupération de l'EntityManager
-        $em=$this->getEntityManager();
-        // Récupération du Service Manager
-        $sm=$this->getServiceLocator();
-         // Récupération du traducteur
-        $translator=$sm->get('Translator');
-        // Récupération de la requete
-        $request=$this->getRequest();
+        // if(!$this->getRequest()->isXmlHttpRequest())
+        // {
+            // Récupération de l'EntityManager
+            $em             =$this->getEntityManager();
+            // Récupération du Service Manager
+            $sm             =$this->getServiceLocator();
+             // Récupération du traducteur
+            $translator     =$sm->get('Translator');
+            // Récupération de la requete
+            $request        =$this->getRequest();
 
-        $utilisateur = new Container('utilisateur');
-        // $utilisateurCourant = $utilisateur->offsetGet('identite');
+            $personnel      = new Personnel();
+            $saisie         = new SaisieHeureProjet();
+            $utilisateur    = new Container('utilisateur');
+            // $utilisateurCourant = $utilisateur->offsetGet('identite');
 
-        $id = $utilisateur->offsetGet('id');
-        // $utilisateurCourant = $em->getRepository('Personnel\Entity\Personnel')->find($id);
-        // if($utilisateurCourant == null)
-        //     throw new \Exception($translator->translate('Une erreur est survenue au chargement des heures.'));
+            // $id = $utilisateur->offsetGet('id');
+            // $utilisateurCourant = $em->getRepository('Personnel\Entity\Personnel')->find($id);
+            // if($utilisateurCourant == null)
+            //     throw new \Exception($translator->translate('Une erreur est survenue au chargement des heures.'));
+        
+            //Assignation de variables au layout
+            $this->layout()->setVariables(array(
+                'headTitle'         =>  $translator->translate('Fiche d\'heures'),
+                'breadcrumbActive'  =>  $utilisateur->offsetGet('identite'),
+                'route'             =>  array(),
+                'action'            =>  'editerficheheure',
+                'module'            =>  'fiche_heure',
+                'plugins'           =>  array('fullcalendar','jquery-ui'),
+            ));
 
-        $saisie = new SaisieHeureProjet();
-        $saisiesHoraires = $saisie->getSaisiesHeureCalendar($id,$sm); // a transformer en array compréhensible par la conversion JSON.
-        $recapitulatif = $saisie->getRecapitulatifParProjet($id,$sm);
+            /* Initialisation des variables de la vue Calendar */
 
-        //Assignation de variables au layout
-        $this->layout()->setVariables(array(
-            'headTitle'         =>  $translator->translate('Fiche d\'heures'),
-            'breadcrumbActive'  =>  $id,
-            'route'             =>  array(),
-            'action'            =>  'editerficheheure',
-            'module'            =>  'fiche_heure',
-            'plugins'           =>  array('fullcalendar'),
-        ));
+            $critere[] = 'personnel';
+            $idAffaire = null;
+            $idPersonnel = $utilisateur->offsetGet('id');
 
-        return new ViewModel(array(
-            'saisiesJson' => $saisiesHoraires,
-            'recapitulatif'=> $recapitulatif
-        ));
+            $numeroAffaire = "";
+            $recapitulatif = array();
+            $saisiesHoraires = array();
+
+            /* Récupération des variables transmises par la recherche en GET */
+
+            if(isset($_GET['ref_personnel']) /*&& $_GET['ref_personnel'] != ""*/)
+            {
+                $idPersonnel = (int) $_GET['ref_personnel'];
+            }
+            if(isset($_GET['ref_affaire']) /*&& $_GET['ref_affaire'] != ""*/)
+            {
+                $idAffaire = (int) $_GET['ref_affaire'];
+                $numeroAffaire = $_GET['numero_affaire'];
+            }
+            if(isset($_GET['critere']))
+            {
+                $critere = $_GET['critere'];
+            }
+
+            /* Récupération des saisies d'heures en réponse aux critères de recherche définis plus haut */
+
+            $personnels = $personnel->getNomsPersonnels($this->getServiceLocator());
+            switch($critere[0])
+            {
+                case 'projet':
+                    $saisiesHoraires = $saisie->getSaisiesHeureCalendar($sm, $idPersonnel, $idAffaire);
+                    $recapitulatif = $saisie->getRecapitulatifParPersonnel($idAffaire,$sm); // A CHANGER !!
+                break;
+                default: // = 'personnel'
+                    $saisiesHoraires = $saisie->getSaisiesHeureCalendar($sm, $idPersonnel, $idAffaire); // a transformer en array compréhensible par la conversion JSON.
+                    $recapitulatif = $saisie->getRecapitulatifParProjet($idPersonnel,$sm); // A CHANGER !!
+                break;
+            }
+
+            return new ViewModel(array(
+                'personnels' => $personnels,
+                'critere' => $critere,
+                'numeroAffaire' => $numeroAffaire,
+                'refAffaire' => $idAffaire,
+                'saisiesJson' => $saisiesHoraires,
+                'recapitulatif'=> $recapitulatif,
+                'idPersonnel' => $idPersonnel,
+            ));
+        // }
+        
+        // // S'il s'agit d'une recherche
+
+        // $resultat       = array();
+        // $centres        = isset($_GET['centres']) ? $_GET['centres'] : null;
+        // $etatAffaire    = isset($_GET['etat']) ? $_GET['etat'] : null;
+        // $projetSigne    = isset($_GET['projetSigne']) ? (bool) $_GET['projetSigne'] : null;
+        // $motCle         = isset($_GET['motCle']) ? $_GET['motCle'] : null;
+
+        // $resultat       = $affaire->getListeAffaire($this->getServiceLocator(), $motCle, $centres, $etatAffaire, $projetSigne);
+
+        // return new JsonModel(array(
+        //     'resultat'=>json_encode($resultat)
+        // ));
     }
-
-    
 
     public function formulairesaisiehoraireAction()
     {

@@ -1,7 +1,7 @@
 <table class="table table-bordered">
 	<thead>
 		<tr>
-			<th><?php echo $this->translate('Projets'); ?></th>
+			<th><?php echo $this->translate('Personnels'); ?></th>
 			<th><?php echo $this->translate('Temps prévu (h)'); ?></th>
 			<th><?php echo $this->translate('Temps passé (h)'); ?></th>
 		</tr>
@@ -16,7 +16,7 @@
 			{
 				?>
 					<tr>
-						<td><?php echo $ligne['intitule_saisie']; ?></td>
+						<td><?php echo $ligne['nom_complet']; ?></td>
 						<td>10</td>
 						<td class="<?php echo ($ligne['nb_heure'] > 10) ? 'text-danger':''; ?>"><?php echo $ligne['nb_heure']; ?></td>
 					</tr>

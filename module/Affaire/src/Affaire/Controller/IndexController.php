@@ -251,6 +251,25 @@ class IndexController extends AbstractActionController
             'adresse'=>$adressePrincipale
         ));
     }
+
+    public function autocompletionaffaireAction()
+    {
+        //Si la requète est de type AJAX, on effectue la recherche
+        if($this->getRequest()->isXmlHttpRequest())
+        {
+            $affaire = new Affaire();
+            $list = $affaire->getAffairesFicheHeure($this->getServiceLocator(),$_GET["motCle"]);
+
+            return new JsonModel(array(
+                'resultat'=>json_encode($list)
+            ));
+        }
+
+        //Si l'utilisateur tente d'accéder à l'url de l'action, on lui envoie une erreur 404
+        //$this->getResponse()->setStatusCode(404);
+        //return;
+        return $this->redirect()->toRoute('home'); // Ou on redirige l'utilisateur vers une autre page
+    }
 }
 
 ?>

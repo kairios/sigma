@@ -2215,6 +2215,44 @@ var sigma={
 					});
 				});
 			},
+			setAutocompletionAffaire:function()
+			{
+				$('#numero_affaire').autocomplete({
+					source:function(request,response)
+					{
+						$.ajax({
+							url:'/autocompletion_affaire',
+							dataType:'json',
+							data:{ motCle:request.term,maxRows:10 },
+							type:'GET',
+							success:function(data)
+							{
+								var suggestions = eval(data.resultat);
+								response($.map(suggestions,function(item){
+									return {
+										label:item.numero_affaire,
+										value:function()
+										{
+											$('#ref_affaire').val(item.id);
+											return item.numero_affaire;
+										}
+									}
+								}));
+							},
+							error:function(xml,status,message)
+							{
+								alert(message);
+							}
+						});
+					},
+					// select:function()
+					// {
+					// 	$('#pays').val('France');
+					// },
+					minLength:3,
+					delay:600
+				});
+			},
 			// verifierLigneAffaire:function()
 			// {
 
@@ -2565,7 +2603,7 @@ var sigma={
 				switch(_action)
 				{
 					case 'editerficheheure':
-						$('#page-wrapper').css('height','1300px');
+						$('#page-wrapper').css('height','200%');
 				        $('.calendar').fullCalendar({
 				            header: {
 				                left: 'prev,next today',
@@ -2590,6 +2628,8 @@ var sigma={
 				            events: saisiesJson,
 				            lang: locale
 				        });
+						
+						sigma.controller.affaire.setAutocompletionAffaire();
 
 						$('#projet-delete-submit').on('click',function(){
 							sigma.controller.ficheHeure.supprimerSaisieHeure();
@@ -2629,61 +2669,66 @@ var sigma={
 			},
 			verifierSaisieHoraire:function(date)
 			{
-				$('#saisie-form-submit span').text($('#saisie-form-submit').attr('data-loading-text'));
-
-				if(!$('#ref_libelle').val() && !$('#ref_affaire').val())
-				{
-					var p = $('#ref_affaire_error').text();
-					$("label[for='ref_affaire']").after('<span class="help-inline" style="color:red;"> - '+p+'</span>');
-					$('#saisie-form-submit span').text($('#saisie-form-submit').attr('data-default-text'));
-					return;
-				}
 				$('span').remove('.help-inline');
 
-				var serializeForm = $('#saisie-horaire-form').serialize();
+				// debugger;
+				if($('select#ref_affaire').val() || $('select#ref_libelle').val()  )
+				{
+					$('#saisie-form-submit span').text($('#saisie-form-submit').attr('data-loading-text'));
 
-				$.ajax({
-					url: '/editer-fiche-heures/formulaire-saisie-horaire/'+date,
-					dataType: 'json',
-					data: serializeForm,
-					type: 'post',
-					success:function(resultats)
-					{
-						/* On supprime les erreurs affichées s'il y en a */
-						//$('#adresse-form div[class*="has-error"]').removeClass('has-error');
-						
+					var serializeForm = $('#saisie-horaire-form').serialize();
 
-						if(resultats.statut==true)
+					$.ajax({
+						url: '/editer-fiche-heures/formulaire-saisie-horaire/'+date,
+						dataType: 'json',
+						data: serializeForm,
+						type: 'post',
+						success:function(resultats)
 						{
-							// Si la saisie a été ajoutée, on ferme le modal
-							$('#saisie-form-modal .close').trigger('click');
+							/* On supprime les erreurs affichées s'il y en a */
+							//$('#adresse-form div[class*="has-error"]').removeClass('has-error');
+							
 
-							// On recharge des saisie d'heure dans le module en faisant une redirection avec setTimeOut :
-							setTimeout(function(){
-								window.location.href='/editer-fiche-heures'
-							},500);
-						}
-						// Si c'est pas bon, on met à jour, le formulaire d'interlocuteur avec les erreurs
-						else
-						{
-							/* Ici on affiche les erreurs et les champs contenant des erreurs */
+							if(resultats.statut==true)
+							{
+								// Si la saisie a été ajoutée, on ferme le modal
+								$('#saisie-form-modal .close').trigger('click');
 
-							var errors=resultats.reponse;
-							$.each(errors,function(index,value){
-								$.each(value,function(codeError, messageError){
-									$("label[for='"+index+"']").after('<span class="help-inline"> - '+messageError+'</span>');
+								// On recharge des saisie d'heure dans le module en faisant une redirection avec setTimeOut :
+								setTimeout(function(){
+									window.location.href='/editer-fiche-heures'
+								},500);
+							}
+							// Si c'est pas bon, on met à jour, le formulaire d'interlocuteur avec les erreurs
+							else
+							{
+								/* Ici on affiche les erreurs et les champs contenant des erreurs */
+
+								var errors=resultats.reponse;
+								$.each(errors,function(index,value){
+									$.each(value,function(codeError, messageError){
+										$("label[for='"+index+"']").after('<span class="help-inline"> - '+messageError+'</span>');
+									});
 								});
-							});
-							$("#saisie-horaire-form span.help-inline").css({'color':'red'});
+								$("#saisie-horaire-form span.help-inline").css({'color':'red'});
+							}
+						},
+						error:function(xml,status,message)
+						{
+							alert(message);
 						}
-					},
-					error:function(xml,status,message)
-					{
-						alert(message);
-					}
-				});
+					});
 
-				$('#saisie-form-submit span').text($('#saisie-form-submit').attr('data-default-text'));
+					$('#saisie-form-submit span').text($('#saisie-form-submit').attr('data-default-text'));
+				}
+				else
+				{
+					// $("label[for='ref_affaire']").remove('span');
+					var p = $('#ref_affaire_error').text();
+					$("label[for='select#ref_affaire']").after('<span class="help-inline" style="color:red;"> - '+p+'</span>');
+					$('#saisie-form-submit span').text($('#saisie-form-submit').attr('data-default-text'));
+					return;
+				}				
 			},
 			setFormModalSaisieProjet:function(numSaisie)
 			{
