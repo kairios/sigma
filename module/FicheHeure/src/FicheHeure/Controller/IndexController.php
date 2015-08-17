@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-29 17:40:56
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-14 15:28:34
+ * @Last Modified time: 2015-08-17 17:57:11
  */
 
 // module\FicheHeure\src\FicheHeure\Controller\IndexController.php
@@ -81,27 +81,19 @@ class IndexController extends AbstractActionController
 
     public function editerficheheureAction()
     {
-        // if(!$this->getRequest()->isXmlHttpRequest())
-        // {
+        $sm = $this->getServiceLocator();
+        $saisie = new SaisieHeureProjet();
+        $utilisateur = new Container('utilisateur');
+
+        if(!$this->getRequest()->isXmlHttpRequest())
+        {
             // Récupération de l'EntityManager
-            $em             =$this->getEntityManager();
-            // Récupération du Service Manager
-            $sm             =$this->getServiceLocator();
+            $em             = $this->getEntityManager();
              // Récupération du traducteur
-            $translator     =$sm->get('Translator');
+            $translator     = $sm->get('Translator');
             // Récupération de la requete
-            $request        =$this->getRequest();
+            $request        = $this->getRequest();
 
-            $personnel      = new Personnel();
-            $saisie         = new SaisieHeureProjet();
-            $utilisateur    = new Container('utilisateur');
-            // $utilisateurCourant = $utilisateur->offsetGet('identite');
-
-            // $id = $utilisateur->offsetGet('id');
-            // $utilisateurCourant = $em->getRepository('Personnel\Entity\Personnel')->find($id);
-            // if($utilisateurCourant == null)
-            //     throw new \Exception($translator->translate('Une erreur est survenue au chargement des heures.'));
-        
             //Assignation de variables au layout
             $this->layout()->setVariables(array(
                 'headTitle'         =>  $translator->translate('Fiche d\'heures'),
@@ -112,71 +104,61 @@ class IndexController extends AbstractActionController
                 'plugins'           =>  array('fullcalendar','jquery-ui'),
             ));
 
-            /* Initialisation des variables de la vue Calendar */
+            // Récupération de l'utilisateur courant
+            $idPersonnel        = $utilisateur->offsetGet('id');
 
-            $critere[] = 'personnel';
-            $idAffaire = null;
-            $idPersonnel = $utilisateur->offsetGet('id');
+            // Récupération de la liste des personnels
+            $personnel          = new Personnel();
+            $personnels         = $personnel->getNomsPersonnels($this->getServiceLocator());
 
-            $numeroAffaire = "";
-            $recapitulatif = array();
-            $saisiesHoraires = array();
+            // Récupération des saisies d'heure du personnel connecté, 
+            // ainsi que du récapitulatif par projet du personnel
+            $saisiesHoraires    = $saisie->getSaisiesHeureParProjet($sm, $idPersonnel); // a transformer en array compréhensible par la conversion JSON.
+            $recapitulatif      = $saisie->getRecapitulatifParProjet($idPersonnel,$sm); // A CHANGER !!
 
-            /* Récupération des variables transmises par la recherche en GET */
-
-            if(isset($_GET['ref_personnel']) /*&& $_GET['ref_personnel'] != ""*/)
-            {
-                $idPersonnel = (int) $_GET['ref_personnel'];
-            }
-            if(isset($_GET['ref_affaire']) /*&& $_GET['ref_affaire'] != ""*/)
-            {
-                $idAffaire = (int) $_GET['ref_affaire'];
-                $numeroAffaire = $_GET['numero_affaire'];
-            }
-            if(isset($_GET['critere']))
-            {
-                $critere = $_GET['critere'];
-            }
-
-            /* Récupération des saisies d'heures en réponse aux critères de recherche définis plus haut */
-
-            $personnels = $personnel->getNomsPersonnels($this->getServiceLocator());
-            switch($critere[0])
-            {
-                case 'projet':
-                    $saisiesHoraires = $saisie->getSaisiesHeureCalendar($sm, $idPersonnel, $idAffaire);
-                    $recapitulatif = $saisie->getRecapitulatifParPersonnel($idAffaire,$sm); // A CHANGER !!
-                break;
-                default: // = 'personnel'
-                    $saisiesHoraires = $saisie->getSaisiesHeureCalendar($sm, $idPersonnel, $idAffaire); // a transformer en array compréhensible par la conversion JSON.
-                    $recapitulatif = $saisie->getRecapitulatifParProjet($idPersonnel,$sm); // A CHANGER !!
-                break;
-            }
-
+            // var_dump($saisiesHoraires);die();
+            // Vue avec Calendar
             return new ViewModel(array(
                 'personnels' => $personnels,
-                'critere' => $critere,
-                'numeroAffaire' => $numeroAffaire,
-                'refAffaire' => $idAffaire,
-                'saisiesJson' => $saisiesHoraires,
+                'saisiesHoraires' => $saisiesHoraires,
                 'recapitulatif'=> $recapitulatif,
                 'idPersonnel' => $idPersonnel,
             ));
-        // }
+
+            // $id = $utilisateur->offsetGet('id');
+            // $utilisateurCourant = $em->getRepository('Personnel\Entity\Personnel')->find($id);
+            // if($utilisateurCourant == null)
+            //     throw new \Exception($translator->translate('Une erreur est survenue au chargement des heures.'));
+        }
         
-        // // S'il s'agit d'une recherche
+        // S'il s'agit d'une recherche
 
-        // $resultat       = array();
-        // $centres        = isset($_GET['centres']) ? $_GET['centres'] : null;
-        // $etatAffaire    = isset($_GET['etat']) ? $_GET['etat'] : null;
-        // $projetSigne    = isset($_GET['projetSigne']) ? (bool) $_GET['projetSigne'] : null;
-        // $motCle         = isset($_GET['motCle']) ? $_GET['motCle'] : null;
+        $critere        = $_GET['critere'];
+        // $date           = $_GET['date'];
+        // list($y,$m,$d) = explode('-',substr($date, 0, 10));
+        // var_dump(date("Y-m-d",mktime(4,0,0,$m,$d,$y)));die();
 
-        // $resultat       = $affaire->getListeAffaire($this->getServiceLocator(), $motCle, $centres, $etatAffaire, $projetSigne);
 
-        // return new JsonModel(array(
-        //     'resultat'=>json_encode($resultat)
-        // ));
+        $idAffaire      = isset($_GET['affaire']) ? $_GET['affaire'] : null;
+
+        switch($critere)
+        {
+            case 'projet':
+                $idPersonnel = isset($_GET['personnel']) ? $_GET['personnel'] : null;
+                $saisiesHoraires = $saisie->getSaisiesHeureParPersonnel($sm, $idPersonnel, $idAffaire);
+                $recapitulatif = $saisie->getRecapitulatifParPersonnel($idAffaire,$sm); // A CHANGER !!
+            break;
+            default:
+                $idPersonnel = isset($_GET['personnel']) ? $_GET['personnel'] : (int) $utilisateur->offsetGet('id');
+                $saisiesHoraires = $saisie->getSaisiesHeureParProjet($sm, $idPersonnel, $idAffaire); // a transformer en array compréhensible par la conversion JSON.
+                $recapitulatif = $saisie->getRecapitulatifParProjet($idPersonnel,$sm); // A CHANGER !!
+            break;
+        }
+
+        return new JsonModel(array(
+            'saisiesPHP'=>$saisiesHoraires,
+            'recapitulatif'=>$recapitulatif,
+        ));
     }
 
     public function formulairesaisiehoraireAction()

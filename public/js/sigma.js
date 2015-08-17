@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:49:48
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-14 18:00:01
+* @Last Modified time: 2015-08-17 17:38:52
 */
 
 'use strict';
@@ -2215,44 +2215,6 @@ var sigma={
 					});
 				});
 			},
-			setAutocompletionAffaire:function()
-			{
-				$('#numero_affaire').autocomplete({
-					source:function(request,response)
-					{
-						$.ajax({
-							url:'/autocompletion_affaire',
-							dataType:'json',
-							data:{ motCle:request.term,maxRows:10 },
-							type:'GET',
-							success:function(data)
-							{
-								var suggestions = eval(data.resultat);
-								response($.map(suggestions,function(item){
-									return {
-										label:item.numero_affaire,
-										value:function()
-										{
-											$('#ref_affaire').val(item.id);
-											return item.numero_affaire;
-										}
-									}
-								}));
-							},
-							error:function(xml,status,message)
-							{
-								alert(message);
-							}
-						});
-					},
-					// select:function()
-					// {
-					// 	$('#pays').val('France');
-					// },
-					minLength:3,
-					delay:600
-				});
-			},
 			// verifierLigneAffaire:function()
 			// {
 
@@ -2625,18 +2587,30 @@ var sigma={
 				                // // change the border color just for fun
 				                // $(this).css('border-color', 'red');
 				            },
-				            events: saisiesJson,
+				            events: sigma.controller.ficheHeure.convertInEvents(saisiesPHP),
 				            lang: locale
 				        });
-						
-						sigma.controller.affaire.setAutocompletionAffaire();
+
+						sigma.controller.ficheHeure.setAutocompletionAffaire();
+						$('#numero_affaire').on('change',function(){
+							if( $('#numero_affaire').val() == "" ){
+								$('#ref_affaire').val("");
+							}
+						});
+
+						$('#search-heures').on('click', function(){
+							sigma.controller.ficheHeure.rechercherFicheHeure();
+							return false;
+						});
 
 						$('#projet-delete-submit').on('click',function(){
 							sigma.controller.ficheHeure.supprimerSaisieHeure();
+							return false;
 						});
 					break;
 				}
 			},
+			// Ce formlaire permet de configurer les heures du jour ainsi que d'ajouter un projet
 			setFormModalSaisieHoraire:function(date)
 			{
 				$.ajax({
@@ -2730,6 +2704,7 @@ var sigma={
 					return;
 				}				
 			},
+			// Ce formulaire permet de de modifier les informations d'une saisie d'heure par projet
 			setFormModalSaisieProjet:function(numSaisie)
 			{
 				$.ajax({
@@ -2827,6 +2802,209 @@ var sigma={
 						alert(message);
 					}
 				});
+			},
+			rechercherFicheHeure:function()
+			{
+				var params 		= {};
+				var personnel 	= $('#ref_personnel').val();
+				var affaire 	= $('#ref_affaire').val();
+				if(personnel)
+					params.personnel = personnel;
+				if(affaire)
+					params.affaire = affaire;
+
+				params.date 	= $('.calendar').fullCalendar('getDate').format();
+				console.log(params.date);
+				params.critere 	= $('[name="critere[]"]:checked').val();
+				params.maxRows = 500;
+
+				sigma.controller.ficheHeure.setCalendarFicheHeure(params);
+			},
+			setCalendarFicheHeure:function(params)
+			{
+				$.ajax({
+					url: '/editer-fiche-heures',
+					data: params,
+					type: 'get',
+					dataType: 'json',
+					success:function(data, status, XMLHttpRequest)
+					{
+						$('.calendar').fullCalendar('destroy');
+						$('.calendar').fullCalendar( {
+							header: {
+				                left: 'prev,next today',
+				                center: 'title',
+				                right: '',
+				            },
+				            editable: false,
+				            //droppable: true, // this allows things to be dropped onto the calendar
+				            dayClick:function(date, jsEvent, view){
+				                sigma.controller.ficheHeure.setFormModalSaisieHoraire(date.format());
+				            },
+				            eventClick: function(saisieHeure, jsEvent, view) {
+				            	sigma.controller.ficheHeure.setFormModalSaisieProjet(saisieHeure.id);
+				            },
+				            events: sigma.controller.ficheHeure.convertInEvents(data["saisiesPHP"]),
+				            lang: locale
+						});
+
+						if($('[name="critere[]"]:checked').val() == 'personnel')
+						{
+							$('.fc-prev-button, .fc-next-button, .fc-today-button').unbind();
+							$('.fc-prev-button, .fc-next-button, .fc-today-button').on('click', function(){
+								var dateCalendar = $('.calendar').fullCalendar('prev').defaultDate;
+								console.log(dateCalendar);
+								$('.calendar').fullCalendar('gotoDate', $.fullCalendar.moment('2015-04-01')); // Permet d'aller au mois contenant le jour spécifié
+								alert('hello');
+								return false;
+							});
+						}
+					},
+					error:function(XMLHttpRequest, status, error)
+					{
+						var message='';
+						if(locale=='en_US')
+							message='An error occured when retrieving data : <strong>'+error+'</strong>';
+						else
+							message='Une erreur s\'est produite lors de la récupération des données : <strong>'+error+'</strong>';
+						$(".calendar").html(message);
+					}
+				});
+			},
+			setRecapitulatifFicheHeure:function(params)
+			{
+				$.ajax({
+					url: '/affaires',
+					data:params,
+					type: 'get',
+					dataType: 'json',
+					success:function(data, status, XMLHttpRequest)
+					{
+						var _affaires=$.parseJSON(data["resultat"]);
+						$('#table-affaire').dataTable().fnDestroy();
+						var clientTable = $('#table-affaire').dataTable( {
+						    data: _affaires,
+						    columns: [
+						        { 'data': 'numero_affaire' },
+						        { 'data': 'date_debut' },
+						        { 'data': 'raison_sociale' },
+						        { 'data': 'code_postal' },
+						        { 'data': 'ville' },
+						        { 'data': 'pays' },
+						        { 'data': 'ref_devis_signe' },
+						        { 'data': 'intitule_etat' },
+						        { 'data': 'id' },
+						    ],
+						    columnDefs:
+						    [
+							    {
+							    	'targets':6,
+							    	'className':'bool',
+							    	'data':_affaires.accepte_infos,
+							    	'render': function (data){
+							    		return (data)? '<i class="fa fa-check"></i>':'';
+							    	}
+							    },
+						    	{
+							    	'targets':8,
+							    	'className':'actions',
+							    	'searchable':false,
+							    	'data':_affaires.id,
+							    	'render': function ( data, type, full, meta ) {
+								      	return 	'<a href="affaires/'+data+'"><i class="fa fa-eye fa-lg"></i></a> '+
+	                                        	'<a href="formulaire-affaire/'+data+'"><i class="fa fa-pencil-square-o fa-lg"></i></a> '+
+	                                        	'<a href="#" class="affaire-delete-toggle affaire" data-target="#affaire-delete-modal" data-action="delete" data-id="'+data+'"><i class="fa fa-trash-o fa-lg"></i></a>  ';
+								    },
+						    	}
+						    ],
+						    'dom': '<"row"l>r<"table-responsive"t>ip',
+				            'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
+				            oLanguage: {
+		                    	'sUrl': '/js/Inspinia/plugins/dataTables/datatables-'+locale+'.json'
+		                	},
+		                	// Fonction de callback
+		                	'fnInitComplete': function(){
+								// sigma.controller.affaire.setAffaireListeners();
+
+								// $('#table-affaire').unbind();
+								// $('#table-affaire').on('order.dt page.dt', function(){
+								// 	sigma.controller.affaire.setAffaireListeners();
+								// });
+								// $('select[name="table-client_length"]').on('change',function(){
+								// 	sigma.controller.affaire.setAffaireListeners();
+								// });
+							},
+						});
+					},
+					error:function(XMLHttpRequest, status, error)
+					{
+						var message='';
+						if(locale=='en_US')
+							message='An error occured when retrieving data : <strong>'+error+'</strong>';
+						else
+							message='Une erreur s\'est produite lors de la récupération des données : <strong>'+error+'</strong>';
+						$("#clients").html(message);
+					}
+				});
+			},
+			setAutocompletionAffaire:function()
+			{
+
+				$('#numero_affaire').autocomplete({
+					source:function(request,response)
+					{
+						$.ajax({
+							url:'/autocompletion_affaire',
+							dataType:'json',
+							data:{ motCle:request.term,maxRows:10 },
+							type:'GET',
+							success:function(data)
+							{
+								var suggestions = eval(data.resultat);
+								response($.map(suggestions,function(item){
+									return {
+										label:item.numero_affaire,
+										value:function()
+										{
+											$('#ref_affaire').val(item.id);
+											return item.numero_affaire;
+										}
+									}
+								}));
+							},
+							error:function(xml,status,message)
+							{
+								alert(message);
+							}
+						});
+					},
+					// select:function()
+					// {
+					// 	$('#ref_affaire').val(item.id);
+					// },
+					minLength:3,
+					delay:600
+				});
+			},
+			convertInEvents:function(saisiesPHP)
+			{
+				var saisiesJSON = [];
+				$.each(saisiesPHP,function(index,saisiePHP){
+
+					var saisieJSON = {};
+
+					var date = new Date(saisiePHP.annee, saisiePHP.mois - 1, saisiePHP.jour);
+
+					saisieJSON.id = saisiePHP.id;
+					saisieJSON.title = saisiePHP.nb_heure + 'h: '+ saisiePHP.intitule_saisie;
+					saisieJSON.start = date;
+					saisieJSON.end = date;
+					saisieJSON.allDay = false;
+
+					saisiesJSON.push(saisieJSON);
+
+				});
+				return saisiesJSON;
 			},
 		}
 	},

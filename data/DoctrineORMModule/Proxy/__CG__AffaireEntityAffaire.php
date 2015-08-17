@@ -64,10 +64,10 @@ class Affaire extends \Affaire\Entity\Affaire implements \Doctrine\ORM\Proxy\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'id', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'numeroAuto', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'numeroAffaire', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'designationAffaire', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'dateCreationModificationFiche', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'exercice', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'demandeClient', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'remise', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'fraisPort', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'referenceCommandeClient', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'referenceDemandePrix', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'suiviBudgetActif', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'dateDebut', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'dateFin', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'etatAffaire', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'raisonPerte', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refInterlocuteur', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refPersonnel', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refConditionReglement', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refConcurrent', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refDevisSigne', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refCentreProfit', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refClient');
+            return array('__isInitialized__', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'id', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'numeroAuto', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'numeroAffaire', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'designationAffaire', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'dateCreationModificationFiche', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'exercice', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'demandeClient', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'remise', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'fraisPort', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'referenceCommandeClient', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'referenceDemandePrix', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'suiviBudgetActif', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'dateDebut', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'dateFin', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'raisonPerte', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refEtatAffaire', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refInterlocuteur', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refPersonnel', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refConditionReglement', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refConcurrent', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refDevisSigne', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refCentreProfit', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refClient');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'id', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'numeroAuto', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'numeroAffaire', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'designationAffaire', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'dateCreationModificationFiche', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'exercice', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'demandeClient', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'remise', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'fraisPort', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'referenceCommandeClient', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'referenceDemandePrix', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'suiviBudgetActif', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'dateDebut', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'dateFin', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'etatAffaire', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'raisonPerte', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refInterlocuteur', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refPersonnel', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refConditionReglement', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refConcurrent', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refDevisSigne', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refCentreProfit', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refClient');
+        return array('__isInitialized__', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'id', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'numeroAuto', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'numeroAffaire', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'designationAffaire', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'dateCreationModificationFiche', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'exercice', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'demandeClient', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'remise', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'fraisPort', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'referenceCommandeClient', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'referenceDemandePrix', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'suiviBudgetActif', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'dateDebut', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'dateFin', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'raisonPerte', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refEtatAffaire', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refInterlocuteur', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refPersonnel', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refConditionReglement', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refConcurrent', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refDevisSigne', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refCentreProfit', '' . "\0" . 'Affaire\\Entity\\Affaire' . "\0" . 'refClient');
     }
 
     /**
@@ -488,28 +488,6 @@ class Affaire extends \Affaire\Entity\Affaire implements \Doctrine\ORM\Proxy\Pro
     /**
      * {@inheritDoc}
      */
-    public function setEtatAffaire($etatAffaire)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEtatAffaire', array($etatAffaire));
-
-        return parent::setEtatAffaire($etatAffaire);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getEtatAffaire()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEtatAffaire', array());
-
-        return parent::getEtatAffaire();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setRaisonPerte($raisonPerte)
     {
 
@@ -527,6 +505,28 @@ class Affaire extends \Affaire\Entity\Affaire implements \Doctrine\ORM\Proxy\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRaisonPerte', array());
 
         return parent::getRaisonPerte();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setRefEtatAffaire($refEtatAffaire)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setRefEtatAffaire', array($refEtatAffaire));
+
+        return parent::setRefEtatAffaire($refEtatAffaire);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRefEtatAffaire()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRefEtatAffaire', array());
+
+        return parent::getRefEtatAffaire();
     }
 
     /**
@@ -709,34 +709,23 @@ class Affaire extends \Affaire\Entity\Affaire implements \Doctrine\ORM\Proxy\Pro
     /**
      * {@inheritDoc}
      */
-    public function getListeAffaire($sm, $motCle = NULL, $activites = NULL, $categories = NULL)
+    public function getListeAffaire($sm, $motCle = NULL, $centres = NULL, $etat = NULL, $projetSigne = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getListeAffaire', array($sm, $motCle, $activites, $categories));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getListeAffaire', array($sm, $motCle, $centres, $etat, $projetSigne));
 
-        return parent::getListeAffaire($sm, $motCle, $activites, $categories);
+        return parent::getListeAffaire($sm, $motCle, $centres, $etat, $projetSigne);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getAffairesFicheHeure($sm)
+    public function getAffairesFicheHeure($sm, $motCle = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAffairesFicheHeure', array($sm));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAffairesFicheHeure', array($sm, $motCle));
 
-        return parent::getAffairesFicheHeure($sm);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getEtatsAffaire($sm)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEtatsAffaire', array($sm));
-
-        return parent::getEtatsAffaire($sm);
+        return parent::getAffairesFicheHeure($sm, $motCle);
     }
 
     /**

@@ -378,59 +378,37 @@ class SaisieHeureProjet
         $this->setNbHeure($nbHeure);
     }
 
-    public function getSaisiesHeureCalendar($sm=null, $personnel = null, $affaire = null)
+    public function getSaisiesHeureParProjet($sm=null, $personnel = null, $affaire = null)
     {
-       $query =   
-            "SELECT sp.id, sj.date, sp.intitule_saisie, sp.nb_heure 
-             FROM saisie_heure_projet AS sp
-                LEFT JOIN saisie_heure_journee AS sj 
-                    ON sp.ref_saisie_horaire = sj.id
-             WHERE sp.supprime = 0 "
-        ;
-        
         if(!is_null($personnel))
         {
-            $query .= " AND sj.ref_personnel = $personnel ";
-        }
+            $query =   
+                "SELECT sp.id, FROM_UNIXTIME(sj.date,'%d') as jour, FROM_UNIXTIME(sj.date,'%m') as mois, FROM_UNIXTIME(sj.date,'%Y') as annee, sp.intitule_saisie, sp.nb_heure 
+                 FROM saisie_heure_projet AS sp
+                    LEFT JOIN saisie_heure_journee AS sj 
+                        ON sp.ref_saisie_horaire = sj.id
+                 WHERE sp.supprime = 0 AND sj.ref_personnel = $personnel "
+            ;
 
-        if(!is_null($affaire))
-        {
-            $query .= " AND sp.ref_affaire = $affaire ";
-        }
-
-        $statement = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
-        $results = $statement->execute();
-
-        if($results->isQueryResult())
-        {
-            // Recupération des saisies en BD
-            $resultSet=new ResultSet;
-            $resultSet->initialize($results);
-
-            $saisiesHoraires = $resultSet->toArray();
-
-            // Conversion en JSON exploitable par sigma.js
-            $saisiesJson = '[';
-            foreach($saisiesHoraires as $key => $saisie)
+            if(!is_null($affaire))
             {
-                $jour = (int) date('j', $saisie['date']); // jour numérique sans les zéros initiaux : 1 à 31
-                $mois = (int) date('n', $saisie['date']) - 1; // mois numérique sans les zéros initiaux : 1 à 12
-                $annee = (int) date('Y', $saisie['date']); // full year (4 chiffres)
-
-                $saisiesJson .= "{
-                    id: ".$saisie['id'].",
-                    title: '".$saisie['nb_heure'].'h: '.$saisie['intitule_saisie']."',
-                    start: new Date(".$annee.", ".$mois.", ".$jour."),
-                    end: new Date(".$annee.", ".$mois.", ".$jour."),
-                    allDay: false
-                },";
+                $query .= " AND sp.ref_affaire = $affaire ";
             }
-            $saisiesJson .= ']';
 
-            return $saisiesJson;
+            $statement = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+            $results = $statement->execute();
+
+            if($results->isQueryResult())
+            {
+                // Recupération des saisies en BD
+                $resultSet=new ResultSet;
+                $resultSet->initialize($results);
+
+                return $resultSet->toArray();
+            }
         }
 
-        return '[]';
+        return array();
     }
 
     public function getRecapitulatifParProjet($personnel, $sm = null)
@@ -457,6 +435,43 @@ class SaisieHeureProjet
         return array();
     }
 
+    public function getSaisiesHeureParPersonnel($sm=null, $personnel = null, $affaire = null)
+    {
+        if(!is_null($affaire))
+        {
+            $query =   
+                "SELECT sp.id, FROM_UNIXTIME(sj.date,'%d') as jour, FROM_UNIXTIME(sj.date,'%m') as mois, FROM_UNIXTIME(sj.date,'%Y') as annee, CONCAT_WS(' ',p.prenom, p.nom) as intitule_saisie, sp.nb_heure 
+                 FROM saisie_heure_projet AS sp
+                    LEFT JOIN saisie_heure_journee AS sj 
+                        ON sp.ref_saisie_horaire = sj.id
+                        LEFT JOIN personnel AS p
+                            ON sj.ref_personnel = p.id
+                 WHERE sp.supprime = 0 AND sp.ref_affaire = $affaire "
+            ;
+            
+            if(!is_null($personnel))
+            {
+                $query .= " AND sj.ref_personnel = $personnel ";
+            }
+
+            $statement = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+            $results = $statement->execute();
+
+            if($results->isQueryResult())
+            {
+                // Recupération des saisies en BD
+                $resultSet=new ResultSet;
+                $resultSet->initialize($results);
+
+                return $resultSet->toArray();
+            }
+        }
+
+        return array();
+    }
+
+    
+
     public function getRecapitulatifParPersonnel($projet, $sm = null)
     {
         $query =   
@@ -466,9 +481,15 @@ class SaisieHeureProjet
                     ON sp.ref_saisie_horaire = sj.id
                 LEFT JOIN personnel AS p
                     ON sj.ref_personnel = p.id
-             WHERE sp.supprime = 0 AND sp.ref_affaire = $projet
-             GROUP BY nom_complet"
+             WHERE sp.supprime = 0 "
         ;
+
+        if(!is_null($projet))
+        {
+            $query .= " AND sp.ref_affaire = $projet ";
+        }
+
+        $query .= "GROUP BY nom_complet";
         
         $statement = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
         $results = $statement->execute();
@@ -484,3 +505,22 @@ class SaisieHeureProjet
     }
 
 }
+
+
+// // Conversion en JSON exploitable par sigma.js
+// $saisiesJson = '[';
+// foreach($saisiesHoraires as $key => $saisie)
+// {
+//     $jour = (int) date('j', $saisie['date']); // jour numérique sans les zéros initiaux : 1 à 31
+//     $mois = (int) date('n', $saisie['date']) - 1; // mois numérique sans les zéros initiaux : 1 à 12
+//     $annee = (int) date('Y', $saisie['date']); // full year (4 chiffres)
+
+//     $saisiesJson .= "{
+//         id: ".$saisie['id'].",
+//         title: '".$saisie['nb_heure'].'h: '.$saisie['intitule_saisie']."',
+//         start: new Date(".$annee.", ".$mois.", ".$jour."),
+//         end: new Date(".$annee.", ".$mois.", ".$jour."),
+//         allDay: false
+//     },";
+// }
+// $saisiesJson .= ']';
