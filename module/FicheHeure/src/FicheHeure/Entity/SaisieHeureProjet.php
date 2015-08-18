@@ -362,23 +362,23 @@ class SaisieHeureProjet
         if(!is_null($libelle))
         {
             $this->setIntituleSaisie($libelle->getIntituleLibelle());
+            $this->setRefLibelle($libelle);
         }
         else
         {
             $intitule = $affaire->getRefClient()->getRaisonSociale().' - '.$affaire->getNumeroAffaire();
             $this->setIntituleSaisie($intitule);
+            $this->setRefAffaire($affaire);
         }
 
         $nbHeure = (!empty($data['nb_heure'])) ? str_replace(',','.',$data['nb_heure']) : null;
         
         $this->setId($data['id_saisie_horaire']);
-        $this->setRefLibelle($libelle);
-        $this->setRefAffaire($affaire);
         $this->setRefPoste($poste);
         $this->setNbHeure($nbHeure);
     }
 
-    public function getSaisiesHeureParProjet($sm=null, $personnel = null, $affaire = null)
+    public function getSaisiesHeureParProjet($sm, $dateDebut, $dateFin, $personnel = null, $affaire = null)
     {
         if(!is_null($personnel))
         {
@@ -387,7 +387,7 @@ class SaisieHeureProjet
                  FROM saisie_heure_projet AS sp
                     LEFT JOIN saisie_heure_journee AS sj 
                         ON sp.ref_saisie_horaire = sj.id
-                 WHERE sp.supprime = 0 AND sj.ref_personnel = $personnel "
+                 WHERE sp.supprime = 0 AND sj.ref_personnel = $personnel AND sj.date BETWEEN $dateDebut AND $dateFin "
             ;
 
             if(!is_null($affaire))
@@ -411,31 +411,40 @@ class SaisieHeureProjet
         return array();
     }
 
-    public function getRecapitulatifParProjet($personnel, $sm = null)
+    public function getRecapitulatifParProjet($sm, $dateDebut, $dateFin, $personnel = null, $affaire = null)
     {
-        $query =   
-            "SELECT sp.intitule_saisie, SUM(sp.nb_heure) as nb_heure
-             FROM saisie_heure_projet AS sp
-                LEFT JOIN saisie_heure_journee AS sj 
-                    ON sp.ref_saisie_horaire = sj.id
-             WHERE sp.supprime = 0 AND sj.ref_personnel = $personnel
-             GROUP BY sp.intitule_saisie"
-        ;
-        
-        $statement = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
-        $results = $statement->execute();
-
-        if($results->isQueryResult())
+        if(!is_null($personnel))
         {
-            $resultSet=new ResultSet;
-            $resultSet->initialize($results);
-            return $resultSet->toArray();
+            $query =   
+                "SELECT sp.intitule_saisie, SUM(sp.nb_heure) as nb_heure
+                 FROM saisie_heure_projet AS sp
+                    LEFT JOIN saisie_heure_journee AS sj 
+                        ON sp.ref_saisie_horaire = sj.id
+                 WHERE sp.supprime = 0 AND sj.ref_personnel = $personnel AND sj.date BETWEEN $dateDebut AND $dateFin "
+            ;
+
+            if(!is_null($affaire))
+            {
+                $query .= " AND sp.ref_affaire = $affaire ";
+            }
+
+            $query .= " GROUP BY sp.intitule_saisie ";
+            
+            $statement = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+            $results = $statement->execute();
+
+            if($results->isQueryResult())
+            {
+                $resultSet=new ResultSet;
+                $resultSet->initialize($results);
+                return $resultSet->toArray();
+            }
         }
 
         return array();
     }
 
-    public function getSaisiesHeureParPersonnel($sm=null, $personnel = null, $affaire = null)
+    public function getSaisiesHeureParPersonnel($sm, $dateDebut, $dateFin, $personnel = null, $affaire = null)
     {
         if(!is_null($affaire))
         {
@@ -446,7 +455,7 @@ class SaisieHeureProjet
                         ON sp.ref_saisie_horaire = sj.id
                         LEFT JOIN personnel AS p
                             ON sj.ref_personnel = p.id
-                 WHERE sp.supprime = 0 AND sp.ref_affaire = $affaire "
+                 WHERE sp.supprime = 0 AND sp.ref_affaire = $affaire AND sj.date BETWEEN $dateDebut AND $dateFin "
             ;
             
             if(!is_null($personnel))
@@ -470,9 +479,7 @@ class SaisieHeureProjet
         return array();
     }
 
-    
-
-    public function getRecapitulatifParPersonnel($projet, $sm = null)
+    public function getRecapitulatifParPersonnel($sm,/* $dateDebut, $dateFin,*/ $projet = null)
     {
         $query =   
             "SELECT CONCAT_WS(' ',p.prenom, p.nom) as nom_complet, SUM(sp.nb_heure) as nb_heure

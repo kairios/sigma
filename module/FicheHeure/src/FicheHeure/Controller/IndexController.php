@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-29 17:40:56
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-17 17:57:11
+ * @Last Modified time: 2015-08-18 13:36:35
  */
 
 // module\FicheHeure\src\FicheHeure\Controller\IndexController.php
@@ -107,16 +107,20 @@ class IndexController extends AbstractActionController
             // Récupération de l'utilisateur courant
             $idPersonnel        = $utilisateur->offsetGet('id');
 
+            // Date de début et date de fin
+            list($y,$m,$d)      = explode('-',date('Y-m-d',time()));
+            $dateDebut          = mktime(4,0,0,$m,01,$y);
+            $dateFin            = mktime(4, 0, 0, $m, date('t',$dateDebut), $y);
+
             // Récupération de la liste des personnels
             $personnel          = new Personnel();
             $personnels         = $personnel->getNomsPersonnels($this->getServiceLocator());
 
             // Récupération des saisies d'heure du personnel connecté, 
             // ainsi que du récapitulatif par projet du personnel
-            $saisiesHoraires    = $saisie->getSaisiesHeureParProjet($sm, $idPersonnel); // a transformer en array compréhensible par la conversion JSON.
-            $recapitulatif      = $saisie->getRecapitulatifParProjet($idPersonnel,$sm); // A CHANGER !!
+            $saisiesHoraires    = $saisie->getSaisiesHeureParProjet($sm, $dateDebut, $dateFin, $idPersonnel); // a transformer en array compréhensible par la conversion JSON.
+            $recapitulatif      = $saisie->getRecapitulatifParProjet($sm, $dateDebut, $dateFin, $idPersonnel); // A CHANGER !!
 
-            // var_dump($saisiesHoraires);die();
             // Vue avec Calendar
             return new ViewModel(array(
                 'personnels' => $personnels,
@@ -133,31 +137,34 @@ class IndexController extends AbstractActionController
         
         // S'il s'agit d'une recherche
 
+        // Critères de recherche
         $critere        = $_GET['critere'];
-        // $date           = $_GET['date'];
-        // list($y,$m,$d) = explode('-',substr($date, 0, 10));
-        // var_dump(date("Y-m-d",mktime(4,0,0,$m,$d,$y)));die();
-
-
         $idAffaire      = isset($_GET['affaire']) ? $_GET['affaire'] : null;
+
+        // Date de début et date de fin
+        $dateCalendar   = $_GET['date'];
+        list($y,$m,$d)  = explode('-',substr($dateCalendar, 0, 10));
+        $dateDebut      = mktime(4,0,0,$m,01,$y);
+        $dateFin        = mktime(4, 0, 0, $m, date('t',$dateDebut), $y);
 
         switch($critere)
         {
             case 'projet':
                 $idPersonnel = isset($_GET['personnel']) ? $_GET['personnel'] : null;
-                $saisiesHoraires = $saisie->getSaisiesHeureParPersonnel($sm, $idPersonnel, $idAffaire);
-                $recapitulatif = $saisie->getRecapitulatifParPersonnel($idAffaire,$sm); // A CHANGER !!
+                $saisiesHoraires = $saisie->getSaisiesHeureParPersonnel($sm, $dateDebut, $dateFin, $idPersonnel, $idAffaire);
+                // $recapitulatif = $saisie->getRecapitulatifParPersonnel($sm, $idAffaire);
             break;
             default:
                 $idPersonnel = isset($_GET['personnel']) ? $_GET['personnel'] : (int) $utilisateur->offsetGet('id');
-                $saisiesHoraires = $saisie->getSaisiesHeureParProjet($sm, $idPersonnel, $idAffaire); // a transformer en array compréhensible par la conversion JSON.
-                $recapitulatif = $saisie->getRecapitulatifParProjet($idPersonnel,$sm); // A CHANGER !!
+                $saisiesHoraires = $saisie->getSaisiesHeureParProjet($sm, $dateDebut, $dateFin, $idPersonnel, $idAffaire);
+                // $recapitulatif = $saisie->getRecapitulatifParProjet($sm, $dateDebut, $dateFin, $idPersonnel);
             break;
         }
 
         return new JsonModel(array(
             'saisiesPHP'=>$saisiesHoraires,
-            'recapitulatif'=>$recapitulatif,
+            // 'recapitulatif'=>$recapitulatif,
+            'date'=>date("Y-m-d",$dateDebut)
         ));
     }
 
@@ -348,6 +355,70 @@ class IndexController extends AbstractActionController
             return new JsonModel(array(
                 'statut' => true
             ));
+        }
+        return $this->redirect()->toRoute('home');
+    }
+
+    public function recapitulatifheureparprojetAction()
+    {
+        if($this->getRequest()->isXmlHttpRequest())
+        {
+            $saisie = new SaisieHeureProjet();
+            $sm = $this->getServiceLocator();
+            $idPersonnel = $this->params()->fromRoute('id');
+            $idProjet = $this->params()->fromRoute('projet');
+            // var_dump($idProjet);die();
+
+            // Date de début et date de fin
+            $dateCalendar   = $_GET['date'];
+            list($y,$m,$d)  = explode('-',substr($dateCalendar, 0, 10));
+            $dateDebut      = mktime(4,0,0,$m,01,$y);
+            $dateFin        = mktime(4, 0, 0, $m, date('t',$dateDebut), $y);
+
+            // Recherche du récapitulatif
+            $recapitulatif  = $saisie->getRecapitulatifParProjet($sm, $dateDebut, $dateFin, $idPersonnel, $idProjet);
+
+            // Retour de la vue du recapitulatif
+            $viewModel = new ViewModel();
+            $viewModel
+            ->setTemplate('fiche_heure/recapitulatif-personnel')
+            ->setVariables(array(
+                'recapitulatif'=>$recapitulatif,
+                // 'id'=>$id
+            ))->setTerminal(true);
+
+            return $viewModel;
+        }
+        return $this->redirect()->toRoute('home');
+    }
+
+    public function recapitulatifheureparpersonnelAction()
+    {
+        if($this->getRequest()->isXmlHttpRequest())
+        {
+            $saisie = new SaisieHeureProjet();
+            $sm = $this->getServiceLocator();
+            $idProjet = (int) $this->params()->fromRoute('id');
+
+            // // Date de début et date de fin
+            // $dateCalendar   = $_GET['date'];
+            // list($y,$m,$d)  = explode('-',substr($dateCalendar, 0, 10));
+            // $dateDebut      = mktime(4,0,0,$m,01,$y);
+            // $dateFin        = mktime(4, 0, 0, $m, date('t',$dateDebut), $y);
+
+            // Recherche du récapitulatif
+            $recapitulatif  = $saisie->getRecapitulatifParPersonnel($sm, $idProjet);
+
+            // Retour de la vue du recapitulatif
+            $viewModel = new ViewModel();
+            $viewModel
+            ->setTemplate('fiche_heure/recapitulatif-projet')
+            ->setVariables(array(
+                'recapitulatif'=>$recapitulatif,
+                // 'id'=>$id
+            ))->setTerminal(true);
+
+            return $viewModel;
         }
         return $this->redirect()->toRoute('home');
     }

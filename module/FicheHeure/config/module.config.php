@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-29 17:42:02
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-12 17:31:15
+ * @Last Modified time: 2015-08-18 13:17:49
  */
 
 // module\FicheHeure\config\module.config.php
@@ -87,6 +87,34 @@ return array(
                                 '__NAMESPACE__' => 'FicheHeure\Controller',
                                 'controller'=>'Index',
                                 'action'=>'supprimersaisieheure'
+                            )
+                        ),
+                    ),
+                    'recapitulatif_personnel'=>array(
+                        'type'=>'Segment',
+                        'options'=>array(
+                            'route'=>'/recapitulatif-personnel/:id[/:projet]',
+                            'constraints'=>array(
+                                'id'=>'[0-9]+'
+                            ),
+                            'defaults'=>array(
+                                '__NAMESPACE__' => 'FicheHeure\Controller',
+                                'controller'=>'Index',
+                                'action'=>'recapitulatifheureparprojet'
+                            )
+                        ),
+                    ),
+                    'recapitulatif_projet'=>array(
+                        'type'=>'Segment',
+                        'options'=>array(
+                            'route'=>'/recapitulatif-projet[/:id]',
+                            'constraints'=>array(
+                                'id'=>'[0-9]+'
+                            ),
+                            'defaults'=>array(
+                                '__NAMESPACE__' => 'FicheHeure\Controller',
+                                'controller'=>'Index',
+                                'action'=>'recapitulatifheureparpersonnel'
                             )
                         ),
                     ),

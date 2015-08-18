@@ -1,36 +1,43 @@
-<table class="table table-bordered">
-	<thead>
-		<tr>
-			<th><?php echo $this->translate('Projets'); ?></th>
-			<th><?php echo $this->translate('Temps prévu (h)'); ?></th>
-			<th><?php echo $this->translate('Temps passé (h)'); ?></th>
-		</tr>
-	</thead>
-	<tbody>
-		<!-- boucle ici sur les projets -->
-		<?php 
-			$recap = $this->recapitulatif;
-			$total_heure = 0;
-			$total_prevu = 0;
-			foreach($recap as $ligne)
-			{
-				?>
-					<tr>
-						<td><?php echo $ligne['intitule_saisie']; ?></td>
-						<td>10</td>
-						<td class="<?php echo ($ligne['nb_heure'] > 10) ? 'text-danger':''; ?>"><?php echo $ligne['nb_heure']; ?></td>
-					</tr>
-				<?php
+<div id="login-alert" class="alert alert-info alert-dismissable">
+	<button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
+	<?php echo $this->translate('Les totaux affichés ci-dessous sont calculés au mois et sont ceux qui figureront sur les fiches d\'heures des employés.'); ?>
+</div>
 
-				$total_heure += floatval($ligne['nb_heure']);
-			}
-		?>
-	</tbody>
-	<tfoot>
-		<tr>
-			<th><?php echo $this->translate('Total heures'); ?></th>
-			<th><?php echo $total_prevu; ?></th>
-			<th class="<?php echo ($total_heure > $total_prevu) ? 'text-danger':''; ?>"><?php echo $total_heure; ?></th>
-		</tr>
-	</tfoot>
-</table>
+<div class="table-responsive">
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th><?php echo $this->translate('Projets'); ?></th>
+				<th><?php echo $this->translate('Temps prévu (h)'); ?></th>
+				<th><?php echo $this->translate('Temps passé (h)'); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- boucle ici sur les projets -->
+			<?php 
+				$recap = $this->recapitulatif;
+				$total_heure = 0;
+				$total_prevu = 0;
+				foreach($recap as $ligne)
+				{
+					?>
+						<tr>
+							<td><?php echo $ligne['intitule_saisie']; ?></td>
+							<td>10</td>
+							<td class="<?php echo ($ligne['nb_heure'] > 10) ? 'text-danger':''; ?>"><?php echo $ligne['nb_heure']; ?></td>
+						</tr>
+					<?php
+
+					$total_heure += floatval($ligne['nb_heure']);
+				}
+			?>
+		</tbody>
+		<tfoot>
+			<tr>
+				<th><?php echo $this->translate('Total heures'); ?></th>
+				<th><?php echo $total_prevu; ?></th>
+				<th class="<?php echo ($total_heure > $total_prevu) ? 'text-danger':''; ?>"><?php echo $total_heure; ?></th>
+			</tr>
+		</tfoot>
+	</table>
+</div>

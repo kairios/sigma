@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:49:48
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-17 17:38:52
+* @Last Modified time: 2015-08-18 13:30:36
 */
 
 'use strict';
@@ -2565,44 +2565,48 @@ var sigma={
 				switch(_action)
 				{
 					case 'editerficheheure':
-						$('#page-wrapper').css('height','200%');
+						// Ajustement de la taille du layout pour le calendrier
+						// MEILLEURE SOLUTION : utiliser un layout spécifique à la saisie d'heure avec 
+						// calendrier initialisé dès le début (pour ne pas avoir ce problème d'ajustement)
+						$('#page-wrapper').css('height','2500px');
+
+						// Initialisation du calendrier
 				        $('.calendar').fullCalendar({
 				            header: {
 				                left: 'prev,next today',
 				                center: 'title',
 				                right: '',
 				            },
-				            editable: false,
-				            //droppable: true, // this allows things to be dropped onto the calendar
+				            editable: false, // this forbid the drop-and-down option
 				            dayClick:function(date, jsEvent, view){
 				                sigma.controller.ficheHeure.setFormModalSaisieHoraire(date.format());
 				            },
 				            eventClick: function(saisieHeure, jsEvent, view) {
 				            	sigma.controller.ficheHeure.setFormModalSaisieProjet(saisieHeure.id);
-
-				                // alert('Event: ' + saisieHeure.title);
-				                // alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-				                // alert('View: ' + view.name);
-
-				                // // change the border color just for fun
-				                // $(this).css('border-color', 'red');
 				            },
 				            events: sigma.controller.ficheHeure.convertInEvents(saisiesPHP),
 				            lang: locale
 				        });
+						
 
+				        // Recherche d'affaires par client et numéro d'affaire
 						sigma.controller.ficheHeure.setAutocompletionAffaire();
-						$('#numero_affaire').on('change',function(){
+						// Permet de réinitialiser la valeur de ref_affaire 
+						// (en prévision de recherches)
+						$('#numero_affaire').on('change',function(){ 
 							if( $('#numero_affaire').val() == "" ){
 								$('#ref_affaire').val("");
 							}
 						});
 
-						$('#search-heures').on('click', function(){
+						// Lance la recherche en fonction des criteres renseignés
+						$('#search-heures, .fc-prev-button, .fc-next-button, .fc-today-button').on('click', function(){
 							sigma.controller.ficheHeure.rechercherFicheHeure();
 							return false;
 						});
 
+						// Permet de supprimer une saisie d'heure [ A MODIFIER : 
+						// faire en sorte que n'importe qui ne puisse pas supprimer les saisies de qq'un d'autre ]
 						$('#projet-delete-submit').on('click',function(){
 							sigma.controller.ficheHeure.supprimerSaisieHeure();
 							return false;
@@ -2645,8 +2649,9 @@ var sigma={
 			{
 				$('span').remove('.help-inline');
 
-				// debugger;
-				if($('select#ref_affaire').val() || $('select#ref_libelle').val()  )
+				// Précision du 'select' car plusieurs inputs ont l'id ref_affaire 
+				// (1 dans chaque formulaire de saisie + barre de recherche)
+				if($('#saisie-horaire-form select#ref_affaire').val() || $('#saisie-horaire-form select#ref_libelle').val()  )
 				{
 					$('#saisie-form-submit span').text($('#saisie-form-submit').attr('data-loading-text'));
 
@@ -2659,16 +2664,12 @@ var sigma={
 						type: 'post',
 						success:function(resultats)
 						{
-							/* On supprime les erreurs affichées s'il y en a */
-							//$('#adresse-form div[class*="has-error"]').removeClass('has-error');
-							
-
 							if(resultats.statut==true)
 							{
 								// Si la saisie a été ajoutée, on ferme le modal
 								$('#saisie-form-modal .close').trigger('click');
 
-								// On recharge des saisie d'heure dans le module en faisant une redirection avec setTimeOut :
+								// On recharge des saisie d'heure dans le module en faisant une redirection avec setTimeOut
 								setTimeout(function(){
 									window.location.href='/editer-fiche-heures'
 								},500);
@@ -2697,9 +2698,8 @@ var sigma={
 				}
 				else
 				{
-					// $("label[for='ref_affaire']").remove('span');
 					var p = $('#ref_affaire_error').text();
-					$("label[for='select#ref_affaire']").after('<span class="help-inline" style="color:red;"> - '+p+'</span>');
+					$("#saisie-horaire-form label[for='ref_affaire']").after('<span class="help-inline" style="color:red;"> - '+p+'</span>');
 					$('#saisie-form-submit span').text($('#saisie-form-submit').attr('data-default-text'));
 					return;
 				}				
@@ -2737,52 +2737,58 @@ var sigma={
 			},
 			verifierSaisieHeure:function(numSaisie)
 			{
-				$('#projet-form-submit span').text($('#projet-form-submit').attr('data-loading-text'));
+				$('span').remove('.help-inline');
 
-				if(!$('#ref_libelle').val() && !$('#ref_affaire').val())
+				// Précision du 'select' car plusieurs inputs ont l'id ref_affaire 
+				// (1 dans chaque formulaire de saisie + barre de recherche)
+				if($('#saisie-heure-form select#ref_affaire').val() || $('#saisie-heure-form select#ref_libelle').val()  )
+				{
+					$('#projet-form-submit span').text($('#projet-form-submit').attr('data-loading-text'));
+
+					var serializeForm = $('#saisie-heure-form').serialize();
+
+					$.ajax({
+						url: '/editer-fiche-heures/formulaire-saisie-heure/'+numSaisie,
+						dataType: 'json',
+						data: serializeForm,
+						type: 'post',
+						success:function(resultats)
+						{
+							if(resultats.statut==true)
+							{
+								// Si la saisie a été ajoutée, on ferme le modal
+								$('#projet-form-modal .close').trigger('click');
+								window.location.href='/editer-fiche-heures';
+							}
+							// Si c'est pas bon, on met à jour, le formulaire d'interlocuteur avec les erreurs
+							else
+							{
+								// Ici on affiche les erreurs et les champs contenant des erreurs
+								var errors=resultats.reponse;
+								$.each(errors,function(index,value){
+									$.each(value,function(codeError, messageError){
+										$("label[for='"+index+"']").after('<span class="help-inline"> - '+messageError+'</span>');
+									});
+								});
+								$("#saisie-heure-form span.help-inline").css({'color':'red'});
+							}
+						},
+						error:function(xml,status,message)
+						{
+							alert(message);
+						}
+					});
+
+					$('#projet-form-submit span').text($('#projet-form-submit').attr('data-default-text'));
+				}
+				else
 				{
 					var p = $('#ref_affaire_error').text();
-					$("label[for='ref_affaire']").after('<span class="help-inline" style="color:red;"> - '+p+'</span>');
+					$("#saisie-heure-form label[for='ref_affaire']").after('<span class="help-inline" style="color:red;"> - '+p+'</span>');
 					$('#projet-form-submit span').text($('#projet-form-submit').attr('data-default-text'));
 					return;
 				}
-				$('span').remove('.help-inline');
-
-				var serializeForm = $('#saisie-heure-form').serialize();
-
-				$.ajax({
-					url: '/editer-fiche-heures/formulaire-saisie-heure/'+numSaisie,
-					dataType: 'json',
-					data: serializeForm,
-					type: 'post',
-					success:function(resultats)
-					{
-						if(resultats.statut==true)
-						{
-							// Si la saisie a été ajoutée, on ferme le modal
-							$('#projet-form-modal .close').trigger('click');
-							window.location.href='/editer-fiche-heures';
-						}
-						// Si c'est pas bon, on met à jour, le formulaire d'interlocuteur avec les erreurs
-						else
-						{
-							// Ici on affiche les erreurs et les champs contenant des erreurs
-							var errors=resultats.reponse;
-							$.each(errors,function(index,value){
-								$.each(value,function(codeError, messageError){
-									$("label[for='"+index+"']").after('<span class="help-inline"> - '+messageError+'</span>');
-								});
-							});
-							$("#saisie-heure-form span.help-inline").css({'color':'red'});
-						}
-					},
-					error:function(xml,status,message)
-					{
-						alert(message);
-					}
-				});
-
-				$('#projet-form-submit span').text($('#projet-form-submit').attr('data-default-text'));
+				
 			},
 			supprimerSaisieHeure:function()
 			{
@@ -2806,6 +2812,7 @@ var sigma={
 			rechercherFicheHeure:function()
 			{
 				var params 		= {};
+
 				var personnel 	= $('#ref_personnel').val();
 				var affaire 	= $('#ref_affaire').val();
 				if(personnel)
@@ -2814,12 +2821,12 @@ var sigma={
 					params.affaire = affaire;
 
 				params.date 	= $('.calendar').fullCalendar('getDate').format();
-				console.log(params.date);
 				params.critere 	= $('[name="critere[]"]:checked').val();
-				params.maxRows = 500;
+				params.maxRows 	= 500;
 
 				sigma.controller.ficheHeure.setCalendarFicheHeure(params);
-			},
+				sigma.controller.ficheHeure.setRecapitulatifFicheHeure(params.critere, params.personnel, params.affaire, params.date);
+			}, 
 			setCalendarFicheHeure:function(params)
 			{
 				$.ajax({
@@ -2836,6 +2843,10 @@ var sigma={
 				                center: 'title',
 				                right: '',
 				            },
+				            // Permet d'initialiser le calendrier à une date définie 
+				            // (à un mois en particulier donc, il doit s'agir d'un Moment)
+				            // Peut être remplacé par la méthode "gotoDate" de fullCalendar après instanciation
+				            defaultDate: $.fullCalendar.moment(data.date), 
 				            editable: false,
 				            //droppable: true, // this allows things to be dropped onto the calendar
 				            dayClick:function(date, jsEvent, view){
@@ -2850,12 +2861,12 @@ var sigma={
 
 						if($('[name="critere[]"]:checked').val() == 'personnel')
 						{
-							$('.fc-prev-button, .fc-next-button, .fc-today-button').unbind();
+							// ne pas unbind => sinon ça enlève le changement de mois et on ne peux plus changer de mois, 
+							// et de toute façon la recherche au clic est déjà supprimée lors du 'destroy' du calendrier.
+							// $('.fc-prev-button, .fc-next-button, .fc-today-button').unbind(); 
+
 							$('.fc-prev-button, .fc-next-button, .fc-today-button').on('click', function(){
-								var dateCalendar = $('.calendar').fullCalendar('prev').defaultDate;
-								console.log(dateCalendar);
-								$('.calendar').fullCalendar('gotoDate', $.fullCalendar.moment('2015-04-01')); // Permet d'aller au mois contenant le jour spécifié
-								alert('hello');
+								sigma.controller.ficheHeure.rechercherFicheHeure();
 								return false;
 							});
 						}
@@ -2871,70 +2882,29 @@ var sigma={
 					}
 				});
 			},
-			setRecapitulatifFicheHeure:function(params)
+			setRecapitulatifFicheHeure:function(critere,personnel,projet,date)
 			{
+				// selon critere, route différente : personnel ou projet
+				if(critere == 'personnel')
+				{
+					var url = '/editer-fiche-heures/recapitulatif-personnel/'+personnel;
+				}
+				else
+				{
+					var url = '/editer-fiche-heures/recapitulatif-projet';
+				}
+
+				if(projet)
+					url+='/'+projet;
+
 				$.ajax({
-					url: '/affaires',
-					data:params,
+					url: url,
+					data: 'date='+date,
 					type: 'get',
-					dataType: 'json',
+					dataType: 'html',
 					success:function(data, status, XMLHttpRequest)
 					{
-						var _affaires=$.parseJSON(data["resultat"]);
-						$('#table-affaire').dataTable().fnDestroy();
-						var clientTable = $('#table-affaire').dataTable( {
-						    data: _affaires,
-						    columns: [
-						        { 'data': 'numero_affaire' },
-						        { 'data': 'date_debut' },
-						        { 'data': 'raison_sociale' },
-						        { 'data': 'code_postal' },
-						        { 'data': 'ville' },
-						        { 'data': 'pays' },
-						        { 'data': 'ref_devis_signe' },
-						        { 'data': 'intitule_etat' },
-						        { 'data': 'id' },
-						    ],
-						    columnDefs:
-						    [
-							    {
-							    	'targets':6,
-							    	'className':'bool',
-							    	'data':_affaires.accepte_infos,
-							    	'render': function (data){
-							    		return (data)? '<i class="fa fa-check"></i>':'';
-							    	}
-							    },
-						    	{
-							    	'targets':8,
-							    	'className':'actions',
-							    	'searchable':false,
-							    	'data':_affaires.id,
-							    	'render': function ( data, type, full, meta ) {
-								      	return 	'<a href="affaires/'+data+'"><i class="fa fa-eye fa-lg"></i></a> '+
-	                                        	'<a href="formulaire-affaire/'+data+'"><i class="fa fa-pencil-square-o fa-lg"></i></a> '+
-	                                        	'<a href="#" class="affaire-delete-toggle affaire" data-target="#affaire-delete-modal" data-action="delete" data-id="'+data+'"><i class="fa fa-trash-o fa-lg"></i></a>  ';
-								    },
-						    	}
-						    ],
-						    'dom': '<"row"l>r<"table-responsive"t>ip',
-				            'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
-				            oLanguage: {
-		                    	'sUrl': '/js/Inspinia/plugins/dataTables/datatables-'+locale+'.json'
-		                	},
-		                	// Fonction de callback
-		                	'fnInitComplete': function(){
-								// sigma.controller.affaire.setAffaireListeners();
-
-								// $('#table-affaire').unbind();
-								// $('#table-affaire').on('order.dt page.dt', function(){
-								// 	sigma.controller.affaire.setAffaireListeners();
-								// });
-								// $('select[name="table-client_length"]').on('change',function(){
-								// 	sigma.controller.affaire.setAffaireListeners();
-								// });
-							},
-						});
+						$("#recapitulatif").html(data);
 					},
 					error:function(XMLHttpRequest, status, error)
 					{
@@ -2943,7 +2913,7 @@ var sigma={
 							message='An error occured when retrieving data : <strong>'+error+'</strong>';
 						else
 							message='Une erreur s\'est produite lors de la récupération des données : <strong>'+error+'</strong>';
-						$("#clients").html(message);
+						$("#recapitulatif").html(message);
 					}
 				});
 			},
@@ -2978,10 +2948,6 @@ var sigma={
 							}
 						});
 					},
-					// select:function()
-					// {
-					// 	$('#ref_affaire').val(item.id);
-					// },
 					minLength:3,
 					delay:600
 				});
