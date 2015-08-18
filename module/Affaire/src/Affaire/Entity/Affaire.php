@@ -802,7 +802,7 @@ class Affaire
             'ref_interlocuteur'         =>  $idInterlocuteur,
             'ref_condition_reglement'   =>  $idConditionReglement,
             'ref_personnel'             =>  $idPersonnel,
-            'ref_etat_affaire'              =>  $idEtat(),
+            'ref_etat_affaire'          =>  $idEtat,
             'ref_concurrent'            =>  $idConcurrent,
             'ref_devis_signe'           =>  $idDevis
         );
@@ -862,7 +862,7 @@ class Affaire
         $this->setRefClient($client);
         $this->setRefInterlocuteur($interlocuteur);
         $this->setRefPersonnel($personnel);
-        $this->setEtatAffaire($etat);
+        $this->setRefEtatAffaire($etat);
         $this->setRefConditionReglement($conditionReglement);
         // $this->setRefConcurrent($concurrent);
         $this->setSuiviBudgetActif($data['suivi_budget_actif']);
@@ -872,7 +872,7 @@ class Affaire
     public function getListeAffaire($sm, $motCle = null, $centres = null, $etat = null, $projetSigne = null)
     {
         $query =   
-            "SELECT a.id, a.numero_affaire, c.raison_sociale, ad.code_postal, ad.ville, ad.pays, FROM_UNIXTIME(a.date_debut,'%d/%m/%Y') as date_debut, a.ref_devis_signe, e.intitule_etat
+            "SELECT a.id, a.numero_affaire, a.designation_affaire, c.raison_sociale, ad.code_postal, ad.ville, ad.pays, FROM_UNIXTIME(a.date_debut,'%d/%m/%Y') as date_debut, a.ref_devis_signe, e.intitule_etat
              FROM affaire AS a
                 LEFT JOIN etat_affaire AS e
                     ON a.ref_etat_affaire = e.id
@@ -910,6 +910,7 @@ class Affaire
         {
             $query.=
                 " AND (a.numero_affaire LIKE '%$motCle%' 
+                  OR a.designation_affaire LIKE '%$motCle%'
                   OR FROM_UNIXTIME(a.date_debut,'%d/%m/%Y') LIKE '%$motCle%'
                   OR c.raison_sociale LIKE '%$motCle%' 
                   OR ad.code_postal LIKE '%$motCle%' 

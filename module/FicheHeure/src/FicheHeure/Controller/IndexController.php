@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-29 17:40:56
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-18 13:36:35
+ * @Last Modified time: 2015-08-18 14:12:07
  */
 
 // module\FicheHeure\src\FicheHeure\Controller\IndexController.php
@@ -383,8 +383,7 @@ class IndexController extends AbstractActionController
             $viewModel
             ->setTemplate('fiche_heure/recapitulatif-personnel')
             ->setVariables(array(
-                'recapitulatif'=>$recapitulatif,
-                // 'id'=>$id
+                'recapitulatif'=>$recapitulatif
             ))->setTerminal(true);
 
             return $viewModel;

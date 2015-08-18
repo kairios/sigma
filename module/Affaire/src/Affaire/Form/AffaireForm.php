@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-13 10:30:54
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-14 16:14:17
+ * @Last Modified time: 2015-08-18 15:46:06
  */
 
 namespace Affaire\Form;
@@ -268,6 +268,11 @@ class AffaireForm extends Form
 						{
 							$value=$affaire->{'get'.$method}();
 						}
+
+						// if($field=="ref_client")
+						// {
+						// 	var_dump($value->getId());die();
+						// }
 					}
 
 					if(is_object($value))

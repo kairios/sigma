@@ -24,37 +24,58 @@ class LigneAffaire
     /**
      * @var string
      *
+     * @ORM\Column(name="code_produit", type="string", length=50, nullable=true)
+     */
+    private $codeProduit;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="intitule_ligne", type="string", length=120, nullable=false)
      */
     private $intituleLigne;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="quantite_prevue", type="integer", nullable=false)
+     */
+    private $quantitePrevue = 1;
+
+    /**
      * @var float
      *
-     * @ORM\Column(name="prix_vente_devis", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\Column(name="prix_unitaire_vente", type="float", precision=10, scale=0, nullable=false)
      */
-    private $prixVenteDevis;
+    private $prixUnitaireVente = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="prix_vente_prevu", type="float", precision=10, scale=0, nullable=false)
+     */
+    private $prixVentePrevu = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="prix_vente_details", type="float", precision=10, scale=0, nullable=false)
      */
-    private $prixVenteDetails = '0';
+    private $prixVenteDetails = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="prix_achat_prevu", type="float", precision=10, scale=0, nullable=false)
      */
-    private $prixAchatPrevu = '0';
+    private $prixAchatPrevu = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="prix_achat_reel", type="float", precision=10, scale=0, nullable=false)
      */
-    private $prixAchatReel = '0';
+    private $prixAchatReel = 0;
 
     /**
      * @var string
@@ -104,6 +125,42 @@ class LigneAffaire
     }
 
     /**
+     * Set id
+     *
+     * @param integer $id
+     * @return LigneAffaire 
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Set codeProduit
+     *
+     * @param string $codeProduit
+     * @return LigneAffaire
+     */
+    public function setCodeProduit($codeProduit)
+    {
+        $this->codeProduit = $codeProduit;
+    
+        return $this;
+    }
+
+    /**
+     * Get codeProduit
+     *
+     * @return string 
+     */
+    public function getCodeProduit()
+    {
+        return $this->codeProduit;
+    }
+
+    /**
      * Set intituleLigne
      *
      * @param string $intituleLigne
@@ -127,26 +184,72 @@ class LigneAffaire
     }
 
     /**
-     * Set prixVenteDevis
+     * Set quantitePrevue
      *
-     * @param float $prixVenteDevis
+     * @param integer $quantitePrevue
      * @return LigneAffaire
      */
-    public function setPrixVenteDevis($prixVenteDevis)
+    public function setQuantitePrevue($quantitePrevue)
     {
-        $this->prixVenteDevis = $prixVenteDevis;
+        $this->quantitePrevue = $quantitePrevue;
     
         return $this;
     }
 
     /**
-     * Get prixVenteDevis
+     * Get quantitePrevue
+     *
+     * @return integer 
+     */
+    public function getQuantitePrevue()
+    {
+        return $this->quantitePrevue;
+    }
+
+    /**
+     * Set prixUnitaireVente
+     *
+     * @param float $prixUnitaireVente
+     * @return LigneAffaire
+     */
+    public function setPrixUnitaireVente($prixUnitaireVente)
+    {
+        $this->prixUnitaireVente = $prixUnitaireVente;
+    
+        return $this;
+    }
+
+    /**
+     * Get prixUnitaireVente
      *
      * @return float 
      */
-    public function getPrixVenteDevis()
+    public function getPrixUnitaireVente()
     {
-        return $this->prixVenteDevis;
+        return $this->prixUnitaireVente;
+    }
+
+    /**
+     * Set prixVentePrevu
+     *
+     * @param float $prixVentePrevu
+     * @return LigneAffaire
+     */
+    public function setPrixVentePrevu($prixVentePrevu)
+    {
+        $this->prixVentePrevu = $prixVentePrevu;
+    
+        return $this;
+    }
+
+    /**
+     * Get prixVentePrevu
+     *
+     * @return float 
+     */
+    public function getPrixVentePrevu()
+    {
+        return $this->prixVentePrevu;
     }
 
     /**
@@ -308,6 +411,83 @@ class LigneAffaire
     public function getRefConfirmationCommande()
     {
         return $this->refConfirmationCommande;
+    }
+
+    /**
+     * Convert the object to an array.
+     *
+     * @return array
+     */
+    public function getArrayCopy() 
+    {
+        $idAffaire = $this->getRefAffaire();
+        if(!(empty($idAffaire)))
+            $idAffaire=$idAffaire->getId();
+
+        $idFacture = $this->getRefFacture();
+        if(!(empty($idFacture)))
+            $idFacture=$idFacture->getId();
+
+        $idConfirmation = $this->getRefConfirmationCommande();
+        if(!(empty($idConfirmation)))
+            $idConfirmation=$idConfirmation->getId();
+
+        return array(
+            'id_ligne_affaire'          =>  $this->getId(),
+            'code_produit'              =>  $this->getCodeProduit(),
+            'intitule_ligne'            =>  $this->getIntituleLigne(),
+            'quantite_prevue'           =>  $this->getQuantitePrevue(),
+            'prix_unitaire_vente'       =>  $this->getPrixUnitaireVente(),
+            'prix_vente_prevu'          =>  $this->getPrixVentePrevu(),
+            'prix_vente_details'        =>  $this->getPrixVenteDetails(),
+            'prix_achat_prevu'          =>  $this->getPrixAchatPrevu(),
+            'prix_achat_reel'           =>  $this->getPrixAchatReel(),
+            'remarques'                 =>  $this->getRemarques(),
+            'ref_affaire'               =>  $idAffaire,
+            'ref_facture'               =>  $idFacture,
+            'ref_confirmation_commande' =>  $idConfirmation
+        );
+    }
+  
+    /**
+     * Populate from an array.
+     *
+     * @param array $data
+     */
+    public function exchangeArray($data = array(),$sm=null,$em=null) 
+    {
+        $refAffaire                         = $em->getRepository('Affaire\Entity\Affaire')->find( (int)$data['ref_affaire'] );
+        $refFacture                         = $em->getRepository('Facture\Entity\Facture')->find( (int)$data['ref_facture'] );
+        $refConfirmation                    = $em->getRepository('ConfirmationCommande\Entity\ConfirmationCommande')->find( (int)$data['ref_confirmation_commande'] );
+
+        $affaire                            = (!empty($refAffaire)) ? $refAffaire : null;
+        $facture                            = (!empty($refFacture)) ? $refFacture : null;
+        $confirmation                       = (!empty($refConfirmation)) ? $refConfirmation : null;
+
+        $codeProduit                        = (!empty($data['code_produit'])) ? $data['code_produit'] : null;
+        $intituleLigne                      = (!empty($data['intitule_ligne'])) ? $data['intitule_ligne'] : null;
+        $quantitePrevue                     = (!empty($data['quantite_prevue'])) ? $data['quantite_prevue'] : null;
+        $prixUnitaireVente                  = (!empty($data['prix_unitaire_vente'])) ? $data['prix_unitaire_vente'] : null;
+        $prixVentePrevu                     = (!empty($data['prix_vente_prevu'])) ? $data['prix_vente_prevu'] : null;
+        $prixVenteDetails                   = (!empty($data['prix_vente_details'])) ? $data['prix_vente_details'] : null;
+        $prixAchatPrevu                     = (!empty($data['prix_achat_prevu'])) ? $data['prix_achat_prevu'] : null;
+        $prixAchatReel                      = (!empty($data['prix_achat_reel'])) ? $data['prix_achat_reel'] : null;
+        $remarques                          = (!empty($data['remarques'])) ? $data['remarques'] : null;
+
+        $this->id = $data['id_ligne_affaire'];
+        $this->setCodeProduit($codeProduit);
+        $this->setIntituleLigne($intituleLigne);
+        $this->setQuantitePrevue($quantitePrevue);
+        $this->setPrixUnitaireVente($prixUnitaireVente);
+        $this->setPrixVentePrevu($prixVentePrevu);
+        $this->setPrixVenteDetails($prixVenteDetails);
+        $this->setPrixAchatPrevu($prixAchatPrevu);
+        $this->setPrixAchatReel($prixAchatReel);
+        $this->setRemarques($remarques);
+
+        $this->setRefAffaire($affaire);
+        $this->setRefFacture($facture);
+        $this->setRefConfirmationCommande($confirmation);
     }
 
 }

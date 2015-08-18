@@ -838,7 +838,7 @@ class Client
         }
 
         $where
-            ->equalTo('c.supprime',0)
+            // ->equalTo('c.supprime',0)
             ->and
             ->nest()
                 ->equalTo('a.adresse_principale',1)

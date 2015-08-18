@@ -151,7 +151,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li title="<?php echo $this->translate('Gestion commerciale') ?>">
+                        <li title="<?php echo $this->translate('Gestion commerciale') ?>" <?php echo (isset($this->module) && ($this->module=='affaire' || $this->module=='devis' || $this->module=='commande_fournisseur' || $this->module=='confirmation_commande' || $this->module=='bon_livraison' || $this->module=='facture'))?' class="active"':''; ?>>
                             <a href="#">
                                 <i class="fa fa-file-text"></i>
                                 <span class="nav-label"><?php echo $this->translate('Gestion') ?></span>

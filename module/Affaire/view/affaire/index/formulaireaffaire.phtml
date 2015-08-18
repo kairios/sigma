@@ -54,6 +54,12 @@
 						<div class="form-group col-sm-3 <?php if(isset($errors['code_client'])) { echo 'has-error'; } ?>">
 							<?php 
 								echo $this->formLabel($form->get('code_client'));
+							?>
+							<a href="<?php echo $this->url('formulaire_client'); ?>">
+								<i class="fa fa-plus"></i>
+								<?php echo $this->translate('Ajouter'); ?>
+							</a>
+							<?php
 								echo $this->formSelect($form->get('code_client')); 
 								echo $this->formElementErrors($form->get('code_client'), array('class' => 'liste-erreurs'));
 							?>
@@ -68,11 +74,29 @@
 						<div class="form-group col-sm-4 <?php if(isset($errors['ref_interlocuteur'])) { echo 'has-error'; } ?>">
 							<?php 
 								echo $this->formLabel($form->get('ref_interlocuteur'));
+							?>
+							<a href="#">
+								<i class="fa fa-plus"></i>
+								<?php echo $this->translate('Ajouter'); ?>
+							</a>
+							<?php
 								echo $this->formSelect($form->get('ref_interlocuteur')); 
 								echo $this->formElementErrors($form->get('ref_interlocuteur'), array('class' => 'liste-erreurs'));
 							?>
 						</div>
 					</div>
+					<!-- <div class="row">
+						<div class="col-sm-8">
+							<a href="#">
+								<?php echo $this->translate('Ajouter un client'); ?>
+							</a>
+						</div>
+						<div class="col-sm-4">
+							<a href="#">
+								<?php echo $this->translate('Ajouter un interlocuteur'); ?>
+							</a>
+						</div>
+					</div> -->
 					<div class="hr-line-dashed"></div>
 
 					<div class="row">
@@ -94,6 +118,12 @@
 							<div class="form-group <?php if(isset($errors['ref_condition_reglement'])) { echo 'has-error'; } ?>">
 							<?php 
 								echo $this->formLabel($form->get('ref_condition_reglement'));
+							?>
+							<a href="#">
+								<i class="fa fa-plus"></i>
+								<?php echo $this->translate('Ajouter'); ?>
+							</a>
+							<?php
 								echo $this->formSelect($form->get('ref_condition_reglement')); 
 								echo $this->formElementErrors($form->get('ref_condition_reglement'), array('class' => 'liste-erreurs'));
 							?>

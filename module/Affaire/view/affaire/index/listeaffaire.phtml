@@ -89,7 +89,7 @@
 							</tfoot>
 							<tbody>
 								<?php foreach($this->affaires as $affaire): ?>
-									<tr>
+									<tr <?php echo (isset($affaire['designation_affaire']))? 'title="'.$affaire['designation_affaire'].'"':''; ?>>
 										<td><?php echo (isset($affaire['numero_affaire']))?$affaire['numero_affaire']:''; ?></td>
 										<td><?php echo (isset($affaire['date_debut']))? /*date('d/m/Y',*/$affaire['date_debut']/*)*/:''; ?></td>
 										<td><?php echo (isset($affaire['raison_sociale']))?$affaire['raison_sociale']:''; ?></td>

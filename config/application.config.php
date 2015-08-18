@@ -13,7 +13,9 @@ return array(
         'Personnel',
         'Produit',
         'FicheHeure',
-        'Devis'
+        'Devis',
+        'Facture',
+        'ConfirmationCommande'
     ),
 
     // These are various options for the listeners attached to the ModuleManager
