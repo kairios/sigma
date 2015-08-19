@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-22 16:18:02
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-07-22 17:03:00
+ * @Last Modified time: 2015-08-19 14:25:51
  */
 
 // module\Produit\config\module.config.php
@@ -30,12 +30,12 @@ return array(
 					'defaults'=>array(
 						'__NAMESPACE__'=>'Produit\Controller',
 						'controller'=>'Index',
-						'action'=>'index',
+						'action'=>'listeproduit',
 					),
 				),
                 'may_terminate'=>true,
                 'child_routes'=>array(
-                    'fournisseur'=>array(
+                    'produit'=>array(
                         'type'=>'Segment',
                         'options'=>array(
                             'route'=>'[/:action][/:id]',
@@ -46,9 +46,19 @@ return array(
                             'defaults'=>array(
                                 '__NAMESPACE__' => 'Produit\Controller',
                                 'controller'    => 'Index',
-                                'action'        => 'index',
+                                'action'        => 'listeproduit',
                             ),
                         ),
+                    ),
+                ),
+            ),
+            'autocompletion_produit'=>array(
+                'type'=>'Literal',
+                'options'=>array(
+                    'route'=>'/autocompletion_produit',
+                    'defaults'=>array(
+                        'controller'=>'Produit\Controller\Index',
+                        'action'=>'autocompletionproduit'
                     ),
                 ),
             ),

@@ -15,7 +15,7 @@ class LigneProduit
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,91 +24,91 @@ class LigneProduit
     /**
      * @var string
      *
-     * @ORM\Column(name="numero_produit", type="string", length=50, nullable=true)
+     * @ORM\Column(name="numero_produit", type="string", length=50, precision=0, scale=0, nullable=true, unique=false)
      */
     private $numeroProduit;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="intitule_produit", type="string", length=120, nullable=false)
+     * @ORM\Column(name="intitule_produit", type="string", length=120, precision=0, scale=0, nullable=false, unique=false)
      */
     private $intituleProduit;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="quantite", type="integer", nullable=false)
+     * @ORM\Column(name="quantite", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $quantite = '1';
+    private $quantite;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="reference_produit_fournisseur", type="string", length=50, nullable=true)
+     * @ORM\Column(name="reference_produit_fournisseur", type="string", length=50, precision=0, scale=0, nullable=true, unique=false)
      */
     private $referenceProduitFournisseur;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="reference_devis", type="string", length=50, nullable=true)
+     * @ORM\Column(name="reference_devis", type="string", length=50, precision=0, scale=0, nullable=true, unique=false)
      */
     private $referenceDevis;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="prix_achat", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\Column(name="prix_achat", type="float", precision=10, scale=0, nullable=false, unique=false)
      */
-    private $prixAchat = '0';
+    private $prixAchat;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="prix_vente", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\Column(name="prix_vente", type="float", precision=10, scale=0, nullable=false, unique=false)
      */
-    private $prixVente = '0';
+    private $prixVente;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="prix_achat_total", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\Column(name="prix_achat_total", type="float", precision=10, scale=0, nullable=false, unique=false)
      */
-    private $prixAchatTotal = '0';
+    private $prixAchatTotal;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="prix_vente_total", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\Column(name="prix_vente_total", type="float", precision=10, scale=0, nullable=false, unique=false)
      */
-    private $prixVenteTotal = '0';
+    private $prixVenteTotal;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_facturation", type="date", nullable=true)
+     * @ORM\Column(name="date_facturation", type="date", precision=0, scale=0, nullable=true, unique=false)
      */
     private $dateFacturation;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_commande", type="date", nullable=true)
+     * @ORM\Column(name="date_commande", type="date", precision=0, scale=0, nullable=true, unique=false)
      */
     private $dateCommande;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="imprevu", type="boolean", nullable=false)
+     * @ORM\Column(name="imprevu", type="boolean", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $imprevu = '0';
+    private $imprevu;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="remarques", type="text", nullable=true)
+     * @ORM\Column(name="remarques", type="text", precision=0, scale=0, nullable=true, unique=false)
      */
     private $remarques;
 
@@ -117,7 +117,7 @@ class LigneProduit
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\LigneAffaire")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_ligne_affaire", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_ligne_affaire", referencedColumnName="id", nullable=true)
      * })
      */
     private $refLigneAffaire;
@@ -127,7 +127,7 @@ class LigneProduit
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Fournisseur")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_fournisseur", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_fournisseur", referencedColumnName="id", nullable=true)
      * })
      */
     private $refFournisseur;
@@ -137,7 +137,7 @@ class LigneProduit
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\PosteCout")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_poste_budget", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_poste_budget", referencedColumnName="id", nullable=true)
      * })
      */
     private $refPosteBudget;
@@ -147,7 +147,7 @@ class LigneProduit
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\ProduitFournisseurVente")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_produit_fournisseur_vente", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_produit_fournisseur_vente", referencedColumnName="id", nullable=true)
      * })
      */
     private $refProduitFournisseurVente;
@@ -157,10 +157,433 @@ class LigneProduit
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\CommandeFournisseur")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_commande_fournisseur", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_commande_fournisseur", referencedColumnName="id", nullable=true)
      * })
      */
     private $refCommandeFournisseur;
 
 
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set numeroProduit
+     *
+     * @param string $numeroProduit
+     * @return LigneProduit
+     */
+    public function setNumeroProduit($numeroProduit)
+    {
+        $this->numeroProduit = $numeroProduit;
+    
+        return $this;
+    }
+
+    /**
+     * Get numeroProduit
+     *
+     * @return string 
+     */
+    public function getNumeroProduit()
+    {
+        return $this->numeroProduit;
+    }
+
+    /**
+     * Set intituleProduit
+     *
+     * @param string $intituleProduit
+     * @return LigneProduit
+     */
+    public function setIntituleProduit($intituleProduit)
+    {
+        $this->intituleProduit = $intituleProduit;
+    
+        return $this;
+    }
+
+    /**
+     * Get intituleProduit
+     *
+     * @return string 
+     */
+    public function getIntituleProduit()
+    {
+        return $this->intituleProduit;
+    }
+
+    /**
+     * Set quantite
+     *
+     * @param integer $quantite
+     * @return LigneProduit
+     */
+    public function setQuantite($quantite)
+    {
+        $this->quantite = $quantite;
+    
+        return $this;
+    }
+
+    /**
+     * Get quantite
+     *
+     * @return integer 
+     */
+    public function getQuantite()
+    {
+        return $this->quantite;
+    }
+
+    /**
+     * Set referenceProduitFournisseur
+     *
+     * @param string $referenceProduitFournisseur
+     * @return LigneProduit
+     */
+    public function setReferenceProduitFournisseur($referenceProduitFournisseur)
+    {
+        $this->referenceProduitFournisseur = $referenceProduitFournisseur;
+    
+        return $this;
+    }
+
+    /**
+     * Get referenceProduitFournisseur
+     *
+     * @return string 
+     */
+    public function getReferenceProduitFournisseur()
+    {
+        return $this->referenceProduitFournisseur;
+    }
+
+    /**
+     * Set referenceDevis
+     *
+     * @param string $referenceDevis
+     * @return LigneProduit
+     */
+    public function setReferenceDevis($referenceDevis)
+    {
+        $this->referenceDevis = $referenceDevis;
+    
+        return $this;
+    }
+
+    /**
+     * Get referenceDevis
+     *
+     * @return string 
+     */
+    public function getReferenceDevis()
+    {
+        return $this->referenceDevis;
+    }
+
+    /**
+     * Set prixAchat
+     *
+     * @param float $prixAchat
+     * @return LigneProduit
+     */
+    public function setPrixAchat($prixAchat)
+    {
+        $this->prixAchat = $prixAchat;
+    
+        return $this;
+    }
+
+    /**
+     * Get prixAchat
+     *
+     * @return float 
+     */
+    public function getPrixAchat()
+    {
+        return $this->prixAchat;
+    }
+
+    /**
+     * Set prixVente
+     *
+     * @param float $prixVente
+     * @return LigneProduit
+     */
+    public function setPrixVente($prixVente)
+    {
+        $this->prixVente = $prixVente;
+    
+        return $this;
+    }
+
+    /**
+     * Get prixVente
+     *
+     * @return float 
+     */
+    public function getPrixVente()
+    {
+        return $this->prixVente;
+    }
+
+    /**
+     * Set prixAchatTotal
+     *
+     * @param float $prixAchatTotal
+     * @return LigneProduit
+     */
+    public function setPrixAchatTotal($prixAchatTotal)
+    {
+        $this->prixAchatTotal = $prixAchatTotal;
+    
+        return $this;
+    }
+
+    /**
+     * Get prixAchatTotal
+     *
+     * @return float 
+     */
+    public function getPrixAchatTotal()
+    {
+        return $this->prixAchatTotal;
+    }
+
+    /**
+     * Set prixVenteTotal
+     *
+     * @param float $prixVenteTotal
+     * @return LigneProduit
+     */
+    public function setPrixVenteTotal($prixVenteTotal)
+    {
+        $this->prixVenteTotal = $prixVenteTotal;
+    
+        return $this;
+    }
+
+    /**
+     * Get prixVenteTotal
+     *
+     * @return float 
+     */
+    public function getPrixVenteTotal()
+    {
+        return $this->prixVenteTotal;
+    }
+
+    /**
+     * Set dateFacturation
+     *
+     * @param \DateTime $dateFacturation
+     * @return LigneProduit
+     */
+    public function setDateFacturation($dateFacturation)
+    {
+        $this->dateFacturation = $dateFacturation;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateFacturation
+     *
+     * @return \DateTime 
+     */
+    public function getDateFacturation()
+    {
+        return $this->dateFacturation;
+    }
+
+    /**
+     * Set dateCommande
+     *
+     * @param \DateTime $dateCommande
+     * @return LigneProduit
+     */
+    public function setDateCommande($dateCommande)
+    {
+        $this->dateCommande = $dateCommande;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateCommande
+     *
+     * @return \DateTime 
+     */
+    public function getDateCommande()
+    {
+        return $this->dateCommande;
+    }
+
+    /**
+     * Set imprevu
+     *
+     * @param boolean $imprevu
+     * @return LigneProduit
+     */
+    public function setImprevu($imprevu)
+    {
+        $this->imprevu = $imprevu;
+    
+        return $this;
+    }
+
+    /**
+     * Get imprevu
+     *
+     * @return boolean 
+     */
+    public function getImprevu()
+    {
+        return $this->imprevu;
+    }
+
+    /**
+     * Set remarques
+     *
+     * @param string $remarques
+     * @return LigneProduit
+     */
+    public function setRemarques($remarques)
+    {
+        $this->remarques = $remarques;
+    
+        return $this;
+    }
+
+    /**
+     * Get remarques
+     *
+     * @return string 
+     */
+    public function getRemarques()
+    {
+        return $this->remarques;
+    }
+
+    /**
+     * Set refLigneAffaire
+     *
+     * @param \Application\Entity\LigneAffaire $refLigneAffaire
+     * @return LigneProduit
+     */
+    public function setRefLigneAffaire(\Application\Entity\LigneAffaire $refLigneAffaire = null)
+    {
+        $this->refLigneAffaire = $refLigneAffaire;
+    
+        return $this;
+    }
+
+    /**
+     * Get refLigneAffaire
+     *
+     * @return \Application\Entity\LigneAffaire 
+     */
+    public function getRefLigneAffaire()
+    {
+        return $this->refLigneAffaire;
+    }
+
+    /**
+     * Set refFournisseur
+     *
+     * @param \Application\Entity\Fournisseur $refFournisseur
+     * @return LigneProduit
+     */
+    public function setRefFournisseur(\Application\Entity\Fournisseur $refFournisseur = null)
+    {
+        $this->refFournisseur = $refFournisseur;
+    
+        return $this;
+    }
+
+    /**
+     * Get refFournisseur
+     *
+     * @return \Application\Entity\Fournisseur 
+     */
+    public function getRefFournisseur()
+    {
+        return $this->refFournisseur;
+    }
+
+    /**
+     * Set refPosteBudget
+     *
+     * @param \Application\Entity\PosteCout $refPosteBudget
+     * @return LigneProduit
+     */
+    public function setRefPosteBudget(\Application\Entity\PosteCout $refPosteBudget = null)
+    {
+        $this->refPosteBudget = $refPosteBudget;
+    
+        return $this;
+    }
+
+    /**
+     * Get refPosteBudget
+     *
+     * @return \Application\Entity\PosteCout 
+     */
+    public function getRefPosteBudget()
+    {
+        return $this->refPosteBudget;
+    }
+
+    /**
+     * Set refProduitFournisseurVente
+     *
+     * @param \Application\Entity\ProduitFournisseurVente $refProduitFournisseurVente
+     * @return LigneProduit
+     */
+    public function setRefProduitFournisseurVente(\Application\Entity\ProduitFournisseurVente $refProduitFournisseurVente = null)
+    {
+        $this->refProduitFournisseurVente = $refProduitFournisseurVente;
+    
+        return $this;
+    }
+
+    /**
+     * Get refProduitFournisseurVente
+     *
+     * @return \Application\Entity\ProduitFournisseurVente 
+     */
+    public function getRefProduitFournisseurVente()
+    {
+        return $this->refProduitFournisseurVente;
+    }
+
+    /**
+     * Set refCommandeFournisseur
+     *
+     * @param \Application\Entity\CommandeFournisseur $refCommandeFournisseur
+     * @return LigneProduit
+     */
+    public function setRefCommandeFournisseur(\Application\Entity\CommandeFournisseur $refCommandeFournisseur = null)
+    {
+        $this->refCommandeFournisseur = $refCommandeFournisseur;
+    
+        return $this;
+    }
+
+    /**
+     * Get refCommandeFournisseur
+     *
+     * @return \Application\Entity\CommandeFournisseur 
+     */
+    public function getRefCommandeFournisseur()
+    {
+        return $this->refCommandeFournisseur;
+    }
 }

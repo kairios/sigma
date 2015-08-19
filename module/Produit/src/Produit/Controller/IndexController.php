@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-22 16:18:51
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-07-24 18:32:37
+ * @Last Modified time: 2015-08-19 15:02:33
  */
 
 // module\Produit\src\Produit\Controller\IndexController.php
@@ -80,6 +80,11 @@ class IndexController extends AbstractActionController
 
 	public function indexAction()
 	{
+		
+	}
+
+	public function listeproduitAction()
+	{
 		$translator = $this->getServiceLocator()->get('Translator');
 		//Assignation de variables au layout
 		$this->layout()->setVariables(array(
@@ -90,11 +95,32 @@ class IndexController extends AbstractActionController
 			'module'			=>	'produit',
 			'plugins'			=>	array(),
 		));
+
+		return new ViewModel(array(
+			'produits' => array()
+		));
 	}
 
-	public function listeproduitAction()
+	public function autocompletionproduitAction()
 	{
-		
+		//Si la requète est de type AJAX, on effectue la recherche
+        if($this->getRequest()->isXmlHttpRequest())
+        {
+        	$list = array();
+            $produit = new Produit();
+            $utilisateur = new Container('utilisateur');
+
+            $codeProduit = isset($_GET['codeProduit']) ? $_GET['codeProduit'] : null;
+            $intituleProduit = isset($_GET['intituleProduit']) ? $_GET['intituleProduit'] : null;
+
+            $list = $produit->getIntitulesProduits($this->getServiceLocator(),$utilisateur->offsetGet('lang','fr_FR'), $codeProduit, $intituleProduit, 10);            
+
+            return new JsonModel(array(
+                'resultat'=>json_encode($list)
+            ));
+        }
+
+        return $this->redirect()->toRoute('home'); // Ou on redirige l'utilisateur vers une autre page
 	}
 }
 

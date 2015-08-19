@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-30 09:31:09
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-18 15:37:50
+ * @Last Modified time: 2015-08-19 14:57:33
  */
 
 namespace Affaire\Controller;
@@ -240,7 +240,7 @@ class IndexController extends AbstractActionController
             'route'             =>  array(),
             'action'            =>  'consulteraffaire',
             'module'            =>  'affaire',
-            'plugins'           =>  array(),                              
+            'plugins'           =>  array('jquery-ui'),
         ));
 
         $adressePrincipale = $this->getEntityManager()->getRepository('Adresse\Entity\Adresse')->findOneBy(array('refClient'=>$affaire->getRefClient()->getId(),'adressePrincipale'=>true));

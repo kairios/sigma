@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:49:48
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-18 13:30:36
+* @Last Modified time: 2015-08-19 15:06:21
 */
 
 'use strict';
@@ -1969,9 +1969,6 @@ var sigma={
 				});
 			},
 		},
-		produit:{
-			init:function(){}
-		},
 		affaire:{
 			init:function(){
 				switch(_action)
@@ -2047,6 +2044,8 @@ var sigma={
 							sigma.controller.affaire.addLigneAffaire();
 					    	return false;
 					    });
+
+					    sigma.controller.produit.setAutocompletionInitulesProduits($('#ligne-form'));
 
 					    // sigma.controller.affaire.setLigneListeners();
 					break;
@@ -2972,7 +2971,72 @@ var sigma={
 				});
 				return saisiesJSON;
 			},
-		}
+		},
+		produit:{
+			init:function(){
+				switch(_action)
+				{
+					case 'listeproduit':
+					break;
+				}
+			},
+			setAutocompletionInitulesProduits:function(scope)
+			{
+				scope.find('#code_produit, #intitule_produit').autocomplete({
+					source:function(request,response)
+					{
+						var params = {};
+						if($(this.element).attr('id')=='code_produit')
+						{
+							params = { codeProduit:request.term,maxRows:10 };
+						}
+						else
+						{
+							params = { intituleProduit:request.term,maxRows:10 };
+						}
+
+						$.ajax({
+							url:'/autocompletion_produit',
+							dataType:'json',
+							data:params,
+							type:'GET',
+							success:function(data)
+							{
+								var suggestions = eval(data.resultat);
+								response($.map(suggestions,function(item){
+									return {
+										label:'['+item.code_produit + '] '+item.intitule_produit,
+										value:function()
+										{
+											if($(this).attr('id')=='code_produit')
+											{
+												$('#intitule_produit').val(item.intitule_produit);
+												return item.code_produit;
+											}
+											else
+											{
+												$('#code_produit').val(item.code_produit);
+												return item.intitule_produit;
+											}
+										}
+									}
+								}));
+							},
+							error:function(xml,status,message)
+							{
+								alert(message);
+							}
+						});
+					},
+					// select:function()
+					// {
+					// 	$('#pays').val('France');
+					// },
+					minLength:3,
+					delay:600
+				});
+			},
+		},
 	},
 	// Initialisation de l'API Sigma V2.0
 	init:function(){
