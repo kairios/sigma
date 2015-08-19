@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-13 10:30:54
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-18 16:45:36
+ * @Last Modified time: 2015-08-19 18:36:41
  */
 
 // module\Affaire\src\Affaire\Form\LigneAffaireForm.php
@@ -236,11 +236,11 @@ class LigneAffaireForm extends Form
 				break;
 			}
 
-			if( !is_null($affaire) )
+			if( !is_null($ligneAffaire) )
 			{
 				// if($field=='code_client')
 				// {
-				// 	$value=$affaire->getRefClient();
+				// 	$value=$ligneAffaire->getRefClient();
 				// 	if($value)
 				// 	{
 				// 		if($value->getCodeClient())
@@ -256,7 +256,7 @@ class LigneAffaireForm extends Form
 				// else
 				// {
 					if($data['form']['type']=='hidden')
-						$value=$affaire->{'get'.$data['form']['getter']}();
+						$value=$ligneAffaire->{'get'.$data['form']['getter']}();
 					else
 					{
 						$tab=explode('_',$field);
@@ -266,15 +266,10 @@ class LigneAffaireForm extends Form
 							$method.=ucfirst($part);
 						}
 						$property=lcfirst($method);
-						if(property_exists($affaire,$property))
+						if(property_exists($ligneAffaire,$property))
 						{
-							$value=$affaire->{'get'.$method}();
+							$value=$ligneAffaire->{'get'.$method}();
 						}
-
-						// if($field=="ref_client")
-						// {
-						// 	var_dump($value->getId());die();
-						// }
 					}
 
 					if(is_object($value))

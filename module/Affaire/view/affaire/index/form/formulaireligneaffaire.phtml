@@ -1,0 +1,84 @@
+
+<!-- module\Affaire\view\affaire\index\formulaireligneaffaire.phtml -->
+
+<?php
+	$ligneAffaire = $this->ligne;
+	$form 	= $this->form;
+	$errors = $form->getMessages();
+
+	// $form->setAttribute('action', $this->url('affaire/formulaire_ligne_affaire',array('id'=>$this->id)));
+	$form->prepare();
+
+	echo $this->form()->openTag($form);
+
+	echo $this->formInput($form->get('id_ligne_affaire'));
+	echo $this->formInput($form->get('ref_affaire'));
+	echo $this->formInput($form->get('prix_vente_details'));
+	echo $this->formInput($form->get('prix_achat_prevu'));
+	echo $this->formInput($form->get('prix_achat_reel'));
+?>
+
+<form id="ligne-form" action="" role="form">
+	<div class="row">
+		<div class="form-group col-sm-4">
+			<!-- <label for="code_produit" class="font-noraml"><?php echo $this->translate('Ref. produit'); ?></label>
+			<a href="#" title="<?php // echo $this->translate('Rechercher un produit dans la bibliothèque'); ?>"><i class="fa fa-search"></i></a>
+			<input id="code_produit" name="code_produit" type="text" class="form-control" /> -->
+			<?php
+				echo $this->formLabel($form->get('code_produit'));
+				echo $this->formInput($form->get('code_produit'));
+			 ?>											
+		</div>
+		<div class="form-group col-sm-8">
+			<!-- <label for="intitule_produit" class="font-noraml"><?php echo $this->translate('Intitulé'); ?></label>
+			<input id="intitule_produit" name="intitule_produit" type="text" class="form-control" /> -->
+			<?php
+				echo $this->formLabel($form->get('intitule_ligne'));
+				echo $this->formInput($form->get('intitule_ligne'));
+			 ?>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group col-sm-4">
+			<!-- <label for="quantite" class="font-noraml"><?php // echo $this->translate('Quantité'); ?></label>
+			<input id="quantite" name="quantite" type="text" class="form-control"/> -->
+			<?php
+				echo $this->formLabel($form->get('quantite_prevue'));
+				echo $this->formInput($form->get('quantite_prevue'));
+			 ?>
+		</div>
+		<div class="col-sm-4">
+			<!-- <label for="prix_unitaire_achat" class="font-noraml"><?php //echo $this->translate('Prix unitaire achat'); ?></label> -->
+			<?php echo $this->formLabel($form->get('prix_unitaire_vente'));	?>
+			<div class="input-group">
+				<?php echo $this->formInput($form->get('prix_unitaire_vente')); ?>
+				<!-- <input id="prix_unitaire_achat" name="prix_unitaire_achat" type="text" class="form-control" /> -->
+				<span class="input-group-addon">&euro;</span>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<?php echo $this->formLabel($form->get('prix_vente_prevu'));	?>
+			<!-- <label for="prix_unitaire_vente" class="font-noraml"><?php //echo $this->translate('Prix unitaire vente'); ?></label> -->
+			<div class="input-group">
+				<?php echo $this->formInput($form->get('prix_vente_prevu')); ?>
+				<!-- <input id="prix_unitaire_vente" name="prix_unitaire_vente" type="text" class="form-control" /> -->
+				<span class="input-group-addon">&euro;</span>
+			</div>
+		</div>
+		<div class="col-sm-12">
+			<!-- <label for="remarques" class="font-noraml"><?php //echo $this->translate('Remarques'); ?></label>
+			<textarea name="remarques" id="remarques" cols="30" rows="2" class="form-control"></textarea> -->
+			<?php
+				echo $this->formLabel($form->get('remarques'));
+				echo $this->formTextarea($form->get('remarques'));
+			 ?>
+		</div>
+	</div>
+	
+	<button id="ligne-form-submit" type="submit" name="submit" class="btn btn-primary btn-block m-t">
+		<i class="fa fa-plus"></i>
+		<span><?php echo $this->translate('Ajouter'); ?></span>
+	</button>
+</form>
+
+<?php echo $this->form()->closeTag($form); ?>

@@ -1,0 +1,171 @@
+
+<!-- module\FicheHeure\view\fiche-heure\index\formulairesaisieheure.phtml -->
+
+<form id="ligne-form" action="" role="form">
+	<div class="row">
+		<div class="form-group col-sm-3">
+			<label for="code_produit" class="font-noraml"><?php echo $this->translate('Ref. produit'); ?></label>
+			<a href="#" title="<?php echo $this->translate('Rechercher un produit dans la bibliothèque'); ?>"><i class="fa fa-search"></i></a>
+			<input id="code_produit" name="code_produit" type="text" class="form-control" />											
+		</div>
+		<div class="form-group col-sm-6">
+			<label for="intitule_produit" class="font-noraml"><?php echo $this->translate('Intitulé'); ?></label>
+			<input id="intitule_produit" name="intitule_produit" type="text" class="form-control" />
+		</div>
+		<div class="form-group col-sm-3">
+			<label for="quantite" class="font-noraml"><?php echo $this->translate('Quantité'); ?></label>
+			<input id="quantite" name="quantite" type="text" class="form-control"/>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group col-sm-3">
+			<label for="code_fournisseur" class="font-noraml"><?php echo $this->translate('Code Fourn.'); ?></label>
+			<select id="code_fournisseur" name="code_fournisseur" class="form-control">
+				<option value="" selected="selected"></option>
+				<option value="1">ABBAIX</option>
+				<option value="2">ACI</option>
+				<option value="3">ACTGAU</option>
+				<option value="4">ACTPAR</option>
+				<option value="5">AEIMAL</option>
+				<option value="6">ZEPP</option>
+			</select>											
+		</div>
+		<div class="form-group col-sm-6">
+			<label for="ref_fournisseur" class="font-noraml"><?php echo $this->translate('Fournisseur'); ?></label>
+			<select id="ref_fournisseur" name="ref_fournisseur" class="form-control">
+				<option value="" selected="selected"></option>
+				<option value="1">ABB France (Division Process Automation)</option>
+				<option value="2">ACI</option>
+				<option value="3">ACTEMIUM St Quentin</option>
+				<option value="4">ACTOMIS</option>
+				<option value="5">A.E.I</option>
+				<option value="6">3 M France</option>
+			</select>
+		</div>
+		<div class="form-group col-sm-3">
+			<label for="reference_devis" class="font-noraml"><?php echo $this->translate('Ref. devis'); ?></label>
+			<input id="reference_devis" name="reference_devis" type="text" class="form-control"/>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<label for="prix_unitaire_achat" class="font-noraml"><?php echo $this->translate('Prix unitaire achat'); ?></label>
+			<div class="input-group">
+				<input id="prix_unitaire_achat" name="prix_unitaire_achat" type="text" class="form-control" />
+				<span class="input-group-addon">&euro;</span>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<label for="prix_unitaire_vente" class="font-noraml"><?php echo $this->translate('Prix unitaire vente'); ?></label>
+			<div class="input-group">
+				<input id="prix_unitaire_vente" name="prix_unitaire_vente" type="text" class="form-control" />
+				<span class="input-group-addon">&euro;</span>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<label for="poids_unitaire" class="font-noraml"><?php echo $this->translate('Poids unitaire'); ?></label>
+			<div class="input-group">
+				<input id="poids_unitaire" name="poids_unitaire" type="text" class="form-control" />
+				<span class="input-group-addon">kg</span>
+			</div>
+		</div>
+		<div class="col-sm-12">
+			<label for="remarques" class="font-noraml"><?php echo $this->translate('Remarques'); ?></label>
+			<textarea name="remarques" id="remarques" cols="30" rows="2" class="form-control"></textarea>
+		</div>
+	</div>
+
+	
+	<hr>
+	<div class="row">
+		<div class="col-sm-9">
+			<label for="metier" class="font-noraml"><?php echo $this->translate('Métier'); ?></label>
+			<select id="metier" name="metier" class="form-control">
+				<option value="" selected="selected"></option>
+				<option value="1">Mise en service</option>
+				<option value="2">Programmation</option>
+				<option value="3">Suivi d'affaires</option>
+				<option value="4">Programmation</option>
+				<option value="5">Matériel</option>
+				<option value="6">Heures</option>
+				<option value="7">Heures sous-traitées</option>
+				<option value="8">Supervision</option>
+				<option value="9">Audit</option>
+				<option value="10">Montage</option>
+				<option value="11">Suivi de projet</option>
+				<option value="12">Dessin - étude</option>
+				<option value="13">Achat de matériel</option>
+				<option value="14">Formation</option>
+				<option value="15">Analyse fonctionnelle</option>
+			</select>
+		</div>
+		<div class="col-sm-3">
+			<label class="font-noraml"><?php echo $this->translate('Charge'); ?></label><br>
+			<label for="charge_externe">
+				<input id="charge_externe" name="charge" type="radio" value="Externe" />
+				Externe
+			</label>
+			<label for="charge_interne">
+				<input id="charge_interne" name="charge" type="radio" value="Interne" />
+				Interne
+			</label>
+		</div>
+	</div>
+	
+	<button id="ligne-form-submit" type="submit" name="submit" class="btn btn-primary btn-block m-t">
+		<i class="fa fa-plus"></i>
+		<span><?php echo $this->translate('Ajouter'); ?></span>
+	</button>
+</form>
+
+<?php
+	// $saisie = $this->saisieHeure;
+	// $form 	= $this->form;
+	// $errors = $form->getMessages();
+
+	// $form->setAttribute('action', $this->url('editer_fiche_heures/formulaire_saisie_heure',array('id'=>$this->id)));
+	// $form->prepare();
+
+	// echo $this->form()->openTag($form);
+
+	// echo $this->formInput($form->get('id_saisie_projet'));
+	// echo $this->formInput($form->get('ref_saisie_horaire'));
+?>
+<!-- <div class="form-group">
+	<?php
+		// echo $this->formLabel($form->get('date'));
+		// echo $this->formInput($form->get('date')); 
+	?>
+</div>
+<div class="well">
+	<div class="row">
+		<div class="form-group col-sm-6">
+			<?php
+				// echo $this->formLabel($form->get('ref_libelle'));
+				// echo $this->formSelect($form->get('ref_libelle'));
+			 ?>
+		</div>
+		<div class="form-group col-sm-6">
+			<?php
+				// echo $this->formLabel($form->get('ref_affaire'));
+				// echo $this->formSelect($form->get('ref_affaire'));
+			 ?>
+		</div>
+		<p id="ref_affaire_error" style="display:none"><?php // echo $this->translate('Vous devez selectionner un projet'); ?></p>
+	</div>
+	<div class="row">
+		<div class="form-group col-sm-6">
+			<?php
+				// echo $this->formLabel($form->get('nb_heure')).'*';
+				// echo $this->formInput($form->get('nb_heure'));
+			 ?>
+		</div>
+		<div class="form-group col-sm-6">
+			<?php
+				// echo $this->formLabel($form->get('ref_poste'));
+				// echo $this->formSelect($form->get('ref_poste'));
+			 ?>
+		</div>
+	</div>
+</div> -->
+<?php // echo $this->form()->closeTag($form); ?>

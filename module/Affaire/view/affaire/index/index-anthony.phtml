@@ -1,0 +1,1095 @@
+<!-- module\Affaire\view\affaire\index\index.phtml -->
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel">
+			<div class="panel-heading">
+				<div class="panel-options">
+					<ul id="tabs" class="nav nav-tabs">
+						<li id="tab-generalites" class="active">
+							<a href="#generalites" title="<?php echo $this->translate('Généralités'); ?>" aria-expanded="true" data-toggle="tab">
+								<i class="fa fa-clipboard"></i>
+								<span class="hidden-xs"><?php echo $this->translate('Généralités'); ?></span>
+							</a>
+						</li>
+						<li id="tab-liste-produit">
+							<a href="#liste-produit" title="<?php echo $this->translate('Liste de produits'); ?>" aria-expanded="false" data-toggle="tab">
+								<i class="fa fa-list-ul"></i>
+								<span class="hidden-xs"><?php echo $this->translate('Liste des produits'); ?></span>
+							</a>
+						</li>
+						<li id="tab-suivi-budget">
+							<a href="#suivi-budget" title="<?php echo $this->translate('Suivi de budget'); ?>" aria-expanded="false" data-toggle="tab">
+								<i class="fa fa-table"></i>
+								<span class="hidden-xs"><?php echo $this->translate('Suivi de budget'); ?></span>
+							</a>
+						</li>
+						<li id="tab-bilan">
+							<a href="#bilan" title="<?php echo $this->translate('Bilan'); ?>" aria-expanded="false" data-toggle="tab">
+								<i class="fa fa-area-chart"></i>
+								<span class="hidden-xs"><?php echo $this->translate('Bilan'); ?></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="panel-body">
+					<div class="tab-content">
+						<!-- Panel des généralités (consultation et gestion de l'état de l'affaire) -->
+						<div id="generalites" class="tab-pane active">
+							<div class="row">
+							 	<span class="text-muted small pull-right">
+				                    <?php echo $this->translate('Dernière modification'); ?>
+				                    <i class="fa fa-clmock-o"></i>
+				                    30/06/2015
+				                </span>
+				                <h3> Pétrin continu ligne Mikado [A13-1234] </h3>
+				                <button class="btn btn-primary btn-xs">
+				                	<i class="fa fa-pencil"></i>
+				                	<?php echo $this->translate('Modifier l\'affaire'); ?>
+				                </button>
+				                <hr class="tiny-hr">
+								<div class="row">
+									<div class="col-md-4 col-sm-7 b-r">
+				                		<h4><?php echo $this->translate('Informations générales'); ?></h4>
+				                		<p><?php echo $this->translate('Créée le').' '.'10/06/2015'; ?></p>
+				                		<ul class="list-group clear-list m-t">
+											<li class="list-group-item fist-item">
+												<span class="pull-right"> Pétrin continu ligne Mikado </span>
+												<span class="label label-info">1</span>
+												<strong>Nom affaire</strong>
+											</li>
+											<li class="list-group-item">
+												<span class="pull-right"> Installation [13] </span>
+												<span class="label label-success">2</span>
+												<strong>Centre de profit</strong>
+											</li>
+											<li class="list-group-item">
+												<span class="pull-right"> 11/12/2015 </span>
+												<span class="label label-primary">3</span>
+												<strong>Date de création</strong>
+											</li>
+											<li class="list-group-item">
+												<span class="pull-right"> MONDALEZ FRANCE (Verpillière) </span>
+												<span class="label label-default">4</span>
+												<strong>Client</strong>
+											</li>
+											<li class="list-group-item">
+												<span class="pull-right"> Virement </span>
+												<span class="label label-default">5</span>
+												<strong>Mode de règlement</strong>
+											</li>
+											<li class="list-group-item">
+												<span class="pull-right"> 20 % à la commande </span>
+												<span class="label label-primary">6</span>
+												<strong>Conditions de règlement</strong>
+											</li>
+										</ul>
+				                	</div>
+				                	<div class="col-md-4 col-sm-5 b-r">
+				                		<h4><?php echo $this->translate('Chargé d\'affaire'); ?></h4>
+				                		<div class="widget gray-bg">
+				                			<h3>
+				                				Laurence Noir
+				                				<a href="#"><i class="fa fa-pencil"></i></a>
+				                			</h3>
+				                		</div>
+										<h4><?php echo $this->translate('Interlocuteur client'); ?></h4>
+				                		<div class="widget gray-bg">
+				                			<h3>
+				                				Janeth Smith
+				                				<a href="#"><i class="fa fa-pencil"></i></a>
+				                			</h3>
+				                			<p>MONDALEZ FRANCE</p>
+				                			<p>Responsable comptabilité</p>
+				                			<ul class="list-unstyled m-t-md">
+				                				<li>
+				                					<span class="fa fa-envelope m-r-xs"></span>
+				                					<label>Email :</label>
+				                					mike@mail.com
+				                				</li>
+				                				<li>
+				                					<span class="fa fa-fax m-r-xs"></span>
+				                					<label>Fax :</label>
+				                					mike@mail.com
+				                				</li>
+				                				<li>
+				                					<span class="fa fa-mobile m-r-xs"></span>
+				                					<label>Mobile :</label>
+				                					mike@mail.com
+				                				</li>
+				                				<li>
+				                					<span class="fa fa-mobile m-r-xs"></span>
+				                					<label>Téléphone :</label>
+				                					mike@mail.com
+				                				</li>
+				                			</ul>
+				                		</div>
+				                	</div>
+				                	<div class="col-md-4 col-sm-12">
+				                		<div class="pull-right dropdown">
+				                			<button class="dropdown-toggle btn-white" data-toggle="dropdown">
+				                				<i class="fa fa-angle-down"></i>
+				                			</button>
+				                			<ul class="dropdown-menu">
+				                				<li><a href="#">Mettre à jour l'état</a></li>
+				                			</ul>
+				                		</div>
+				                		<h4><?php echo $this->translate('Historique'); ?></h4>
+										<div id="vertical-timeline" class="scrollable vertical-container dark-timeline">
+											<p class="etat-courant">En attente des envois de commandes</p>
+											<!--<p class="autre-etat">En attente de facturation<br><s>En attente de commande fournisseur</s></p>-->
+											<div class="vertical-timeline-block">
+												<div class="vertical-timeline-icon navy-bg">
+													<i class="fa fa-check"></i>
+												</div>
+												<div class="vertical-timeline-content">
+													<strong>Affaire signée</strong>
+													<p>
+														<i class="fa fa-paperclip"></i>
+														Devis n°<a href="">13-1234-2</a>
+													</p>
+													<p class="small text-muted">
+														<i class="fa fa-clock-o"></i>
+														03/07/2015
+													</p>
+												</div>
+											</div>
+											<p class="autre-etat"><s>En attente de réponse client</s></p>
+											<div class="vertical-timeline-block">
+												<div class="vertical-timeline-icon gray-bg">
+													<i class="fa fa-envelope"></i>
+												</div>
+												<div class="vertical-timeline-content">
+													<strong>Devis envoyé(s)</strong>
+													<p>
+														<i class="fa fa-paperclip"></i>
+														Devis n°<a href="">13-1234-1</a>
+													<br>
+														<i class="fa fa-paperclip"></i>
+														Devis n°<a href="">13-1234-2</a>
+													</p>
+													<p class="small text-muted">
+														<i class="fa fa-clock-o"></i>
+														01/07/2015
+													</p>
+												</div>
+											</div>
+											<p class="autre-etat"><s>En attente des envois de devis</s></p>
+											<div class="vertical-timeline-block">
+												<div class="vertical-timeline-icon gray-bg">
+													<i class="fa fa-flag"></i>
+												</div>
+												<div class="vertical-timeline-content">
+													<strong>Affaire créée</strong>
+													<p class="small text-muted">
+														<i class="fa fa-clock-o"></i>
+														10/06/2015
+													</p>
+												</div>
+											</div>
+										</div>
+				                	</div>
+				                </div>
+							</div>
+							
+							<div class="row" style="margin-top:20px">
+								<a  href="#" class="pull-right">
+									<i class="fa fa-server"></i>
+				                    <?php echo $this->translate('Voir sur serveur'); ?>
+				                </a>
+								<h3><?php echo $this->translate('Documents de gestion'); ?></h3>
+				            	<hr>
+								<div class="col-lg-6">
+									<div class="ibox float-e-margins">
+										<div class="ibox-title">
+											<h5>Devis</h5>
+											<div class="ibox-tools">
+												<a class="collapse-link">
+													<i class="fa fa-chevron-up"></i>
+												</a>
+												<a class="close-link">
+													<i class="fa fa-times"></i>
+												</a>
+											</div>
+										</div>
+										<div class="ibox-content table-responsive">
+											<em class="text-info">
+												<i class="fa fa-pencil"></i>
+												<?php echo $this->translate('Date signature:'); ?> 03/07/2015
+											</em>
+											<table class="table table-hover no-margins">
+												<thead>
+													<th>Code devis</th>
+													<th>Date creation</th>
+													<th class="bool">Version</th>
+													<th class="bool">Envoyé</th>
+													<th class="bool">Signé</th>
+													<th class="bool">#</th>
+												</thead>
+												<tbody>
+													<tr>
+														<td>13-1234-1</td>
+														<td>
+															<i class="fa fa-clock-o"></i>
+															10/06/2015
+														</td>
+														<td class="bool">1</td>
+														<td class="bool">
+															<input type="checkbox" name="etat" value="1" checked>
+														</td>
+														<td class="bool">
+															<input type="checkbox" name="etat" value="1">
+														</td>
+														<td class="bool">
+															<a href="#"><i class="fa fa-eye"></i></a>
+															<a href="#"><i class="fa fa-pencil"></i></a>
+															<a href="#"><i class="fa fa-trash"></i></a>
+														</td>
+													</tr>
+													<tr>
+														<td>13-1234-2</td>
+														<td>
+															<i class="fa fa-clock-o"></i>
+															30/06/2015
+														</td>
+														<td class="bool">2</td>
+														<td class="bool">
+															<input type="checkbox" name="etat" value="1" checked>
+														</td>
+														<td class="bool">
+															<input type="checkbox" name="etat" value="1" checked>
+														</td>
+														<td class="bool">
+															<a href="#"><i class="fa fa-eye"></i></a>
+															<a href="#"><i class="fa fa-pencil"></i></a>
+															<a href="#"><i class="fa fa-trash"></i></a>
+														</td>
+													</tr>
+													<tr></tr>
+												</tbody>
+											</table>
+											<a href="#">
+												<i class="fa fa-plus"></i>
+												<?php echo $this->translate('Ajouter'); ?>
+											</a>
+										</div>
+									</div>
+									<div class="ibox float-e-margins">
+										<div class="ibox-title">
+											<h5>Factures</h5>
+											<div class="ibox-tools">
+												<a class="collapse-link">
+													<i class="fa fa-chevron-up"></i>
+												</a>
+												<a class="close-link">
+													<i class="fa fa-times"></i>
+												</a>
+											</div>
+										</div>
+										<div class="ibox-content table-responsive">
+											<div>
+												<span><?php echo $this->translate('Réglées'); ?></span>
+												<small class="pull-right">0/2</small>
+											</div>
+											<div class="progress progress-small">
+												<div class="progress-bar progress-bar-danger" style="width: 20%;"></div>
+											</div>
+
+											<table class="table table-hover no-margins">
+												<thead>
+													<th>Code facture</th>
+													<th>Type</th>
+													<th>Date creation</th>
+													<th>Nb ligne</th>
+													<th class="bool">Réglée</th>
+													<th class="bool">#</th>
+												</thead>
+												<tbody>
+													<tr>
+														<td>(F-13-1234-1)</td>
+														<td>Proformat</td>
+														<td>
+															<i class="fa fa-clock-o"></i>
+															30/06/2015
+														</td>
+														<td>4 / 12</td>
+														<td class="bool">
+															<input type="checkbox" name="etat" value="1">
+														</td>
+														<td class="bool">
+															<a href="#"><i class="fa fa-eye"></i></a>
+															<a href="#"><i class="fa fa-pencil"></i></a>
+															<a href="#"><i class="fa fa-trash"></i></a>
+														</td>
+													</tr>
+													<tr>
+														<td>F-13-1234-2</td>
+														<td>Classique</td>
+														<td>
+															<i class="fa fa-clock-o"></i>
+															01/07/2015
+														</td>
+														<td>5 / 12</td>
+														<td class="bool">
+															<input type="checkbox" name="etat" value="1">
+														</td>
+														<td class="bool">
+															<a href="#"><i class="fa fa-eye"></i></a>
+															<a href="#"><i class="fa fa-pencil"></i></a>
+															<a href="#"><i class="fa fa-trash"></i></a>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<a href="#">
+												<i class="fa fa-plus"></i>
+												<?php echo $this->translate('Ajouter'); ?>
+											</a>
+										</div>
+									</div>
+									<div class="ibox float-e-margins">
+										<div class="ibox-title">
+											<h5>Confirmations de commande</h5>
+											<div class="ibox-tools">
+												<a class="collapse-link">
+													<i class="fa fa-chevron-up"></i>
+												</a>
+												<a class="close-link">
+													<i class="fa fa-times"></i>
+												</a>
+											</div>
+										</div>
+										<div class="ibox-content table-responsive">
+											<div>
+												<span><?php echo $this->translate('Envoyées'); ?></span>
+												<small class="pull-right">0/1</small>
+											</div>
+											<div class="progress progress-small">
+												<div class="progress-bar progress-bar-danger" style="width: 0%;"></div>
+											</div>
+											<table class="table table-hover no-margins">
+												<thead>
+													<th>Code confirmation</th>
+													<th>Date creation</th>
+													<th class="bool">Envoyée</th>
+													<th class="bool">#</th>
+												</thead>
+												<tbody>
+													<tr>
+														<td>13-1234-1</td>
+														<td>
+															<i class="fa fa-clock-o"></i>
+															30/06/2015
+														</td>
+														<td class="bool">
+															<input type="checkbox" name="etat" value="1">
+														</td>
+														<td class="bool">
+															<a href="#"><i class="fa fa-eye"></i></a>
+															<a href="#"><i class="fa fa-pencil"></i></a>
+															<a href="#"><i class="fa fa-trash"></i></a>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<a href="#">
+												<i class="fa fa-plus"></i>
+												<?php echo $this->translate('Ajouter'); ?>
+											</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="ibox float-e-margins">
+										<div class="ibox-title">
+											<h5>Commandes fournisseur</h5>
+											<div class="ibox-tools">
+												<a class="collapse-link">
+													<i class="fa fa-chevron-up"></i>
+												</a>
+												<a class="close-link">
+													<i class="fa fa-times"></i>
+												</a>
+											</div>
+										</div>
+										<div class="ibox-content table-responsive">
+											<div>
+												<span><?php echo $this->translate('Envoyées'); ?></span>
+												<small class="pull-right">2/2</small>
+											</div>
+											<div class="progress progress-small">
+												<div class="progress-bar" style="width: 100%;"></div>
+											</div>
+											<table class="table table-hover no-margins">
+												<thead>
+													<th>Code commande</th>
+													<th>Date</th>
+													<th>Fournisseur</th>
+													<th>Montant</th>
+													<th class="bool">Envoyée</th>
+													<th class="bool">#</th>
+												</thead>
+												<tbody>
+													<tr>
+														<td>CF13-1234-1</td>
+														<td>
+															<i class="fa fa-clock-o"></i>
+															30/06/2015
+														</td>
+														<td>Mikado France</td>
+														<td>1 512.36 €</td>
+														<td class="bool">
+															<input type="checkbox" name="etat" value="1" checked>
+														</td>
+														<td class="bool">
+															<a href="#"><i class="fa fa-eye"></i></a>
+															<a href="#"><i class="fa fa-pencil"></i></a>
+															<a href="#"><i class="fa fa-trash"></i></a>
+														</td>
+													</tr>
+													<tr>
+														<td>CF13-1234-1</td>
+														<td>
+															<i class="fa fa-clock-o"></i>
+															30/06/2015
+														</td>
+														<td>Pestashop</td>
+														<td>45 021.20 €</td>
+														<td class="bool">
+															<input type="checkbox" name="etat" value="1" checked>
+														</td>
+														<td class="bool">
+															<a href="#"><i class="fa fa-eye"></i></a>
+															<a href="#"><i class="fa fa-pencil"></i></a>
+															<a href="#"><i class="fa fa-trash"></i></a>
+														</td>
+													</tr>
+													<tr></tr>
+												</tbody>
+											</table>
+											<a href="#">
+												<i class="fa fa-plus"></i>
+												<?php echo $this->translate('Ajouter'); ?>
+											</a>
+										</div>
+									</div>
+									<div class="ibox float-e-margins">
+										<div class="ibox-title">
+											<h5>Bordereaux de livraison</h5>
+											<div class="ibox-tools">
+												<a class="collapse-link">
+													<i class="fa fa-chevron-up"></i>
+												</a>
+												<a class="close-link">
+													<i class="fa fa-times"></i>
+												</a>
+											</div>
+										</div>
+										<div class="ibox-content table-responsive">
+											<div>
+												<span><?php echo $this->translate('Livrés'); ?></span>
+												<small class="pull-right">0/1</small>
+											</div>
+											<div class="progress progress-small">
+												<div class="progress-bar progress-bar-danger" style="width: 0%;"></div>
+											</div>
+											<table class="table table-hover no-margins">
+												<thead>
+													<th>Code bordereaux</th>
+													<th>Date creation</th>
+													<th class="bool">Livré</th>
+													<th class="bool">#</th>
+												</thead>
+												<tbody>
+													<tr>
+														<td>13-1234-1</td>
+														<td>
+															<i class="fa fa-clock-o"></i>
+															30/06/2015
+														</td>
+														<td class="bool">
+															<input type="checkbox" name="etat" value="1">
+														</td>
+														<td class="bool">
+															<a href="#"><i class="fa fa-eye"></i></a>
+															<a href="#"><i class="fa fa-pencil"></i></a>
+															<a href="#"><i class="fa fa-trash"></i></a>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<a href="#">
+												<i class="fa fa-plus"></i>
+												<?php echo $this->translate('Ajouter'); ?>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Panel de suivi de budget (gestion de l'affaire et intéractions, enregistrement de données et mise à jour) -->
+						<div id="liste-produit" class="tab-pane">
+							<div class="row">
+								<div class="col-lg-12">
+									<!--<h3><?php echo $this->translate('Actions'); ?></h3>-->
+									<div class="row">
+									<!--
+										<div class="col-lg-6">
+											<input id="filter" class="form-control input-sm m-b-xs" type="text" placeholder="<?php echo $this->translate('Rechercher dans la liste'); ?>">
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<h5 class="panel-title">
+															<a href="#new-product-body" id="new-product" data-parent="#forms" data-toggle="collapse">
+																<i class="fa fa-shopping-cart"></i>
+																<?php echo $this->translate('Ajouter un produit'); ?>
+															</a>
+														</h5>
+													</div>
+													<div id="new-product-body" class="panel-collapse collapse">
+														<div class="panel-body tiny-form">
+															<form id="ligne-form" action="" role="form">
+																<div class="row">
+																	<div class="form-group col-sm-3">
+																		<label for="reference_produit" class="font-noraml"><?php echo $this->translate('Ref. produit'); ?></label>
+																		<a href="#" title="<?php echo $this->translate('Rechercher un produit dans la bibliothèque'); ?>"><i class="fa fa-search"></i></a>
+																		<input id="reference_produit" name="reference_produit" type="text" class="form-control" />											
+																	</div>
+																	<div class="form-group col-sm-6">
+																		<label for="intitule_produit" class="font-noraml"><?php echo $this->translate('Intitulé'); ?></label>
+																		<input id="intitule_produit" name="intitule_produit" type="text" class="form-control" />
+																	</div>
+																	<div class="form-group col-sm-3">
+																		<label for="quantite" class="font-noraml"><?php echo $this->translate('Quantité'); ?></label>
+																		<input id="quantite" name="quantite" type="text" class="form-control"/>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="form-group col-sm-3">
+																		<label for="code_fournisseur" class="font-noraml"><?php echo $this->translate('Code Fourn.'); ?></label>
+																		<select id="code_fournisseur" name="code_fournisseur" class="form-control">
+																			<option value="" selected="selected"></option>
+																			<option value="1">ABBAIX</option>
+																			<option value="2">ACI</option>
+																			<option value="3">ACTGAU</option>
+																			<option value="4">ACTPAR</option>
+																			<option value="5">AEIMAL</option>
+																			<option value="6">ZEPP</option>
+																		</select>											
+																	</div>
+																	<div class="form-group col-sm-6">
+																		<label for="ref_fournisseur" class="font-noraml"><?php echo $this->translate('Fournisseur'); ?></label>
+																		<select id="ref_fournisseur" name="ref_fournisseur" class="form-control">
+																			<option value="" selected="selected"></option>
+																			<option value="1">ABB France (Division Process Automation)</option>
+																			<option value="2">ACI</option>
+																			<option value="3">ACTEMIUM St Quentin</option>
+																			<option value="4">ACTOMIS</option>
+																			<option value="5">A.E.I</option>
+																			<option value="6">3 M France</option>
+																		</select>
+																	</div>
+																	<div class="form-group col-sm-3">
+																		<label for="reference_devis" class="font-noraml"><?php echo $this->translate('Ref. devis'); ?></label>
+																		<input id="reference_devis" name="reference_devis" type="text" class="form-control"/>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-sm-4">
+																		<label for="prix_unitaire_achat" class="font-noraml"><?php echo $this->translate('Prix unitaire achat'); ?></label>
+																		<div class="input-group">
+																			<input id="prix_unitaire_achat" name="prix_unitaire_achat" type="text" class="form-control" />
+																			<span class="input-group-addon">&euro;</span>
+																		</div>
+																	</div>
+																	<div class="col-sm-4">
+																		<label for="prix_unitaire_vente" class="font-noraml"><?php echo $this->translate('Prix unitaire vente'); ?></label>
+																		<div class="input-group">
+																			<input id="prix_unitaire_vente" name="prix_unitaire_vente" type="text" class="form-control" />
+																			<span class="input-group-addon">&euro;</span>
+																		</div>
+																	</div>
+																	<div class="col-sm-4">
+																		<label for="poids_unitaire" class="font-noraml"><?php echo $this->translate('Poids unitaire'); ?></label>
+																		<div class="input-group">
+																			<input id="poids_unitaire" name="poids_unitaire" type="text" class="form-control" />
+																			<span class="input-group-addon">kg</span>
+																		</div>
+																	</div>
+																	<div class="col-sm-12">
+																		<label for="remarques" class="font-noraml"><?php echo $this->translate('Remarques'); ?></label>
+																		<textarea name="remarques" id="remarques" cols="30" rows="2" class="form-control"></textarea>
+																	</div>
+																</div>
+											
+																
+																<hr>
+																<div class="row">
+																	<div class="col-sm-9">
+																		<label for="metier" class="font-noraml"><?php echo $this->translate('Métier'); ?></label>
+																		<select id="metier" name="metier" class="form-control">
+																			<option value="" selected="selected"></option>
+																			<option value="1">Mise en service</option>
+																			<option value="2">Programmation</option>
+																			<option value="3">Suivi d'affaires</option>
+																			<option value="4">Programmation</option>
+																			<option value="5">Matériel</option>
+																			<option value="6">Heures</option>
+																			<option value="7">Heures sous-traitées</option>
+																			<option value="8">Supervision</option>
+																			<option value="9">Audit</option>
+																			<option value="10">Montage</option>
+																			<option value="11">Suivi de projet</option>
+																			<option value="12">Dessin - étude</option>
+																			<option value="13">Achat de matériel</option>
+																			<option value="14">Formation</option>
+																			<option value="15">Analyse fonctionnelle</option>
+																		</select>
+																	</div>
+																	<div class="col-sm-3">
+																		<label class="font-noraml"><?php echo $this->translate('Charge'); ?></label><br>
+																		<label for="charge_externe">
+																			<input id="charge_externe" name="charge" type="radio" value="Externe" />
+																			Externe
+																		</label>
+																		<label for="charge_interne">
+																			<input id="charge_interne" name="charge" type="radio" value="Interne" />
+																			Interne
+																		</label>
+																	</div>
+																</div>
+																
+																<button id="ligne-form-submit" type="submit" name="submit" class="btn btn-primary btn-block m-t">
+																	<i class="fa fa-plus"></i>
+																	<span><?php echo $this->translate('Ajouter'); ?></span>
+																</button>
+															</form>
+														</div>
+													</div>
+												</div>
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<h5 class="panel-title">
+															<a href="#new-previsionnel-body" id="new-previsionnel" data-parent="#forms" data-toggle="collapse">
+																<i class="fa fa-calendar"></i>
+																<?php echo $this->translate('Ajouter un prévisionnel heure'); ?>
+															</a>
+														</h5>
+													</div>
+													<div id="new-previsionnel-body" class="panel-collapse collapse">
+														<div class="panel-body">
+															Hello
+														</div>
+													</div>
+												</div>
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<h5 class="panel-title">
+															<a href="#new-imprevu-body" id="new-imprevu" data-parent="#forms" data-toggle="collapse">
+																<i class="fa fa-bell-slash-o"></i>
+																<?php echo $this->translate('Ajouter un imprévu'); ?>
+															</a>
+														</h5>
+													</div>
+													<div id="new-imprevu-body" class="panel-collapse collapse">
+														<div class="panel-body">
+															Hello
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>-->
+
+										<div class="col-lg-6">
+
+											<div class="table-responsive">
+												<table class="table table-bordered">
+													<thead>
+														<tr>
+															<th>
+																<?php echo $this->translate('Remise'); ?>
+															</th>
+															<th>
+																<?php echo $this->translate('Frais de port'); ?>
+															</th>
+															<th>
+																<?php echo $this->translate('Référence DP').'*'; ?>
+															</th>
+															<th>
+																<?php echo $this->translate('Référence commande client'); ?>
+															</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>
+																0,00€
+															</td>
+															<td>
+																0,00€
+															</td>
+															<td>
+																Votre demande de prix de ce jour
+															</td>
+															<td>
+																
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>	
+								</div>
+								
+								<div class="col-lg-12 affaire_liste_prod">
+									<h3><?php echo $this->translate('Liste des produits'); ?></h3>
+
+
+
+
+
+
+
+
+									<!-- BOUCLE SUR LES LIGNES DE DEVIS -->
+									<?php // foreach($variable as $key => $data) {} ?>
+
+									<h4><?php echo $this->translate('Ligne Devis N° 456268'); ?></h4>
+									<div class="table-responsive">
+										<table id="table-ligne" class="table table-striped">
+										    <thead>
+										        <th class="reference_produit"><?php echo $this->translate('Ref. produit'); ?></th>
+										        <th class="intitule_produit"><?php echo $this->translate('Intitulé'); ?></th>
+										        <!-- <th class="metier"><?php echo $this->translate('Métier'); ?></th> -->
+										        <!-- <th class="charge"><?php echo $this->translate('Charge'); ?></th> -->
+										        <th class="bool quantite"><?php echo $this->translate('Qté'); ?></th>
+										        <!-- <th class="bool poids_unitaire" title="<?php echo $this->translate('Poids unitaire'); ?>"><?php echo $this->translate('PU').'*'; ?></th> -->
+										        <th class="bool prix_unitaire_achat" title="<?php echo $this->translate('Prix unitaire achat'); ?>"><?php echo $this->translate('PUA').'*'; ?></th>
+										        <th class="bool prix_unitaire_vente" title="<?php echo $this->translate('Prix unitaire vente'); ?>"><?php echo $this->translate('PUV').'*'; ?></th>
+										        <!-- <th class="bool poids_total" title="<?php echo $this->translate('Poids total'); ?>"><?php echo $this->translate('PT').'*'; ?></th> -->
+										        <th class="bool prix_total_achat" title="<?php echo $this->translate('Prix total achat'); ?>"><?php echo $this->translate('PTA').'*'; ?></th>
+										        <th class="bool prix_total_vente" title="<?php echo $this->translate('Prix total vente'); ?>"><?php echo $this->translate('PTV').'*'; ?></th>
+										    	
+												
+												<!-- Détails ligne -->
+										    	<!-- <th data-hide="all"><?php echo $this->translate('Ref. devis'); ?></th> -->
+										    	<!-- <th data-hide="all"><?php echo $this->translate('État achat'); ?></th> -->
+										        <!-- <th data-hide="all"><?php echo $this->translate('État vente'); ?></th> -->
+												
+												<!-- Actions -->
+										        <th class="bool actions">#</th>
+										    </thead>
+										    <tbody>
+										        <!-- Début lignes tableau -->
+										        <tr class="footable-visible">
+										        	
+
+													<!-- Ref. produit -->
+										        	<td class="reference_produit">
+										        		<span class="fa fa-angle-right"></span>
+										        		20187491
+										        	</td>
+
+													<!-- Intitulé produit -->
+										        	<td class="important-text intitule_produit">Cartouche filtrante 2.5m²</td>
+
+										        	<!-- Métier -->
+										        	<!-- <td class="metier">Matériel autres-fournisseurs</td> -->
+								
+													<!-- Charge -->
+										        	<!-- <td class="charge">
+										        		<a href="#" title="Consulter la commande fournisseur">
+										        			<i class="fa fa-file-o"></i>
+										        		</a>
+										        		Externe
+										        	</td> -->
+
+													<!-- Quantité -->
+										        	<td class="bool quantite">12</td>
+
+													<!-- Poids unitaire -->
+										        	<!-- <td class="bool poids_unitaire">0.00 kg</td> -->
+
+													<!-- Prix unitaire achat -->
+										        	<td class="bool prix_unitaire_achat">0.00 €</td>
+
+													<!-- Prix unitaire vente -->
+										        	<td class="bool prix_unitaire_vente">121.94 €</td>
+
+													<!-- Poids total -->
+										        	<!-- <td class="bool poids_total">0.00 kg</td> -->
+													<!-- Prix total achat -->
+										        	<td class="bool prix_total_achat">0.00 €</td>
+
+													<!-- Prix total vente -->
+										        	<td class="bool prix_total_vente">1463.28 €</td>
+
+										        	<!-- # -->
+										        	<td style="width:3%" class="bool actions">
+										        		<a class="delete-ligne" href="#"><i class="fa fa-times"></i></a>
+										        		<a class="edit-ligne" href="#"><i class="fa fa-edit"></i></a>
+											        </td>
+										        </tr>
+										        <tr class="footable-row-detail">
+										        	<td class="footable-row-detail-cell" colspan="12">
+										        		<div class="footable-row-detail-inner">
+										        			<div class="footable-row-detail-row hidden-lg">
+										        				<div class="footable-row-detail-name"><?php echo $this->translate('Charge'); ?></div>
+										        				<div class="footable-row-detail-value">
+										        					<a href="#" title="Consulter la commande fournisseur">
+													        			<i class="fa fa-file-o"></i>
+													        		</a>
+													        		Externe
+										        				</div>
+										        			</div>
+										        			<div class="footable-row-detail-row">
+										        				<div class="footable-row-detail-name"><?php echo $this->translate('Ref. devis'); ?></div>
+										        				<div class="footable-row-detail-value"></div>
+										        			</div>
+										        			<div class="footable-row-detail-row">
+										        				<div class="footable-row-detail-name"><?php echo $this->translate('État achat'); ?></div>
+										        				<div class="footable-row-detail-value">Non commandé</div>
+										        			</div>
+										        			<div class="footable-row-detail-row">
+										        				<div class="footable-row-detail-name"><?php echo $this->translate('État vente'); ?></div>
+										        				<div class="footable-row-detail-value">Non livré</div>
+										        			</div>
+										        			<div class="footable-row-detail-row">
+										        				<div class="footable-row-detail-name"><?php echo $this->translate('Métier'); ?></div>
+										        				<div class="footable-row-detail-value">Matériel autres-fournisseurs</div>
+										        			</div>
+										        			<div class="footable-row-detail-row">
+										        				<div class="footable-row-detail-name"><?php echo $this->translate('Charge'); ?></div>
+										        				<div class="footable-row-detail-value"><a href="#" title="Consulter la commande fournisseur"><i class="fa fa-file-o"></i></a> Externe</div>
+										        			</div>
+										        			<div class="footable-row-detail-row">
+										        				<div class="footable-row-detail-name"><?php echo $this->translate('Poids unitaire'); ?></div>
+										        				<div class="footable-row-detail-value">0.00 kg</div>
+										        			</div>
+										        			<div class="footable-row-detail-row">
+										        				<div class="footable-row-detail-name"><?php echo $this->translate('Poids total'); ?></div>
+										        				<div class="footable-row-detail-value">0.00 kg</div>
+										        			</div>
+										        			<div class="footable-row-detail-row hidden-lg">
+										        				<div class="footable-row-detail-name">#</div>
+										        				<div class="footable-row-detail-value">
+										        					<a class="btn btn-white btn-xs edit-ligne-hidden" href="#"><i class="fa fa-edit"></i> <?php echo $this->translate('Modifier'); ?></a>
+										        					<a class="btn btn-danger btn-xs delete-ligne-hidden" href="#"><i class="fa fa-times"></i> <?php echo $this->translate('Supprimer'); ?></a>
+										        				</div>
+										        			</div>
+										        		</div>
+										        	</td>
+										        </tr>
+										        <tr class="footable-visible">
+													<!-- Ref. produit -->
+										        	<td>
+										        		<span class="fa fa-angle-right"></span>
+										        		20203950
+										        	</td>
+
+													<!-- Intitulé produit -->
+										        	<td class="important-text">Poche filtrante D0610*1520</td>
+
+										        	<!-- Métier -->
+										        	<!-- <td>Matériel autres-fournisseurs</td> -->
+								
+													<!-- Charge -->
+										        	<!-- <td>
+										        		<a href="#" title="Consulter la commande fournisseur">
+										        			<i class="fa fa-file-o"></i>
+										        		</a>
+										        		Externe
+										        	</td> -->
+
+										        	<!-- Quantité -->
+										        	<td class="bool">10</td>
+
+													<!-- Poids unitaire -->
+										        	<!-- <td class="bool">0.00 kg</td> -->
+
+													<!-- Prix unitaire achat -->
+										        	<td class="bool">0.00 €</td>
+
+													<!-- Prix unitaire vente -->
+										        	<td class="bool">54.60 €</td>
+
+										        	<!-- Poids total -->
+										        	<!-- <td class="bool">0.00 kg</td> -->
+
+													<!-- Prix total achat -->
+										        	<td class="bool">0.00 €</td>
+
+													<!-- Prix total vente -->
+										        	<td class="bool">546.00 €</td>
+
+										        	<!-- # -->
+										        	<td style="width:3%" class="bool">
+										        		<a class="delete-ligne" href="#"><i class="fa fa-times"></i></a>
+										        		<a class="edit-ligne" href="#"><i class="fa fa-edit"></i></a>
+											        </td>
+										        </tr>
+												<tr class="footable-row-detail">
+										        	<td class="footable-row-detail-cell" colspan="12">
+										        		<div class="footable-row-detail-inner">
+										        			<div class="footable-row-detail-row hidden-lg">
+										        				<div class="footable-row-detail-name"><?php echo $this->translate('Charge'); ?></div>
+										        				<div class="footable-row-detail-value">
+										        					<a href="#" title="Consulter la commande fournisseur">
+													        			<i class="fa fa-file-o"></i>
+													        		</a>
+													        		Externe
+										        				</div>
+										        			</div>
+										        			<div class="footable-row-detail-row">
+										        				<div class="footable-row-detail-name"><?php echo $this->translate('Ref. devis'); ?></div>
+										        				<div class="footable-row-detail-value"></div>
+										        			</div>
+										        			<div class="footable-row-detail-row">
+										        				<div class="footable-row-detail-name"><?php echo $this->translate('État achat'); ?></div>
+										        				<div class="footable-row-detail-value">Non commandé</div>
+										        			</div>
+										        			<div class="footable-row-detail-row">
+										        				<div class="footable-row-detail-name"><?php echo $this->translate('État vente'); ?></div>
+										        				<div class="footable-row-detail-value">Non livré</div>
+										        			</div>
+										        			<div class="footable-row-detail-row hidden-lg">
+										        				<div class="footable-row-detail-name">#</div>
+										        				<div class="footable-row-detail-value">
+										        					<a class="btn btn-white btn-xs edit-ligne-hidden" href="#"><i class="fa fa-edit"></i> <?php echo $this->translate('Modifier'); ?></a>
+										        					<a class="btn btn-danger btn-xs delete-ligne-hidden" href="#"><i class="fa fa-times"></i> <?php echo $this->translate('Supprimer'); ?></a>
+										        				</div>
+										        			</div>
+										        		</div>
+										        	</td>
+										        </tr>
+										    </tbody>
+										    <tfoot>
+										    	<tr>
+										    		<th>Total vente/Total achat hors port</th>
+										    	</tr>
+										    </tfoot>
+										</table>
+									</div>
+								</div>
+
+								<!-- FIN BOUCLE LIGNES DEVIS -->
+								<?php
+
+								?>
+								
+
+
+
+
+
+
+								<!-- LISTE DES IMPREVUS -->
+								<div class="col-lg-6 affaire_liste_imprv">
+									<h3><?php echo $this->translate('Liste des imprévus'); ?></h3>
+									<div class="table-responsive">
+										<table id="table-imprevu" class="table table-hover">
+										    <thead>
+										        <th class="motif"><?php echo $this->translate('Motif'); ?></th>
+										        <th class="montant"><?php echo $this->translate('Achat'); ?></th>
+										        <th class="metier"><?php echo $this->translate('Métier'); ?></th>
+												Actions
+										        <th class="bool actions">#</th>
+										    </thead>
+										    <tbody>
+										        Début lignes tableau
+										        <tr class="footable-visible">
+										        	
+
+													<!-- Motif -->
+										        	<td class="motif">
+										        		Serveur pour installation
+										        	</td>
+
+													<!-- Montant -->
+										        	<td class="montant">5 000 €</td>
+
+										        	<!-- Métier -->
+										        	<td class="metier">Matériel autres-fournisseurs</td>
+
+										        	<!-- # -->
+										        	<td style="width:3%" class="bool actions">
+										        		<a class="delete-ligne" href="#"><i class="fa fa-times"></i></a>
+										        		<a class="edit-ligne" href="#"><i class="fa fa-edit"></i></a>
+											        </td>
+										        </tr>
+										        <tr class="footable-visible">
+										        	
+
+													<!-- Motif -->
+										        	<td class="motif">
+										        		Perte camion livraison
+										        	</td>
+
+													<!-- Montant -->
+										        	<td class="montant">7 210 €</td>
+
+										        	<!-- Métier -->
+										        	<td class="metier">Matériel autres-fournisseurs</td>
+
+										        	<!-- # -->
+										        	<td style="width:3%" class="bool actions">
+										        		<a class="delete-ligne" href="#"><i class="fa fa-times"></i></a>
+										        		<a class="edit-ligne" href="#"><i class="fa fa-edit"></i></a>
+											        </td>
+										        </tr>
+										    </tbody>
+										    <tfoot>
+										    	<tr>
+										    		<th>Total vente/Total achat hors port</th>
+										    	</tr>
+										    </tfoot>
+										</table>
+									</div>
+								</div>
+
+								
+								
+								
+
+							</div>
+						</div>
+
+						<!-- Panel de suivi de budget -->
+						<div id="suivi-budget" class="tab-pane">
+							<div class="row">
+
+								<h3><?php echo $this->translate('Suivi de budget'); ?></h3>
+							</div>
+							<hr>
+							<div class="col-lg-12">
+								<button class="btn btn-primary btn-md"><?php echo $this->translate('Activer le suivi de budget'); ?></button>
+							</div>
+						</div>
+
+						<!-- Panel du Bilan des budgets -->
+						<div id="bilan" class="tab-pane">
+							<div class="row">
+								<h3><?php echo $this->translate('Bilan'); ?></h3>
+							</div>
+							<hr>
+							<div class="col-lg-12">
+
+
+
+
+								<!-- Morris Line Chart -->
+								<div id="morris-line-chart" style="height:250px;"></div>
+
+
+
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

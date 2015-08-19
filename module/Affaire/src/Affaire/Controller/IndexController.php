@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-30 09:31:09
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-19 14:57:33
+ * @Last Modified time: 2015-08-19 18:56:12
  */
 
 namespace Affaire\Controller;
@@ -17,7 +17,9 @@ use Doctrine\ORM\EntityManager;
 use Zend\Session\Container;
 // Entity
 use Affaire\Entity\Affaire;
+use Affaire\Entity\LigneAffaire;
 use Affaire\Form\AffaireForm;
+use Affaire\Form\LigneAffaireForm;
 
 class IndexController extends AbstractActionController
 {
@@ -85,6 +87,12 @@ class IndexController extends AbstractActionController
 			//'userId'			=>	$userId,
 			//'login'			=>	$login,									
 		));
+
+        $view = new ViewModel(array(
+            'message' => 'Hello world',
+        ));
+        $view->setTemplate('affaire/index');
+        return $view;
     }
 
     /**
@@ -226,6 +234,17 @@ class IndexController extends AbstractActionController
     
     public function consulteraffaireAction()
     {
+        // Récupération de l'EntityManager
+        $em             =$this->getEntityManager();
+        // Récupération du Service Manager
+        $sm             = $this->getServiceLocator();
+        // Récupération de la requete
+        $request        =$this->getRequest();
+        // Récupération du traducteur
+        $translator     = $this->getServiceLocator()->get('Translator');
+        // Récupération de la session de l'utilisateur
+        $utilisateur    = new Container('utilisateur');
+
         $id = (int)$this->params()->fromRoute('id');
         $affaire = $this->getEntityManager()->getRepository('Affaire\Entity\Affaire')->find($id);
         if($affaire==null)
@@ -244,9 +263,13 @@ class IndexController extends AbstractActionController
         ));
 
         $adressePrincipale = $this->getEntityManager()->getRepository('Adresse\Entity\Adresse')->findOneBy(array('refClient'=>$affaire->getRefClient()->getId(),'adressePrincipale'=>true));
+
+        $ligne = new LigneAffaire();
+        $form = new LigneAffaireForm($translator,$sm,$em,$request,$ligne); 
         
         return new ViewModel(array(
             'id'=>$id,
+            'form'=>$form,
             'affaire'=>$affaire,
             'adresse'=>$adressePrincipale
         ));
