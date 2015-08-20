@@ -70,6 +70,23 @@ return array(
 								'action'=>'consulteraffaire',
 							),
 						),
+						'may_terminate'=>true,
+						'child_routes'=>array(
+							'formulaire_ligne_affaire'=>array(
+								'type'=>'Segment',
+								'options'=>array(
+									'route'=>'/formulaire-ligne-affaire[/:ligne]',
+									'constraints'=>array(
+										'ligne'=>'[0-9]+'
+									),
+									'defaults'=>array(
+										'__NAMESPACE__' => 'Affaire\Controller',
+										'controller'=>'Index',
+										'action'=>'formulaireligneaffaire',
+									),
+								),
+							),
+						),
 					),
 				),
 			),

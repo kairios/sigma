@@ -85,9 +85,9 @@ class LigneAffaire
     private $remarques;
 
     /**
-     * @var \Affaire
+     * @var \Affaire\Entity\Affaire
      *
-     * @ORM\ManyToOne(targetEntity="Affaire")
+     * @ORM\ManyToOne(targetEntity="Affaire\Entity\Affaire")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_affaire", referencedColumnName="id")
      * })
@@ -95,9 +95,9 @@ class LigneAffaire
     private $refAffaire;
 
     /**
-     * @var \Facture
+     * @var \Facture\Entity\Facture
      *
-     * @ORM\ManyToOne(targetEntity="Facture")
+     * @ORM\ManyToOne(targetEntity="Facture\Entity\Facture")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_facture", referencedColumnName="id")
      * })
@@ -105,9 +105,9 @@ class LigneAffaire
     private $refFacture;
 
     /**
-     * @var \ConfirmationCommande
+     * @var \ConfirmationCommande\Entity\ConfirmationCommande
      *
-     * @ORM\ManyToOne(targetEntity="ConfirmationCommande")
+     * @ORM\ManyToOne(targetEntity="ConfirmationCommande\Entity\ConfirmationCommande")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_confirmation_commande", referencedColumnName="id")
      * })
@@ -469,9 +469,9 @@ class LigneAffaire
         $quantitePrevue                     = (!empty($data['quantite_prevue'])) ? $data['quantite_prevue'] : null;
         $prixUnitaireVente                  = (!empty($data['prix_unitaire_vente'])) ? $data['prix_unitaire_vente'] : null;
         $prixVentePrevu                     = (!empty($data['prix_vente_prevu'])) ? $data['prix_vente_prevu'] : null;
-        $prixVenteDetails                   = (!empty($data['prix_vente_details'])) ? $data['prix_vente_details'] : null;
-        $prixAchatPrevu                     = (!empty($data['prix_achat_prevu'])) ? $data['prix_achat_prevu'] : null;
-        $prixAchatReel                      = (!empty($data['prix_achat_reel'])) ? $data['prix_achat_reel'] : null;
+        // $prixVenteDetails                   = (!empty($data['prix_vente_details'])) ? $data['prix_vente_details'] : null;
+        // $prixAchatPrevu                     = (!empty($data['prix_achat_prevu'])) ? $data['prix_achat_prevu'] : null;
+        // $prixAchatReel                      = (!empty($data['prix_achat_reel'])) ? $data['prix_achat_reel'] : null;
         $remarques                          = (!empty($data['remarques'])) ? $data['remarques'] : null;
 
         $this->id = $data['id_ligne_affaire'];
@@ -480,9 +480,9 @@ class LigneAffaire
         $this->setQuantitePrevue($quantitePrevue);
         $this->setPrixUnitaireVente($prixUnitaireVente);
         $this->setPrixVentePrevu($prixVentePrevu);
-        $this->setPrixVenteDetails($prixVenteDetails);
-        $this->setPrixAchatPrevu($prixAchatPrevu);
-        $this->setPrixAchatReel($prixAchatReel);
+        // $this->setPrixVenteDetails($prixVenteDetails);
+        // $this->setPrixAchatPrevu($prixAchatPrevu);
+        // $this->setPrixAchatReel($prixAchatReel);
         $this->setRemarques($remarques);
 
         $this->setRefAffaire($affaire);

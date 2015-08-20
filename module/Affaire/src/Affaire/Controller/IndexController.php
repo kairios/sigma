@@ -262,7 +262,7 @@ class IndexController extends AbstractActionController
             'plugins'           =>  array('jquery-ui'),
         ));
 
-        $adressePrincipale = $this->getEntityManager()->getRepository('Adresse\Entity\Adresse')->findOneBy(array('refClient'=>$affaire->getRefClient()->getId(),'adressePrincipale'=>true));
+        $adressePrincipale = $em->getRepository('Adresse\Entity\Adresse')->findOneBy(array('refClient'=>$affaire->getRefClient()->getId(),'adressePrincipale'=>true));
 
         $ligne = new LigneAffaire();
         $form = new LigneAffaireForm($translator,$sm,$em,$request,$ligne); 
@@ -271,8 +271,95 @@ class IndexController extends AbstractActionController
             'id'=>$id,
             'form'=>$form,
             'affaire'=>$affaire,
+            'lignesAffaire'=>$em->getRepository('Affaire\Entity\LigneAffaire')->findBy(array('refAffaire'=>$affaire)),
             'adresse'=>$adressePrincipale
         ));
+    }
+
+    public function formulaireligneaffaireAction()
+    {
+        if($this->getRequest()->isXmlHttpRequest())
+        {
+            /* Initialisation de variables */
+
+            $statusForm=null;
+            // Récupération de l'EntityManager
+            $em=$this->getEntityManager();
+            // Récupération du Service Manager
+            $sm=$this->getServiceLocator();
+             // Récupération du traducteur
+            $translator=$sm->get('Translator');
+            // Récupération de la requete
+            $request=$this->getRequest();
+
+            /* Initialisation de la ligne affaire */
+            $ligneAffaire = null;
+            $id = $this->params()->fromRoute('ligne');
+            if(!empty($id)) // Si l'ID de la ligne est transmis, on réccupère celle-ci
+            {
+                // Récupération de la ligne en BD
+                $ligneAffaire = $em->getRepository('Affaire\Entity\LigneAffaire')->find($id);
+                if($ligneAffaire == null)
+                    throw new \Exception($translator->translate('Une erreur est survenue lors de la récupération de la ligne de l\'affaire.'));
+            }
+            else // Sinon on crée un nouvel interlocuteur
+            {
+                $id = null;
+                $ligneAffaire = new LigneAffaire();
+            }
+
+            /* Creation du formulaire de la ligne affaire */
+            
+            $form = new LigneAffaireForm($translator,$sm,$em,$request,$ligneAffaire);
+            if($request->isPost())
+            {
+                $form->setData($request->getPost());
+
+                if($form->isValid())
+                {
+                    $statusForm=true;
+
+                    // On récuppère l'affaire
+                    $idAffaire = (int) $this->params()->fromRoute('id');
+                    $affaire = $em->getRepository('Affaire\Entity\Affaire')->find($idAffaire);
+
+                    // On hydrate la ligne affaire avec les infos du formulaire
+                    // et on met la référence de l'affaire dans la ligne affaire
+                    $ligneAffaire->exchangeArray($form->getData(),$sm,$em);
+                    $ligneAffaire->setRefAffaire($affaire);
+
+                    $em->persist($ligneAffaire);
+                    $em->flush($ligneAffaire);
+
+                    return new JsonModel(array(
+                        'statut'=>$statusForm,
+                        // 'motCle'=>$ligneAffaire->getNom(),
+                    ));
+                }
+                else // Sinon, on retourne les erreurs au formulaire qui les affiche
+                {
+                    $statusForm=false;
+                    $errors=$form->getMessages();
+
+                    return new JsonModel(array(
+                        'statut'=>$statusForm,
+                        'reponse'=>$errors,
+                    ));
+                }
+            }
+
+            /* Affichage du formulaire sans le layout (retour d'une sous-vue uniquement) */
+
+            $viewModel=new ViewModel;
+            $viewModel->setVariables(array(
+                'ligneAffaire'=>$ligneAffaire,
+                'form'=>$form,
+                'id'=>$id
+            ))->setTerminal(true);
+
+            return $viewModel;
+        }
+        return $this->redirect()->toRoute('home');
     }
 
     public function autocompletionaffaireAction()

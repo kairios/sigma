@@ -7,6 +7,7 @@
 	$errors = $form->getMessages();
 
 	// $form->setAttribute('action', $this->url('affaire/formulaire_ligne_affaire',array('id'=>$this->id)));
+	$form->setAttribute('class', 'ligne-affaire-form');
 	$form->prepare();
 
 	echo $this->form()->openTag($form);
@@ -75,9 +76,14 @@
 		</div>
 	</div>
 	
-	<button id="ligne-form-submit" type="submit" name="submit" class="btn btn-primary btn-block m-t">
+	<!-- <button id="ligne-form-submit" type="submit" name="submit" class="btn btn-primary btn-block m-t">
 		<i class="fa fa-plus"></i>
 		<span><?php echo $this->translate('Ajouter'); ?></span>
+	</button> -->
+
+	<button name="submit" class="btn btn-primary pull-right" type="submit" data-default-text="<?php echo $this->translate('Valider'); ?>" data-loading-text="<?php echo $this->translate('En cours...'); ?>">
+		<i class="fa fa-check"></i>
+		<span><?php echo $this->translate('Valider'); ?></span>
 	</button>
 </form>
 

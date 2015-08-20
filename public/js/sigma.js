@@ -2040,7 +2040,11 @@ var sigma={
 					        railOpacity: 0.4,
 					        wheelStep: 10
 					    });
-					    sigma.controller.produit.setAutocompletionInitulesProduits($('#ligne-form'));
+					    sigma.controller.produit.setAutocompletionInitulesProduits($('.ligne-affaire-form'));
+					    $('.ligne-affaire-form').on('submit',function(){
+					    	sigma.controller.affaire.verifierLigneAffaire($(this));
+					    	return false;
+					    });
 					break;
 				}
 			},
@@ -2207,9 +2211,66 @@ var sigma={
 					});
 				});
 			},
-			setModalLigneAffaire:function(){
-				// Requète ajax
+			verifierLigneAffaire:function(form, numLigne)
+			{
+				// Définition de l'adresse de requète
+				var url= document.location.href+'/formulaire-ligne-affaire';
+				if(numLigne)
+					url+='/'+numLigne;
+
+				alert(url);
+
+				// Les inputs de type disabled ne sont pas pris en compte par le serialize() de jQuery
+				// Il faut donc les enable le temps de la sérialisation :
+				// var form = $('#personnel-form');
+				var disabledInputs = form.find(':input:disabled').removeAttr('disabled');
+				var serializeForm = form.serialize();
+				disabledInputs.attr('disabled','disabled');
+
+				// console.log(serializeForm);
+
+				$.ajax({
+					url: url,
+					dataType: 'json',
+					data: serializeForm,
+					type: 'post',
+					success:function(resultats)
+					{
+						/* On supprime les erreurs affichées s'il y en a */
+						//$('#adresse-form div[class*="has-error"]').removeClass('has-error');
+						$('span').remove('.help-inline');
+
+						if(resultats.statut==true)
+						{	
+							// Si l'utilisateur a été ajouté, on réactualise la table des utilisateurs
+							setTimeout(function(){
+								window.location.href=document.location.href;
+							},1000);
+						}
+						// Si c'est pas bon, on met à jour, le formulaire d'utilisateur avec les erreurs
+						else
+						{
+							/* Ici on affiche les erreurs et les champs contenant des erreurs */
+
+							var errors=resultats.reponse;
+							$.each(errors,function(index,value){
+								//$('#'+index).closest('div').addClass('has-error');
+								$.each(value,function(codeError, messageError){
+									$("label[for='"+index+"']").after('<span class="help-inline"> - '+messageError+'</span>');
+								});
+							});
+							form.find("span.help-inline").css({'color':'red'});
+						}
+					},
+					error:function(xml,status,message)
+					{
+						alert(message);
+					}
+				});
 			},
+			// setModalLigneAffaire:function(){
+			// 	// Requète ajax
+			// },
 		},
 		personnel:{
 			init:function()
@@ -2339,12 +2400,6 @@ var sigma={
 					});
 					$('#personnel-form-submit span').text($('#personnel-form-submit').attr('data-default-text'));
 				},
-				verifierTauxHoraire:function()
-				{
-					// Vérifier que le taux-horaire est un simple nombre à virgule et non du texte
-					// Fonction utilisée dans verifierPersonnel()
-					// Ou utiliser la fonction de Anthony permettant de brider l'utilisateur que entrerai autre chose dans l'input que les caractères autorisés
-				}
 			},
 			password:{
 				setFormModalPassword:function()

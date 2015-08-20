@@ -32,6 +32,7 @@ class LigneAffaireModel implements InputFilterAwareInterface
 		'prix_vente_prevu'					=>array('type'=>'float',			'form'=>array('type'=>'text','required'=>true,'label'=>'Total ligne')),
 		'remarques'							=>array('type'=>'int',				'form'=>array('type'=>'textarea','required'=>false,'label'=>'Remarques')),
 		'ref_facture'						=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>false,'label'=>'Facture')),
+		'ref_confirmation_commande'			=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>false,'label'=>'Confirmation de commande')),
 	);
 
 	public function setInputFilter(InputFilterInterface $inputFilter)
