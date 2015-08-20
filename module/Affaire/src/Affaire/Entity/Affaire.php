@@ -985,6 +985,16 @@ class Affaire
         return $numeroExiste;
     }
 
+    // public function getLignesAffaire($em)
+    // {
+    //     $query = $em->createQuery("SELECT l FROM Affaire\Entity\LigneAffaire l WHERE l.ref_affaire = :idAffaire");
+    //     $query->setParameter('idAffaire',(int)$this->getId());
+    //     // $query->setMaxResults(intval($_GET['maxRows']));
+        
+    //     // retourne un tableau d'objets contrairement à getArrayResult() 
+    //     // qui retourne un tableau de tableaux.
+    //     return $query->getResult(); 
+    // }
 
 }
 

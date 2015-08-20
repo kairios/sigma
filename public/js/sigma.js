@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:49:48
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-19 18:57:44
+* @Last Modified time: 2015-08-20 10:56:42
 */
 
 'use strict';
@@ -2040,13 +2040,40 @@ var sigma={
 					        railOpacity: 0.4,
 					        wheelStep: 10
 					    });
-					    sigma.controller.produit.setAutocompletionInitulesProduits($('.ligne-affaire-form'));
+					    $('#tab-liste-produit a').one('click',function(){ // "one" au lieu de "on" pour ne pas refaire l'ajax à chaque clic sur l'onglet Interlocuteur, peut être changé selon demande du client
+							sigma.controller.affaire.getLignesAffaire();
+						});
+					break;
+				}
+			},
+			getLignesAffaire:function()
+			{
+				$.ajax({
+					url: document.location.href+'/liste-produit',
+					type: 'get',
+					dataType: 'html',
+					success:function(data, status, XMLHttpRequest)
+					{
+						$('#liste-produit').html(data);
+
+						sigma.controller.produit.setAutocompletionInitulesProduits($('.ligne-affaire-form'));
 					    $('.ligne-affaire-form').on('submit',function(){
 					    	sigma.controller.affaire.verifierLigneAffaire($(this));
 					    	return false;
 					    });
-					break;
-				}
+
+					},
+					error:function(XMLHttpRequest, status, error)
+					{
+						//sigma.language.error(233);
+						var message='';
+						if(locale=='en_US')
+							message='An error occured when retrieving data : <strong>'+error+'</strong>';
+						else
+							message='Une erreur s\'est produite lors de la récupération des données : <strong>'+error+'</strong>';
+						$("#liste-produit").html(message);
+					}
+				});
 			},
 			setDataTableAffaire:function(params)
 			{
@@ -2217,8 +2244,6 @@ var sigma={
 				var url= document.location.href+'/formulaire-ligne-affaire';
 				if(numLigne)
 					url+='/'+numLigne;
-
-				alert(url);
 
 				// Les inputs de type disabled ne sont pas pris en compte par le serialize() de jQuery
 				// Il faut donc les enable le temps de la sérialisation :

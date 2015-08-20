@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-30 09:23:52
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-19 16:28:54
+ * @Last Modified time: 2015-08-20 10:16:48
  */
 
 // module\Affaire\config\module.config.php
@@ -72,6 +72,20 @@ return array(
 						),
 						'may_terminate'=>true,
 						'child_routes'=>array(
+							'liste_produit'=>array(
+								'type'=>'Literal',
+								'options'=>array(
+									'route'=>'/liste-produit',
+									'constraints'=>array(
+										'ligne'=>'[0-9]+'
+									),
+									'defaults'=>array(
+										'__NAMESPACE__' => 'Affaire\Controller',
+										'controller'=>'Index',
+										'action'=>'listeproduit',
+									),
+								),
+							),
 							'formulaire_ligne_affaire'=>array(
 								'type'=>'Segment',
 								'options'=>array(

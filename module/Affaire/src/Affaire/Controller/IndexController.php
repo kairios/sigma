@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-30 09:31:09
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-19 18:56:12
+ * @Last Modified time: 2015-08-20 10:55:14
  */
 
 namespace Affaire\Controller;
@@ -271,9 +271,49 @@ class IndexController extends AbstractActionController
             'id'=>$id,
             'form'=>$form,
             'affaire'=>$affaire,
-            'lignesAffaire'=>$em->getRepository('Affaire\Entity\LigneAffaire')->findBy(array('refAffaire'=>$affaire)),
             'adresse'=>$adressePrincipale
         ));
+    }
+
+    public function listeproduitAction()
+    {
+        //Si la requète n'est pas de type AJAX, on n'effectue pas de recherche
+        if($this->getRequest()->isXmlHttpRequest())
+        {
+            $statusForm=null;
+            // Récupération de l'EntityManager
+            $em=$this->getEntityManager();
+            // Récupération du Service Manager
+            $sm=$this->getServiceLocator();
+             // Récupération du traducteur
+            $translator=$sm->get('Translator');
+            // Récupération de la requete
+            $request=$this->getRequest();
+
+            $idAffaire = (int) $this->params()->fromRoute('id');
+
+            $affaire = null;
+            $affaire = $em->getRepository('Affaire\Entity\Affaire')->find($idAffaire);
+            if($affaire==null)
+                throw new \Exception($translator->translate('Cette affaire n\'existe pas'));
+
+            // $resultat = $affaire->getLignesAffaire($this->getEntityManager());
+
+            $form = new LigneAffaireForm($translator,$sm,$em,$request,new LigneAffaire());
+
+            $viewModel = new ViewModel();
+            $viewModel->setVariables(array(
+                'id'=>$idAffaire,
+                'affaire'=>$affaire,
+                'lignesAffaire'=>$em->getRepository('Affaire\Entity\LigneAffaire')->findBy(array('refAffaire'=>$affaire)),
+                'form'=>$form,
+            ))->setTerminal(true);
+
+            return $viewModel;
+        }
+
+        // Sinon on redirige vers l'écran d'accueil
+        return $this->redirect()->toRoute('home');
     }
 
     public function formulaireligneaffaireAction()

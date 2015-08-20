@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-09 13:34:46
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-06-17 19:00:20
+ * @Last Modified time: 2015-08-20 10:39:21
  */
 
 namespace Adresse\Controller;
@@ -68,7 +68,7 @@ class IndexController extends AbstractActionController
                 $query->setParameter('ville',$value);
                 $query->setMaxResults(intval($_GET['maxRows']));
             }
-            $list=$query->getResult();
+            $list=$query->getResult(); // retourne un tableau d'objets, contrairement à getArrayResult() qui retourne un tableau de tableaux.
 
             return new JsonModel(array(
                 'resultat'=>json_encode($list)
