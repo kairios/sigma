@@ -1,0 +1,206 @@
+<!-- module\Devis\view\devis\index\formulairedevis.phtml -->
+
+<?php
+	use Zend\Session\Container;
+	$devis = $this->devis;
+	$lignesAffaire = $this->lignesAffaire;
+?>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>
+					<?php echo $this->translate('Formulaire devis'); ?>
+				</h5>
+				<div class="ibox-tools">
+					<a href="<?php echo $this->url('devis'); ?>"><i class="fa fa-arrow-left"></i> <?php echo $this->translate('Retour'); ?></a>
+				</div>
+			</div>
+			<div class="ibox-content">
+				<?php
+					$form=$this->form;
+					$errors=$form->getMessages();
+
+					$form->setAttribute('action', $this->url('formulaire_devis',array('id'=>$this->id)));
+					// $form->setAttribute('class','form-horizontal');
+					$form->get('submit')->setAttribute('value',$this->translate('Enregistrer'));
+					$form->prepare();
+
+					echo $this->form()->openTag($form);
+					echo $this->formInput($form->get('id_devis'));
+					echo $this->formInput($form->get('code_devis'));
+					echo $this->formInput($form->get('date_devis'));
+					echo $this->formInput($form->get('total_hors_port'));
+					echo $this->formInput($form->get('total_avec_port'));
+				?>
+
+				<div class="row">
+					<div class="form-group col-sm-8 <?php if(isset($errors['numero_affaire'])) { echo 'has-error'; } ?>">
+						<?php
+							echo $this->formInput($form->get('ref_affaire'));
+							
+							echo $this->formLabel($form->get('numero_affaire'));
+							echo $this->formInput($form->get('numero_affaire'));
+							echo $this->formElementErrors($form->get('numero_affaire'), array('class' => 'liste-erreurs'));
+						 ?>
+					</div>
+					<div class="form-group col-sm-4 <?php if(isset($errors['ref_personnel'])) { echo 'has-error'; } ?>">
+						<?php						
+							echo $this->formLabel($form->get('ref_personnel'));
+							echo $this->formSelect($form->get('ref_personnel'));
+							echo $this->formElementErrors($form->get('ref_personnel'), array('class' => 'liste-erreurs'));
+						 ?>
+					</div>
+				</div>
+
+				<!-- <div class="hr-line-dashed"></div> -->
+
+				<div class="row">
+					<div class="col-sm-4 b-r">
+						<div class="form-group <?php if(isset($errors['condition_reglement'])) { echo 'has-error'; } ?>">
+							<?php
+								echo $this->formLabel($form->get('condition_reglement'));
+							?>
+								<a href="#">
+									<i class="fa fa-plus"></i>
+									<?php echo $this->translate('Ajouter'); ?>
+								</a>
+							<?php
+								echo $this->formSelect($form->get('condition_reglement'));
+								echo $this->formElementErrors($form->get('condition_reglement'), array('class' => 'liste-erreurs'));
+							 ?>
+						</div>
+						<div class="form-group <?php if(isset($errors['delais_livraison'])) { echo 'has-error'; } ?>">
+							<?php
+								echo $this->formLabel($form->get('delais_livraison'));
+							?>
+								<a href="#">
+									<i class="fa fa-plus"></i>
+									<?php echo $this->translate('Ajouter'); ?>
+								</a>
+							<?php
+								echo $this->formSelect($form->get('delais_livraison'));
+								echo $this->formElementErrors($form->get('delais_livraison'), array('class' => 'liste-erreurs'));
+							 ?>
+						</div>
+						<div class="form-group <?php if(isset($errors['duree_validite_prix'])) { echo 'has-error'; } ?>">
+							<?php
+								echo $this->formLabel($form->get('duree_validite_prix'));
+							?>
+								<a href="#">
+									<i class="fa fa-plus"></i>
+									<?php echo $this->translate('Ajouter'); ?>
+								</a>
+							<?php
+								echo $this->formSelect($form->get('duree_validite_prix'));
+								echo $this->formElementErrors($form->get('duree_validite_prix'), array('class' => 'liste-erreurs'));
+							 ?>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="row">
+							<div class="form-group col-sm-6">
+								<?php						
+									echo $this->formLabel($form->get('remise'));
+									echo $this->formInput($form->get('remise'));
+									echo $this->formElementErrors($form->get('remise'), array('class' => 'liste-erreurs'));
+								 ?>
+							</div>
+							<div class="form-group col-sm-6">
+								<?php						
+									echo $this->formLabel($form->get('frais_port'));
+									echo $this->formInput($form->get('frais_port'));
+									echo $this->formElementErrors($form->get('frais_port'), array('class' => 'liste-erreurs'));
+								 ?>
+							</div>
+						</div>
+						<label><?php echo $this->translate('Lignes du devis'); ?></label>
+						<?php foreach($this->lignesAffaire as $ligneAffaire) : ?>
+							<label class="entite">
+								<input type="checkbox" name="ligne-affaire[]" value="<?php echo $ligneAffaire->getId(); ?>" data-vente="<?php echo $ligneAffaire->getPrixVentePrevu(); ?>" checked>
+								<b><?php echo $ligneAffaire->getQuantitePrevue(); ?>x</b>
+								<?php echo $ligneAffaire->getIntituleLigne(); ?>
+								<b class="total-ligne text-danger pull-right">
+									<?php echo number_format($ligneAffaire->getPrixVentePrevu(),2,',',' '); ?>
+									&euro;
+								</b>
+							</label>
+						<?php endforeach; ?>
+						<p class="pull-right">
+							<?php echo $this->translate('Total hors port: '); ?>
+							<span class="total-hp">
+								
+							</span>
+							&euro;
+						</p>
+						<p>
+							<?php echo $this->translate('Total avec port: '); ?>
+							<span class="total-ap">
+								
+							</span>
+							&euro;
+						</p>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="form-group col-lg-12 <?php if(isset($errors['remarques'])) { echo 'has-error'; } ?>">
+						<?php						
+							echo $this->formLabel($form->get('remarques'));
+							echo $this->formTextarea($form->get('remarques'));
+							echo $this->formElementErrors($form->get('remarques'), array('class' => 'liste-erreurs'));
+						 ?>
+					</div>
+				</div>
+
+				<div class="hr-line-dashed"></div>
+
+				<div class="row">
+					<div class="form-group col-md-6">
+						<?php
+							echo $this->formLabel($form->get('date_envoi'));
+						?>
+						<div class="input-group date">
+							<span class="input-group-addon">
+								<i class="fa fa-calendar"></i>
+							</span>
+							<?php
+								echo $this->formInput($form->get('date_envoi'));
+								echo $this->formElementErrors($form->get('date_envoi'), array('class' => 'liste-erreurs'));
+							 ?>
+						</div>
+					</div>
+					<div class="form-group col-md-6">
+						<?php
+							echo $this->formLabel($form->get('date_signature'));
+						?>
+						<div class="input-group date">
+							<span class="input-group-addon">
+								<i class="fa fa-calendar"></i>
+							</span>
+							<?php
+								echo $this->formInput($form->get('date_signature'));
+								echo $this->formElementErrors($form->get('date_signature'), array('class' => 'liste-erreurs'));
+							 ?>
+						</div>
+					</div>
+				</div>
+
+				<div class="hr-line-dashed"></div>
+				<div class="row">
+					<div class="col-md-12">		
+					<?php
+						echo 
+							$this->formButton()->openTag($form->get('submit')).
+							'<i class="fa fa-check"></i> '.$form->get('submit')->getLabel().
+							$this->formButton()->closeTag(); 
+					?>
+					<a id="annuler" href="<?php echo $this->url('devis'); ?>" class="btn btn-default pull-right"><i class="fa fa-times"></i> <?php echo $this->translate('Annuler'); ?></a>
+					</div>
+				</div>
+				<?php echo $this->form()->closeTag($form); ?>
+			</div>
+		</div>
+	</div>
+</div>

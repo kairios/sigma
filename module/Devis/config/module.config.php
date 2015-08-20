@@ -22,8 +22,54 @@ return array(
                     'route'=>'/devis',
                     'defaults'=>array(
                         'controller'=>'Devis\Controller\Index',
-                        'action'=>'index'
+                        'action'=>'listedevis'
                     ),
+                ),
+                'may_terminate'=>true,
+                'child_routes'=>array(
+                    'devis'=>array(
+                        'type'=>'Segment',
+                        'options'=>array(
+                            'route'=>'[/:action][/:id]',
+                            'constraints'=>array(
+                                'action'=>'[a-zA-Z][a-zA-Z0-9_-]*',
+                                'id'=>'[0-9]+',
+                            ),
+                            'defaults'=>array(
+                                '__NAMESPACE__' => 'Devis\Controller',
+                                'controller'    => 'Index',
+                                'action'        => 'listedevis',
+                            ),
+                        ),
+                    ),
+                    'consulter_devis'=>array(
+                        'type'=>'Segment',
+                        'options'=>array(
+                            'route'=>'/:id',
+                            'constraints'=>array(
+                                'id'=>'[0-9]+'
+                            ),
+                            'defaults'=>array(
+                                '__NAMESPACE__' => 'Devis\Controller',
+                                'controller'=>'Index',
+                                'action'=>'consulterdevis',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            'formulaire_devis'=>array(
+                'type'=>'Segment',
+                'options'=>array(
+                    'route'=>'/formulaire-devis[/:id]',
+                    'constraints'=>array(
+                        'id'=>'[0-9]+'
+                    ),
+                    'defaults'=>array(
+                        '__NAMESPACE__' => 'Devis\Controller',
+                        'controller'=>'Index',
+                        'action'=>'formulairedevis',
+                    )
                 ),
             ),
         ),

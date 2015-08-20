@@ -11,7 +11,7 @@
 		<div class="ibox float-e-margins">
 			<div class="ibox-title">
 				<h5>
-					<?php echo $this->translate('Nouvelle affaire'); ?>
+					<?php echo $this->translate('Formulaire affaire'); ?>
 				</h5>
 				<div class="ibox-tools">
 					<a href="<?php echo $this->url('affaire'); ?>"><i class="fa fa-arrow-left"></i> <?php echo $this->translate('Retour'); ?></a>
@@ -32,8 +32,8 @@
 					echo $this->formInput($form->get('numero_auto'));
 					echo $this->formInput($form->get('numero_affaire'));
 					echo $this->formInput($form->get('ref_etat_affaire'));
+					echo $this->formInput($form->get('date_debut'));
 				?>
-
 					<div class="row">
 						<div class="form-group col-sm-3 <?php if(isset($errors['ref_centre_profit'])) { echo 'has-error'; } ?>">
 							<?php
@@ -85,18 +85,7 @@
 							?>
 						</div>
 					</div>
-					<!-- <div class="row">
-						<div class="col-sm-8">
-							<a href="#">
-								<?php echo $this->translate('Ajouter un client'); ?>
-							</a>
-						</div>
-						<div class="col-sm-4">
-							<a href="#">
-								<?php echo $this->translate('Ajouter un interlocuteur'); ?>
-							</a>
-						</div>
-					</div> -->
+					
 					<div class="hr-line-dashed"></div>
 
 					<div class="row">

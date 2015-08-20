@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-13 10:31:47
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-14 17:02:19
+ * @Last Modified time: 2015-08-20 12:48:10
  */
 
 namespace Affaire\Model;
@@ -22,6 +22,7 @@ class AffaireModel implements InputFilterAwareInterface
 		'numero_auto'						=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'NumeroAuto')),
 		'numero_affaire'					=>array('type'=>'text',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'NumeroAffaire')),
 		'ref_etat_affaire'					=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'RefEtatAffaire')),
+		'date_debut'						=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'DateDebut')),
 		'ref_centre_profit'					=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>true,'label'=>'Centre de profit','parent'=>'generalite')),
 		'code_client'						=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>false,'label'=>'Code client','static'=>true)),
 		'ref_client'						=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>true,'label'=>'Client','parent'=>'coordonnees')),
@@ -88,9 +89,9 @@ class AffaireModel implements InputFilterAwareInterface
 							array(
 								'name'=>'Regex',
 								'options'=>array(
-									'pattern'=>'/^[0-9]+([\.,][05]){0,1}$/',
+									'pattern'=>'/^[0-9]+([\.,][0-9]{1,2}){0,1}$/',
 									'messages'=>array(
-										'regexNotMatch'=>'Vous devez entrer un décimal valide (0,5 ou 1.5...)'
+										'regexNotMatch'=>'Vous devez entrer un décimal valide (10, 10.0, 5,07...)'
 									)
 								)
 							)

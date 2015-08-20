@@ -976,7 +976,7 @@ class Affaire
         return $numero;
     }
 
-     public function alreadyExisteNumero($numero, $em = null)
+    public function alreadyExisteNumero($numero, $em = null)
     {
         $query = $em->createQuery("SELECT COUNT(a.numeroAuto) as numero_max FROM Affaire\Entity\Affaire a WHERE a.numeroAuto = :numero");
         $query->setParameter('numero',$numero);
@@ -995,6 +995,29 @@ class Affaire
     //     // qui retourne un tableau de tableaux.
     //     return $query->getResult(); 
     // }
+
+    public function getListeDevis($sm)
+    {
+        $id = (int) $this->getId();
+        $query =   
+            "SELECT id, code_devis, version, date_devis, date_envoi, date_signature, remarques
+             FROM devis
+             WHERE ref_affaire = $id
+             ORDER BY version ASC "
+        ;
+
+        $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+        $results    = $statement->execute();
+
+        if($results->isQueryResult())
+        {
+            $resultSet=new ResultSet;
+            $resultSet->initialize($results);
+            return $resultSet->toArray();
+        }
+
+        return array();
+    }
 
 }
 

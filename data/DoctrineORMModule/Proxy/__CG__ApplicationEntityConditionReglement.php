@@ -221,4 +221,15 @@ class ConditionReglement extends \Application\Entity\ConditionReglement implemen
         return parent::setIntituleConditionReglement($intituleConditionReglement);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getIntitulesConditionReglement($sm)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIntitulesConditionReglement', array($sm));
+
+        return parent::getIntitulesConditionReglement($sm);
+    }
+
 }

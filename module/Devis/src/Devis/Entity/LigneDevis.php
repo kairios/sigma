@@ -64,14 +64,24 @@ class LigneDevis
     private $remarques;
 
     /**
-     * @var \Devis
+     * @var \Devis\Entity\Devis
      *
-     * @ORM\ManyToOne(targetEntity="Devis")
+     * @ORM\ManyToOne(targetEntity="Devis\Entity\Devis")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_devis", referencedColumnName="id")
      * })
      */
     private $refDevis;
+
+    /**
+     * @var \Affaire\Entity\LigneAffaire
+     *
+     * @ORM\ManyToOne(targetEntity="Affaire\Entity\LigneAffaire")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ref_devis", referencedColumnName="id")
+     * })
+     */
+    private $refLigneAffaire;
 
     /**
      * Get id
@@ -243,4 +253,28 @@ class LigneDevis
     {
         return $this->refDevis;
     }
+
+     /**
+     * Set refLigneAffaire
+     *
+     * @param \Affaire\Entity\LigneAffaire $refLigneAffaire
+     * @return LigneDevis
+     */
+    public function setRefDevis(\Affaire\Entity\LigneAffaire $refLigneAffaire = null)
+    {
+        $this->refLigneAffaire = $refLigneAffaire;
+    
+        return $this;
+    }
+
+    /**
+     * Get refLigneAffaire
+     *
+     * @return \Affaire\Entity\LigneAffaire 
+     */
+    public function getRefDevis()
+    {
+        return $this->refLigneAffaire;
+    }
+}
 }

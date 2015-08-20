@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:49:48
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-20 10:56:42
+* @Last Modified time: 2015-08-20 17:50:12
 */
 
 'use strict';
@@ -166,6 +166,9 @@ var sigma={
 				break;
 				case 'fiche_heure':
 					this.ficheHeure.init();
+				break;
+				case 'devis':
+					this.devis.init();
 				break;
 			}
 
@@ -2984,6 +2987,35 @@ var sigma={
 				});
 			},
 		},
+		devis:{
+			init:function(){
+				switch(_action)
+				{
+					case 'listedevis':
+					break;
+					case 'formulairedevis':
+						sigma.controller.devis.calculTotauxForms();
+						$('#frais_port, #remise, input[name="ligne-affaire[]"]').on('change',function(){
+							sigma.controller.devis.calculTotauxForms();
+						});
+					break;
+				}
+			},
+			calculTotauxForms:function()
+			{
+				var totalLignes = 0;
+				
+				$('input[name="ligne-affaire[]"]:checked').each(function() {
+					totalLignes += parseFloat($(this).attr('data-vente'));
+				});
+
+				totalLignes -= parseFloat($('#remise').val());
+				$('.total-hp').text(totalLignes);
+
+				totalLignes += parseFloat($('#frais_port').val())
+				$('.total-ap').text(totalLignes);
+			}
+		}
 	},
 	// Initialisation de l'API Sigma V2.0
 	init:function(){
