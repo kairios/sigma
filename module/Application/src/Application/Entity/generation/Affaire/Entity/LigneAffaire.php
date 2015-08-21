@@ -95,9 +95,9 @@ class LigneAffaire
     private $refAffaire;
 
     /**
-     * @var \Affaire\Entity\Facture
+     * @var \Facture\Entity\Facture
      *
-     * @ORM\ManyToOne(targetEntity="Affaire\Entity\Facture")
+     * @ORM\ManyToOne(targetEntity="Facture\Entity\Facture")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_facture", referencedColumnName="id", nullable=true)
      * })
@@ -105,9 +105,9 @@ class LigneAffaire
     private $refFacture;
 
     /**
-     * @var \Affaire\Entity\ConfirmationCommande
+     * @var \ConfirmationCommande\Entity\ConfirmationCommande
      *
-     * @ORM\ManyToOne(targetEntity="Affaire\Entity\ConfirmationCommande")
+     * @ORM\ManyToOne(targetEntity="ConfirmationCommande\Entity\ConfirmationCommande")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_confirmation_commande", referencedColumnName="id", nullable=true)
      * })
@@ -358,10 +358,10 @@ class LigneAffaire
     /**
      * Set refFacture
      *
-     * @param \Affaire\Entity\Facture $refFacture
+     * @param \Facture\Entity\Facture $refFacture
      * @return LigneAffaire
      */
-    public function setRefFacture(\Affaire\Entity\Facture $refFacture = null)
+    public function setRefFacture(\Facture\Entity\Facture $refFacture = null)
     {
         $this->refFacture = $refFacture;
     
@@ -371,7 +371,7 @@ class LigneAffaire
     /**
      * Get refFacture
      *
-     * @return \Affaire\Entity\Facture 
+     * @return \Facture\Entity\Facture 
      */
     public function getRefFacture()
     {
@@ -381,10 +381,10 @@ class LigneAffaire
     /**
      * Set refConfirmationCommande
      *
-     * @param \Affaire\Entity\ConfirmationCommande $refConfirmationCommande
+     * @param \ConfirmationCommande\Entity\ConfirmationCommande $refConfirmationCommande
      * @return LigneAffaire
      */
-    public function setRefConfirmationCommande(\Affaire\Entity\ConfirmationCommande $refConfirmationCommande = null)
+    public function setRefConfirmationCommande(\ConfirmationCommande\Entity\ConfirmationCommande $refConfirmationCommande = null)
     {
         $this->refConfirmationCommande = $refConfirmationCommande;
     
@@ -394,7 +394,7 @@ class LigneAffaire
     /**
      * Get refConfirmationCommande
      *
-     * @return \Affaire\Entity\ConfirmationCommande 
+     * @return \ConfirmationCommande\Entity\ConfirmationCommande 
      */
     public function getRefConfirmationCommande()
     {

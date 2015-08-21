@@ -1,0 +1,23 @@
+<div id="ligne-produit-form-modal" class="modal inmodal in" aria-hidden="true" role="dialog" role="dialog" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content animated bounceInRight">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal" type="button">
+					<span aria-hidden="true">×</span>
+					<span class="sr-only"><?php echo $this->translate('Fermer'); ?></span>
+				</button>
+				<h4 class="modal-title"><?php echo $this->translate('Formulaire de ligne produit'); ?></h4>
+				<small class="font-bold"><?php echo $this->translate('Toutes les lignes produits sont considérées comme des charges externes à Zeppelin.'); ?></small>
+			</div>
+			<div class="modal-body">
+			</div>
+			<div class="modal-footer">
+				<button id="annuler" class="btn btn-white" data-dismiss="modal" type="button"><i class="fa fa-times"></i> <?php echo $this->translate('Annuler'); ?></button>
+				<button id="ligne-produit-form-submit" name="submit" class="btn btn-primary pull-right" type="button" data-default-text="<?php echo $this->translate('Valider'); ?>" data-loading-text="<?php echo $this->translate('En cours...'); ?>">
+					<i class="fa fa-check"></i>
+					<span><?php echo $this->translate('Valider'); ?></span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

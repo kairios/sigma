@@ -114,7 +114,7 @@
 		<?php if(sizeof($lignesAffaire)>0) : ?>				
 			<?php foreach($lignesAffaire as $ligneAffaire) : ?>
 								
-				<div class="ligne-affaire table-responsive">
+				<div class="ligne-affaire">
 					<p class="pull-right">
 						<?php echo $this->translate('P.Vente : '); ?>
 						<?php echo number_format($ligneAffaire->getPrixVentePrevu(),2,',',' '); ?>
@@ -124,213 +124,221 @@
 						<b><?php echo $ligneAffaire->getQuantitePrevue(); ?>x</b>
 						<?php echo $ligneAffaire->getIntituleLigne(); ?>
 					</h4>
-					<table id="table-ligne" class="table table-striped">
-					    <thead>
-					        <th class="reference_produit"><?php echo $this->translate('Ref. produit'); ?></th>
-					        <th class="intitule_produit"><?php echo $this->translate('Intitulé'); ?></th>
-					        <th class="metier"><?php echo $this->translate('Métier'); ?></th>
-					        <th class="charge"><?php echo $this->translate('Charge'); ?></th>
-					        <th class="bool quantite"><?php echo $this->translate('Qté'); ?></th>
-					        <th class="bool poids_unitaire" title="<?php echo $this->translate('Poids unitaire'); ?>"><?php echo $this->translate('PU').'*'; ?></th>
-					        <th class="bool prix_unitaire_achat" title="<?php echo $this->translate('Prix unitaire achat'); ?>"><?php echo $this->translate('PUA').'*'; ?></th>
-					        <th class="bool prix_unitaire_vente" title="<?php echo $this->translate('Prix unitaire vente'); ?>"><?php echo $this->translate('PUV').'*'; ?></th>
-					        <th class="bool poids_total" title="<?php echo $this->translate('Poids total'); ?>"><?php echo $this->translate('PT').'*'; ?></th>
-					        <th class="bool prix_total_achat" title="<?php echo $this->translate('Prix total achat'); ?>"><?php echo $this->translate('PTA').'*'; ?></th>
-					        <th class="bool prix_total_vente" title="<?php echo $this->translate('Prix total vente'); ?>"><?php echo $this->translate('PTV').'*'; ?></th>
-							<th class="bool actions">#</th>
-					    </thead>
-
-					    <?php if(/*sizeof($ligneAffaire->getLignes()))*/1 > 0) : ?>
-						    <tbody>
-						        <!-- Début lignes tableau -->
-						        <tr class="footable-visible">
-						        	
-
-									<!-- Ref. produit -->
-						        	<td class="reference_produit">
-						        		<span class="fa fa-angle-right"></span>
-						        		20187491
-						        	</td>
-
-									<!-- Intitulé produit -->
-						        	<td class="important-text intitule_produit">Cartouche filtrante 2.5m²</td>
-
-						        	<!-- Métier -->
-						        	<td class="metier">Matériel autres-fournisseurs</td>
-				
-									<!-- Charge -->
-						        	<td class="charge">
-						        		<a href="#" title="Consulter la commande fournisseur">
-						        			<i class="fa fa-file-o"></i>
-						        		</a>
-						        		Externe
-						        	</td>
-
-									<!-- Quantité -->
-						        	<td class="bool quantite">12</td>
-
-									<!-- Poids unitaire -->
-						        	<td class="bool poids_unitaire">0.00 kg</td>
-
-									<!-- Prix unitaire achat -->
-						        	<td class="bool prix_unitaire_achat">0.00 €</td>
-
-									<!-- Prix unitaire vente -->
-						        	<td class="bool prix_unitaire_vente">121.94 €</td>
-
-									<!-- Poids total -->
-						        	<td class="bool poids_total">0.00 kg</td>
-									Prix total achat
-						        	<td class="bool prix_total_achat">0.00 €</td>
-
-									<!-- Prix total vente -->
-						        	<td class="bool prix_total_vente">1463.28 €</td>
-
-						        	<!-- # -->
-						        	<td style="width:3%" class="bool actions">
-						        		<a class="delete-ligne" href="#"><i class="fa fa-times"></i></a>
-						        		<a class="edit-ligne" href="#"><i class="fa fa-edit"></i></a>
-							        </td>
-						        </tr>
-						        <tr class="footable-row-detail">
-						        	<td class="footable-row-detail-cell" colspan="12">
-						        		<div class="footable-row-detail-inner">
-						        			<div class="footable-row-detail-row hidden-lg">
-						        				<div class="footable-row-detail-name"><?php echo $this->translate('Charge'); ?></div>
-						        				<div class="footable-row-detail-value">
-						        					<a href="#" title="Consulter la commande fournisseur">
-									        			<i class="fa fa-file-o"></i>
-									        		</a>
-									        		Externe
-						        				</div>
-						        			</div>
-						        			<div class="footable-row-detail-row">
-						        				<div class="footable-row-detail-name"><?php echo $this->translate('Ref. devis'); ?></div>
-						        				<div class="footable-row-detail-value"></div>
-						        			</div>
-						        			<div class="footable-row-detail-row">
-						        				<div class="footable-row-detail-name"><?php echo $this->translate('État achat'); ?></div>
-						        				<div class="footable-row-detail-value">Non commandé</div>
-						        			</div>
-						        			<div class="footable-row-detail-row">
-						        				<div class="footable-row-detail-name"><?php echo $this->translate('État vente'); ?></div>
-						        				<div class="footable-row-detail-value">Non livré</div>
-						        			</div>
-						        			<div class="footable-row-detail-row hidden-lg">
-						        				<div class="footable-row-detail-name">#</div>
-						        				<div class="footable-row-detail-value">
-						        					<a class="btn btn-white btn-xs edit-ligne-hidden" href="#"><i class="fa fa-edit"></i> <?php echo $this->translate('Modifier'); ?></a>
-						        					<a class="btn btn-danger btn-xs delete-ligne-hidden" href="#"><i class="fa fa-times"></i> <?php echo $this->translate('Supprimer'); ?></a>
-						        				</div>
-						        			</div>
-						        		</div>
-						        	</td>
-						        </tr>
-						        <tr class="footable-visible">
-									<!-- Ref. produit -->
-						        	<td>
-						        		<span class="fa fa-angle-right"></span>
-						        		20203950
-						        	</td>
-
-									<!-- Intitulé produit -->
-						        	<td class="important-text">Poche filtrante D0610*1520</td>
-
-						        	<!-- Métier -->
-						        	<td>Matériel autres-fournisseurs</td>
-				
-									<!-- Charge -->
-						        	<td>
-						        		<a href="#" title="Consulter la commande fournisseur">
-						        			<i class="fa fa-file-o"></i>
-						        		</a>
-						        		Externe
-						        	</td>
-
-						        	<!-- Quantité -->
-						        	<td class="bool">10</td>
-
-									<!-- Poids unitaire -->
-						        	<td class="bool">0.00 kg</td>
-
-									<!-- Prix unitaire achat -->
-						        	<td class="bool">0.00 €</td>
-
-									<!-- Prix unitaire vente -->
-						        	<td class="bool">54.60 €</td>
-
-						        	<!-- Poids total -->
-						        	<td class="bool">0.00 kg</td>
-
-									<!-- Prix total achat -->
-						        	<td class="bool">0.00 €</td>
-
-									<!-- Prix total vente -->
-						        	<td class="bool">546.00 €</td>
-
-						        	<!-- # -->
-						        	<td style="width:3%" class="bool">
-						        		<a class="delete-ligne" href="#"><i class="fa fa-times"></i></a>
-						        		<a class="edit-ligne" href="#"><i class="fa fa-edit"></i></a>
-							        </td>
-						        </tr>
-								<tr class="footable-row-detail">
-						        	<td class="footable-row-detail-cell" colspan="12">
-						        		<div class="footable-row-detail-inner">
-						        			<div class="footable-row-detail-row hidden-lg">
-						        				<div class="footable-row-detail-name"><?php echo $this->translate('Charge'); ?></div>
-						        				<div class="footable-row-detail-value">
-						        					<a href="#" title="Consulter la commande fournisseur">
-									        			<i class="fa fa-file-o"></i>
-									        		</a>
-									        		Externe
-						        				</div>
-						        			</div>
-						        			<div class="footable-row-detail-row">
-						        				<div class="footable-row-detail-name"><?php echo $this->translate('Ref. devis'); ?></div>
-						        				<div class="footable-row-detail-value"></div>
-						        			</div>
-						        			<div class="footable-row-detail-row">
-						        				<div class="footable-row-detail-name"><?php echo $this->translate('État achat'); ?></div>
-						        				<div class="footable-row-detail-value">Non commandé</div>
-						        			</div>
-						        			<div class="footable-row-detail-row">
-						        				<div class="footable-row-detail-name"><?php echo $this->translate('État vente'); ?></div>
-						        				<div class="footable-row-detail-value">Non livré</div>
-						        			</div>
-						        			<div class="footable-row-detail-row hidden-lg">
-						        				<div class="footable-row-detail-name">#</div>
-						        				<div class="footable-row-detail-value">
-						        					<a class="btn btn-white btn-xs edit-ligne-hidden" href="#"><i class="fa fa-edit"></i> <?php echo $this->translate('Modifier'); ?></a>
-						        					<a class="btn btn-danger btn-xs delete-ligne-hidden" href="#"><i class="fa fa-times"></i> <?php echo $this->translate('Supprimer'); ?></a>
-						        				</div>
-						        			</div>
-						        		</div>
-						        	</td>
-						        </tr>
-						    </tbody>
-						<?php endif; ?>
-					    <tfoot>
-					    	<tr>
-					    		<th>Total vente/Total achat hors port</th>
-					    	</tr>
-					    </tfoot>
-					</table>
-					<p>
-						<?php echo $this->translate('Total vente ligne : ').number_format($ligneAffaire->getPrixVenteDetails(),2,',',' '); ?>
-						&euro;
-					</p>
-					<p>
-						<?php echo $this->translate('Total achat prévu : ').number_format($ligneAffaire->getPrixAchatPrevu(),2,',',' '); ?>
-						&euro;
-					</p>
-					<p>
-						<?php echo $this->translate('Total achat réel : ').number_format($ligneAffaire->getPrixAchatReel(),2,',',' '); ?>
-						&euro;
-					</p>
 					
-				</div>
+					<div class="col-lg-12">
+						<button class="btn btn-primary btn-xs  produit" title="<?php echo $this->translate('Ajouter un produit'); ?>">
+							<i class="fa fa-plus"></i>
+							<?php echo $this->translate('Ajouter un produit'); ?>
+						</button>
+						<button class="btn btn-success  btn-xs prestation" title="<?php echo $this->translate('Ajouter un prévisionnel d\'heure'); ?>">
+							<i class="fa fa-plus"></i>
+							<?php echo $this->translate('Ajouter un prévisionnel'); ?>
+						</button>
+					</div>
+					<div class="ligne-details table-responsive">
+						<!-- ICI les lignes produits et lignes prestations -->
+						<table id="table-ligne" class="table table-striped table-bordered">
+						    <thead>
+						        <th class="reference_produit"><?php echo $this->translate('Ref. produit'); ?></th>
+						        <th class="intitule_produit"><?php echo $this->translate('Intitulé'); ?></th>
+						        <th class="metier"><?php echo $this->translate('Métier'); ?></th>
+						        <th class="charge"><?php echo $this->translate('Charge'); ?></th>
+						        <th class="bool quantite"><?php echo $this->translate('Qté'); ?></th>
+						        <th class="bool poids_unitaire" title="<?php echo $this->translate('Poids unitaire'); ?>"><?php echo $this->translate('PU').'*'; ?></th>
+						        <th class="bool prix_unitaire_achat" title="<?php echo $this->translate('Prix unitaire achat'); ?>"><?php echo $this->translate('PUA').'*'; ?></th>
+						        <th class="bool prix_unitaire_vente" title="<?php echo $this->translate('Prix unitaire vente'); ?>"><?php echo $this->translate('PUV').'*'; ?></th>
+						        <th class="bool prix_total_achat" title="<?php echo $this->translate('Prix total achat'); ?>"><?php echo $this->translate('PTA').'*'; ?></th>
+								<th class="bool actions">#</th>
+						    </thead>
 
+						    <?php if(/*sizeof($ligneAffaire->getLignes()))*/1 > 0) : ?>
+							    <tbody>
+							        <!-- Début lignes tableau -->
+							        <tr class="footable-visible">
+							        	
+
+										<!-- Ref. produit -->
+							        	<td class="reference_produit">
+							        		<span class="fa fa-angle-right"></span>
+							        		20187491
+							        	</td>
+
+										<!-- Intitulé produit -->
+							        	<td class="important-text intitule_produit">Cartouche filtrante 2.5m²</td>
+
+							        	<!-- Métier -->
+							        	<td class="metier">Matériel autres-fournisseurs</td>
+					
+										<!-- Charge -->
+							        	<td class="charge">
+							        		<a href="#" title="Consulter la commande fournisseur">
+							        			<i class="fa fa-file-o"></i>
+							        		</a>
+							        		Externe
+							        	</td>
+
+										<!-- Quantité -->
+							        	<td class="bool quantite">12</td>
+
+										<!-- Prix unitaire achat -->
+							        	<td class="bool prix_unitaire_achat">0.00 €</td>
+
+										<!-- Prix unitaire vente -->
+							        	<td class="bool prix_unitaire_vente">121.94 €</td>
+
+										<!-- Poids total -->							        	
+							        	<td class="bool prix_total_achat">0.00 €</td>
+
+										<!-- Prix total vente -->
+							        	<td class="bool prix_total_vente">1463.28 €</td>
+
+							        	<!-- # -->
+							        	<td style="width:3%" class="bool actions">
+							        		<a class="delete-ligne" href="#"><i class="fa fa-times"></i></a>
+							        		<a class="edit-ligne" href="#"><i class="fa fa-edit"></i></a>
+								        </td>
+							        </tr>
+							        <tr class="footable-row-detail">
+							        	<td class="footable-row-detail-cell" colspan="12">
+							        		<div class="footable-row-detail-inner">
+							        			<div class="footable-row-detail-row hidden-lg">
+							        				<div class="footable-row-detail-name"><?php echo $this->translate('Charge'); ?></div>
+							        				<div class="footable-row-detail-value">
+							        					<a href="#" title="Consulter la commande fournisseur">
+										        			<i class="fa fa-file-o"></i>
+										        		</a>
+										        		Externe
+							        				</div>
+							        			</div>
+							        			<div class="footable-row-detail-row">
+							        				<div class="footable-row-detail-name"><?php echo $this->translate('Ref. devis'); ?></div>
+							        				<div class="footable-row-detail-value"></div>
+							        			</div>
+							        			<div class="footable-row-detail-row">
+							        				<div class="footable-row-detail-name"><?php echo $this->translate('État achat'); ?></div>
+							        				<div class="footable-row-detail-value">Non commandé</div>
+							        			</div>
+							        			<div class="footable-row-detail-row">
+							        				<div class="footable-row-detail-name"><?php echo $this->translate('État vente'); ?></div>
+							        				<div class="footable-row-detail-value">Non livré</div>
+							        			</div>
+							        			<div class="footable-row-detail-row hidden-lg">
+							        				<div class="footable-row-detail-name">#</div>
+							        				<div class="footable-row-detail-value">
+							        					<a class="btn btn-white btn-xs edit-ligne-hidden" href="#"><i class="fa fa-edit"></i> <?php echo $this->translate('Modifier'); ?></a>
+							        					<a class="btn btn-danger btn-xs delete-ligne-hidden" href="#"><i class="fa fa-times"></i> <?php echo $this->translate('Supprimer'); ?></a>
+							        				</div>
+							        			</div>
+							        		</div>
+							        	</td>
+							        </tr>
+							        <tr class="footable-visible">
+										<!-- Ref. produit -->
+							        	<td>
+							        		<span class="fa fa-angle-right"></span>
+							        		20203950
+							        	</td>
+
+										<!-- Intitulé produit -->
+							        	<td class="important-text">Poche filtrante D0610*1520</td>
+
+							        	<!-- Métier -->
+							        	<td>Matériel autres-fournisseurs</td>
+					
+										<!-- Charge -->
+							        	<td>
+							        		<a href="#" title="Consulter la commande fournisseur">
+							        			<i class="fa fa-file-o"></i>
+							        		</a>
+							        		Externe
+							        	</td>
+
+							        	<!-- Quantité -->
+							        	<td class="bool">10</td>
+
+										<!-- Prix unitaire achat -->
+							        	<td class="bool">0.00 €</td>
+
+										<!-- Prix unitaire vente -->
+							        	<td class="bool">54.60 €</td>
+
+										<!-- Prix total achat -->
+							        	<td class="bool">0.00 €</td>
+
+										<!-- Prix total vente -->
+							        	<td class="bool">546.00 €</td>
+
+							        	<!-- # -->
+							        	<td style="width:3%" class="bool">
+							        		<a class="delete-ligne" href="#"><i class="fa fa-times"></i></a>
+							        		<a class="edit-ligne" href="#"><i class="fa fa-edit"></i></a>
+								        </td>
+							        </tr>
+									<tr class="footable-row-detail">
+							        	<td class="footable-row-detail-cell" colspan="12">
+							        		<div class="footable-row-detail-inner">
+							        			<div class="footable-row-detail-row hidden-lg">
+							        				<div class="footable-row-detail-name"><?php echo $this->translate('Charge'); ?></div>
+							        				<div class="footable-row-detail-value">
+							        					<a href="#" title="Consulter la commande fournisseur">
+										        			<i class="fa fa-file-o"></i>
+										        		</a>
+										        		Externe
+							        				</div>
+							        			</div>
+							        			<div class="footable-row-detail-row">
+							        				<div class="footable-row-detail-name"><?php echo $this->translate('Ref. devis'); ?></div>
+							        				<div class="footable-row-detail-value"></div>
+							        			</div>
+							        			<div class="footable-row-detail-row">
+							        				<div class="footable-row-detail-name"><?php echo $this->translate('État achat'); ?></div>
+							        				<div class="footable-row-detail-value">Non commandé</div>
+							        			</div>
+							        			<div class="footable-row-detail-row">
+							        				<div class="footable-row-detail-name"><?php echo $this->translate('État vente'); ?></div>
+							        				<div class="footable-row-detail-value">Non livré</div>
+							        			</div>
+							        			<div class="footable-row-detail-row hidden-lg">
+							        				<div class="footable-row-detail-name">#</div>
+							        				<div class="footable-row-detail-value">
+							        					<a class="btn btn-white btn-xs edit-ligne-hidden" href="#"><i class="fa fa-edit"></i> <?php echo $this->translate('Modifier'); ?></a>
+							        					<a class="btn btn-danger btn-xs delete-ligne-hidden" href="#"><i class="fa fa-times"></i> <?php echo $this->translate('Supprimer'); ?></a>
+							        				</div>
+							        			</div>
+							        		</div>
+							        	</td>
+							        </tr>
+							    </tbody>
+							<?php endif; ?>
+						    <tfoot>
+						    	<tr>
+						    		<th>Total vente/Total achat hors port</th>
+						    	</tr>
+						    </tfoot>
+						</table>
+					</div>
+					<div class="row">
+						<div class="col-sm-4">
+							<p>
+								<?php echo $this->translate('Total vente ligne : ').number_format($ligneAffaire->getPrixVenteDetails(),2,',',' '); ?>
+								&euro;
+							</p>
+						</div>
+						<div class="col-sm-4">
+							<p>
+								<?php echo $this->translate('Total achat prévu : ').number_format($ligneAffaire->getPrixAchatPrevu(),2,',',' '); ?>
+								&euro;
+							</p>
+						</div>
+						<div class="col-sm-4">
+							<p>
+								<?php echo $this->translate('Total achat réel : ').number_format($ligneAffaire->getPrixAchatReel(),2,',',' '); ?>
+								&euro;
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="hr-line-dashed"></div>
 			<?php endforeach; ?>
 		<?php endif; ?>
 	</div>
