@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-08-20 11:19:12
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-20 16:29:21
+ * @Last Modified time: 2015-08-21 11:52:50
  */
 
 namespace Devis\Model;
@@ -30,7 +30,7 @@ class DevisModel implements InputFilterAwareInterface
 		'remise'							=>array('type'=>'float',			'form'=>array('type'=>'text','required'=>false,'label'=>'Remise')),
 		'frais_port'						=>array('type'=>'float',			'form'=>array('type'=>'text','required'=>false,'label'=>'Frais de transport')),
 		'delais_livraison'					=>array('type'=>'text','max'=>50,	'form'=>array('type'=>'select','required'=>false,'label'=>'Délais de livraison')),
-		'duree_validite_prix'				=>array('type'=>'text','max'=>50,	'form'=>array('type'=>'select','required'=>false,'label'=>'Durée de validité devis')), // Fixé arbitrairement ici, mais devra dépendre d'une variable modifiable par l'administrateur
+		'duree_validite_prix'				=>array('type'=>'text','max'=>50,	'form'=>array('type'=>'text','required'=>true,'label'=>'Durée de validité devis')), // Fixé arbitrairement ici, mais devra dépendre d'une variable modifiable par l'administrateur
 		'condition_reglement'				=>array('type'=>'text','max'=>60,	'form'=>array('type'=>'select','required'=>false,'label'=>'Conditions de paiement')),
 		'date_envoi'						=>array('type'=>'text',				'form'=>array('type'=>'text','required'=>false,'label'=>'Envoyé le...')), // avec datepicker
 		'date_signature'					=>array('type'=>'text',				'form'=>array('type'=>'text','required'=>false,'label'=>'Signé le...')), // avec datepicker

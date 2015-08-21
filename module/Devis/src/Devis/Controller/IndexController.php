@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-08-11 18:01:01
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-20 17:41:52
+ * @Last Modified time: 2015-08-21 11:59:26
  */
 
 namespace Devis\Controller;
@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManager;
 use Zend\Session\Container;
 // Entity
 use Devis\Entity\Devis;
+use Devis\Entity\LigneDevis;
 use Devis\Form\DevisForm;
 
 class IndexController extends AbstractActionController
@@ -130,13 +131,15 @@ class IndexController extends AbstractActionController
             if($devis==null)
                 throw new \Exception($translator->translate('Ce devis n\'existe pas'));
 
+            $affaire = $devis->getRefAffaire();
+
             //Assignation de variables au layout
             $this->layout()->setVariables(array(
                 'headTitle'         =>  $translator->translate('Modifier un devis'),
                 'breadcrumbActive'  =>  $devis->getCodeDevis(),
                 'action'            =>  'formulairedevis',
                 'module'            =>  'devis',
-                'plugins'           =>  array(),
+                'plugins'           =>  array('jquery-ui'),
             ));
         }
         else
@@ -156,12 +159,12 @@ class IndexController extends AbstractActionController
                 'breadcrumbActive'  =>  $translator->translate('Nouveau devis'),
                 'action'            =>  'formulairedevis',                            
                 'module'            =>  'devis',
-                'plugins'           =>  array(),
+                'plugins'           =>  array('jquery-ui'),
             ));
         }       
 
         // Creation du formulaire du devis
-        $form = new DevisForm($translator,$sm,$em,$request,$devis);   
+        $form = new DevisForm($translator,$sm,$em,$request,$devis);
         if($request->isPost())
         {
             $form->setData($request->getPost());
@@ -171,26 +174,53 @@ class IndexController extends AbstractActionController
 
                 $devis->exchangeArray($form->getData(),$sm,$em);
 
-                var_dump($form->getData());die();
+                $totalDevis = 0;
                 
-                // try
-                // {
-                //     $em->persist($devis);
-                //     $em->flush();
-                // }
-                // catch(\Exception $e)
-                // {
-                //     $erreurMessage = $translator->translate('Une erreur est survenue durant la sauvegarde du devis. Vérifiez que tous les champs sont valides.').$e->getMessage();
-                //     $messagesFlash = $this->flashArray;
-                //     $messagesFlash['errors'][] = $erreurMessage;
-                //     $utilisateur->offsetSet('messagesFlash', $messagesFlash);
+                try
+                {
+                    // On supprime d'abord les lignes de devis existantes
+                    $lignes = $devis->getLignesDevis($sm);
+                    foreach($lignes as $ligne)
+                    {
+                        $devis->removeLigneDevis($sm, $ligne['id']);
+                    }
+                    // On ajoute les lignes de devis en fonction des lignes de l'affaire sélectionnées
+                    if(isset($_POST['ligne-affaire']))
+                    {
+                        foreach($_POST['ligne-affaire'] as $key => $idLigneAffaire)
+                        {
+                            // On récupère puis enregistre la ligne de devis
+                            $ligneDevis = new LigneDevis();
+                            $ligneDevis->exchangeProperties($em->getRepository('Affaire\Entity\LigneAffaire')->find($idLigneAffaire));
+                            $ligneDevis->setRefDevis($devis);
+                            $em->persist($ligneDevis);
 
-                //     return new ViewModel(array(
-                //         'devis'=>$devis,
-                //         'form'=>$form,
-                //         'id'=>$id
-                //     ));
-                // }
+                            // On ajoute le montant de la ligne devis créée au montant total du devis
+                            $totalDevis += $ligneDevis->getTotalPrixVente();
+                        }
+                    }
+                    // On enregistre les totaux
+                    $totalDevis -= $devis->getRemise();
+                    $devis->setTotalHorsPort($totalDevis);
+                    $totalDevis += $devis->getFraisPort();
+                    $devis->setTotalAvecPort($totalDevis);
+
+                    $em->persist($devis);
+                    $em->flush();
+                }
+                catch(\Exception $e)
+                {
+                    $erreurMessage = $translator->translate('Une erreur est survenue durant la sauvegarde du devis. Vérifiez que tous les champs sont valides.').$e->getMessage();
+                    $messagesFlash = $this->flashArray;
+                    $messagesFlash['errors'][] = $erreurMessage;
+                    $utilisateur->offsetSet('messagesFlash', $messagesFlash);
+
+                    return new ViewModel(array(
+                        'devis'=>$devis,
+                        'form'=>$form,
+                        'id'=>$id
+                    ));
+                }
                 
                 return $this->redirect()->toRoute('devis/consulter_devis',array('id'=>$devis->getId()));
             }
@@ -198,6 +228,7 @@ class IndexController extends AbstractActionController
 
         return new ViewModel(array(
         	'lignesAffaire'=>$em->getRepository('Affaire\Entity\LigneAffaire')->findBy(array('refAffaire'=>$affaire)),
+            'refLignesAffaire'=>$devis->getRefLignesAffaire($sm),
             'devis'=>$devis,
             'form'=>$form,
             'id'=>$id

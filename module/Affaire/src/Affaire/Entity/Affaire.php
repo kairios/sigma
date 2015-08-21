@@ -935,7 +935,7 @@ class Affaire
     public function getAffairesFicheHeure($sm, $motCle = null)
     {
         $query =   
-            "SELECT a.id, CONCAT_WS(' - ', c.raison_sociale, a.numero_affaire) as numero_affaire
+            "SELECT a.id, CONCAT_WS(' - ', c.raison_sociale, a.numero_affaire, a.designation_affaire) as numero_affaire
              FROM affaire AS a
                 LEFT JOIN client AS c
                     ON a.ref_client = c.id
@@ -945,7 +945,8 @@ class Affaire
         if(!is_null($motCle))
         {
             $query.=  " AND (a.numero_affaire LIKE '%$motCle%'
-                        OR c.raison_sociale LIKE '%$motCle%') ";
+                        OR c.raison_sociale LIKE '%$motCle%'
+                        OR a.designation_affaire LIKE '%$motCle%') ";
         }
 
         $query.=  " ORDER BY numero_affaire ASC ";

@@ -43,31 +43,11 @@
 								<input type="checkbox" name="signe" value="1" <?php echo (!empty($devis['date_signature'])) ? 'checked' : ''; ?>>
 							</td>
 							<td class="bool">
-								<a href="#"><i class="fa fa-eye"></i></a>
-								<a href="#"><i class="fa fa-pencil"></i></a>
+								<a href="<?php echo $this->url('formulaire_devis', array('id'=>$devis['id'])); ?>"><i class="fa fa-pencil"></i></a>
 								<a href="#"><i class="fa fa-trash"></i></a>
 							</td>
 						</tr>
 					<?php endforeach; ?>
-					<!-- <tr>
-						<td>13-1234-2</td>
-						<td>
-							<i class="fa fa-clock-o"></i>
-							30/06/2015
-						</td>
-						<td class="bool">2</td>
-						<td class="bool">
-							<input type="checkbox" name="etat" value="1" checked>
-						</td>
-						<td class="bool">
-							<input type="checkbox" name="etat" value="1" checked>
-						</td>
-						<td class="bool">
-							<a href="#"><i class="fa fa-eye"></i></a>
-							<a href="#"><i class="fa fa-pencil"></i></a>
-							<a href="#"><i class="fa fa-trash"></i></a>
-						</td>
-					</tr> -->
 				</tbody>
 			</table>
 		<?php else : ?>

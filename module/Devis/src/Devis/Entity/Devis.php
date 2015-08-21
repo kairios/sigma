@@ -35,9 +35,9 @@ class Devis
     private $codeDevis;
 
     /**
-     * @var \DateTime
+     * @var integer
      *
-     * @ORM\Column(name="date_devis", type="date", nullable=false)
+     * @ORM\Column(name="date_devis", type="integer", nullable=false)
      */
     private $dateDevis;
 
@@ -46,7 +46,7 @@ class Devis
      *
      * @ORM\Column(name="version", type="integer", nullable=false)
      */
-    private $version = 1;
+    private $version;
 
     /**
      * @var float
@@ -98,16 +98,16 @@ class Devis
     private $totalAvecPort = 0;
 
     /**
-     * @var \DateTime
+     * @var integer
      *
-     * @ORM\Column(name="date_envoi", type="date", nullable=true)
+     * @ORM\Column(name="date_envoi", type="integer", nullable=true)
      */
     private $dateEnvoi;
 
     /**
-     * @var \DateTime
+     * @var integer
      *
-     * @ORM\Column(name="date_signature", type="date", nullable=true)
+     * @ORM\Column(name="date_signature", type="integer", nullable=true)
      */
     private $dateSignature;
 
@@ -146,6 +146,8 @@ class Devis
         if(!is_null($refAffaire))
         {
             $this->refPersonnel = $refAffaire->getRefPersonnel();
+            $this->fraisPort = $refAffaire->getFraisPort();
+            $this->remise = $refAffaire->getRemise();
 
             $conditionReglement = $refAffaire->getRefConditionReglement();
             // var_dump($conditionReglement->getIntituleConditionReglement());die();
@@ -594,8 +596,6 @@ class Devis
         $affaire                            = (!empty($refAffaire)) ? $refAffaire : null;
         $personnel                          = (!empty($refPersonnel)) ? $refPersonnel : null;
 
-        // $centreProfit                       = (!empty($affaire)) ? $affaire->getRefCentreProfit()->getNumero() : null;
-
         $dateDevis                          = $data['date_devis'];
         $version                            = (!empty($data['version'])) ? $data['version'] : $this->getVersionDevisMax($em,$affaire)+1;
         $codeDevis                          = (!empty($data['code_devis'])) ? $data['code_devis'].'-'.$version : null;
@@ -651,5 +651,73 @@ class Devis
         $numero = (int) $query->getSingleScalarResult()/* + 1*/; // retourne plusieurs résultat sous forme de tableau
 
         return $numero;
+    }
+
+    public function getRefLignesAffaire($sm)
+    {
+        $id = (int) $this->getId();
+        $query =   
+            "SELECT ref_ligne_affaire FROM ligne_devis
+             WHERE ref_devis = $id "
+        ;
+
+        $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+        $results    = $statement->execute();
+
+        if($results->isQueryResult())
+        {
+            $resultSet=new ResultSet;
+            $resultSet->initialize($results);
+            return $resultSet->toArray();
+        }
+
+        return array();
+    }
+
+    public function getLignesDevis($sm)
+    {
+        $id = (int) $this->getId();
+        $query =   
+            "SELECT * FROM ligne_devis
+             WHERE ref_devis = $id "
+        ;
+
+        $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+        $results    = $statement->execute();
+
+        if($results->isQueryResult())
+        {
+            $resultSet=new ResultSet;
+            $resultSet->initialize($results);
+            return $resultSet->toArray();
+        }
+
+        return array();
+    }
+
+    public function removeLigneDevis($sm, $idLigne = null)
+    {
+        $id = (int) $this->getId();
+        $query =   
+            "DELETE FROM ligne_devis
+             WHERE ref_devis = $id "
+        ;
+
+        if(!is_null($idLigne))
+        {
+            $query .= " AND id = $idLigne ";
+        }
+
+        $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+        return $statement->execute();
+
+        // if($results->isQueryResult())
+        // {
+        //     $resultSet=new ResultSet;
+        //     $resultSet->initialize($results);
+        //     return $resultSet->toArray();
+        // }
+
+        // return array();
     }
 }

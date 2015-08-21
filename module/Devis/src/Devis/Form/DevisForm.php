@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-08-20 11:18:43
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-20 16:24:06
+ * @Last Modified time: 2015-08-21 11:58:00
  */
 
 namespace Devis\Form;
@@ -110,92 +110,6 @@ class DevisForm extends Form
 						$options=array();
 						switch($field)
 						{
-							// case 'ref_centre_profit':
-							// 	$c = new \Affaire\Entity\CentreDeProfit;
-							// 	$centres = $c->getCentresProfit($sm);
-							// 	if(is_array($centres)&&count($centres)>0)
-							// 	{
-							// 		foreach($centres as $centre)
-							// 		{
-							// 			$options[]=array(
-							// 				'value'=>$centre['id'],
-							// 				'label'=>$translator->translate($centre['intitule_centre'])
-							// 			);
-							// 		}
-							// 	}
-							// 	if($affaire->getRefCentreProfit())
-							// 	{						
-							// 		$element['attributes']['disabled']='disabled';
-							// 	}
-							// break;
-							// case 'code_client':
-							// 	$c=new \Client\Entity\Client;
-							// 	$codes=$c->getCodesClient($sm);
-							// 	if(is_array($codes)&&count($codes)>0)
-							// 	{
-							// 		foreach($codes as $code)
-							// 		{
-							// 			$options[]=array(
-							// 				'value'=>$code['code_client'],
-							// 				'label'=>$code['code_client']
-							// 			);
-							// 			$options[0]['value']=0;
-							// 			$options[0]['label']='['.$translator->translate('Pas de code').']';
-							// 		}
-							// 	}
-							// 	if($affaire->getRefClient())
-							// 	{
-							// 		$element['attributes']['disabled']='disabled';
-							// 	}
-							// break;
-							// case 'ref_client':
-							// 	$c=new \Client\Entity\Client;
-							// 	$clients = array();
-							// 	if($affaire->getRefClient())
-							// 	{
-							// 		$c=$affaire->getRefClient();
-							// 		$codeClient=$c->getCodeClient();
-
-							// 		$clients=$c->getClientsFromForms($sm,$codeClient,$c->getRaisonSociale());
-							// 		$element['attributes']['disabled']='disabled';
-							// 	}
-							// 	else
-							// 	{
-							// 		$clients=$c->getClientsFromForms($sm);
-							// 	}
-							// 	if(is_array($clients)&&count($clients)>0)
-							// 	{
-							// 		foreach($clients as $client)
-							// 		{
-							// 			$options[]=array(
-							// 				'value'=>$client['id'],
-							// 				'label'=>$client['societe']
-							// 			);
-							// 		}
-							// 	}
-							// break;
-							// case 'ref_interlocuteur':
-							// 	$i=new \Client\Entity\InterlocuteurClient;
-							// 	$interlocuteurs = array();
-							// 	if($affaire->getRefClient())
-							// 	{
-							// 		$interlocuteurs=$i->getNomsInterlocuteurs($sm,$affaire->getRefClient()->getId());
-							// 	}
-							// 	else
-							// 	{
-							// 		$interlocuteurs=$i->getNomsInterlocuteurs($sm);
-							// 	}
-							// 	if(is_array($interlocuteurs)&&count($interlocuteurs)>0)
-							// 	{
-							// 		foreach($interlocuteurs as $interlocuteur)
-							// 		{
-							// 			$options[]=array(
-							// 				'value'=>$interlocuteur['id'],
-							// 				'label'=>$interlocuteur['nom_complet']
-							// 			);
-							// 		}
-							// 	}
-							// break;
 							case 'ref_personnel':
 								$p = new \Personnel\Entity\Personnel;
 								$personnels = $p->getNomsPersonnels($sm);
@@ -263,19 +177,46 @@ class DevisForm extends Form
 			{
 				if($field == 'numero_affaire')
 				{
+					$affaire = $devis->getRefAffaire();
+					if($affaire)
+					{
+						$value = $affaire->getRefClient()->getRaisonSociale().' - '.$affaire->getNumeroAffaire();
+						if($affaire->getDesignationAffaire())
+						{
+							$value .= ' - '.$affaire->getDesignationAffaire();
+						}
+						$element['attributes']['value']= $value;
+						$element['attributes']['disabled'] = 'disabled';
+					}
+				}
+				elseif($field == 'code_devis')
+				{
 					$value=$devis->getRefAffaire();
 					if($value)
 					{
-						$element['attributes']['value']='['.$value->getNumeroAffaire().'] '.$value->getDesignationAffaire();
+						$element['attributes']['value']= $value->getNumeroAffaire();
+						$element['attributes']['disabled'] = 'disabled';
 					}
 				}
-				elseif($field == 'version')
+				elseif($field == 'version' && is_null($devis->getVersion()))
 				{
 					$value=$devis->getVersion();
 					if(!$value)
 					{
 						$element['attributes']['value']=$devis->getVersionDevisMax($em,$devis->getRefAffaire()) + 1;
 					}
+				}
+				elseif($field == 'duree_validite_prix')
+				{
+					$value=$devis->getDureeValiditePrix();
+					if(!$value)
+					{
+						// var_dump($value);die();
+						// IMPORTANT : la durée doit être administrable par l'utilisateur, 
+						// il faut donc la stocker et la récupérer quelque part dans ce formulaire !!!
+						$value = $translator->translate('1 mois');
+					}
+					$element['attributes']['value'] = $value;
 				}
 				else
 				{

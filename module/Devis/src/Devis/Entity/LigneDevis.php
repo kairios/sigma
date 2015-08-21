@@ -40,21 +40,21 @@ class LigneDevis
      *
      * @ORM\Column(name="quantite", type="integer", nullable=false)
      */
-    private $quantite = '1';
+    private $quantite = 1;
 
     /**
      * @var float
      *
      * @ORM\Column(name="prix_vente", type="float", precision=10, scale=0, nullable=false)
      */
-    private $prixVente = '0';
+    private $prixVente = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="total_prix_vente", type="float", precision=10, scale=0, nullable=false)
      */
-    private $totalPrixVente = '0';
+    private $totalPrixVente = 0;
 
     /**
      * @var string
@@ -78,7 +78,7 @@ class LigneDevis
      *
      * @ORM\ManyToOne(targetEntity="Affaire\Entity\LigneAffaire")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_devis", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ref_ligne_affaire", referencedColumnName="id")
      * })
      */
     private $refLigneAffaire;
@@ -91,6 +91,18 @@ class LigneDevis
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @return LigneDevis 
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -165,7 +177,7 @@ class LigneDevis
     /**
      * Set prixVente
      *
-     * @param float $prixVente
+     * @param float $prixVenteLigneAffaire
      * @return LigneDevis
      */
     public function setPrixVente($prixVente)
@@ -260,7 +272,7 @@ class LigneDevis
      * @param \Affaire\Entity\LigneAffaire $refLigneAffaire
      * @return LigneDevis
      */
-    public function setRefDevis(\Affaire\Entity\LigneAffaire $refLigneAffaire = null)
+    public function setRefLigneAffaire(\Affaire\Entity\LigneAffaire $refLigneAffaire = null)
     {
         $this->refLigneAffaire = $refLigneAffaire;
     
@@ -272,9 +284,54 @@ class LigneDevis
      *
      * @return \Affaire\Entity\LigneAffaire 
      */
-    public function getRefDevis()
+    public function getRefLigneAffaire()
     {
         return $this->refLigneAffaire;
     }
+
+    /**
+     * Convert the object to an array.
+     *
+     * @return array
+     */
+    public function getArrayCopy() 
+    {
+        $idDevis = $this->getRefDevis();
+        if(!(empty($idDevis)))
+            $idDevis=$idDevis->getId();
+
+        $idLigneAffaire = $this->getRefLigneAffaire();
+        if(!(empty($idLigneAffaire)))
+            $idLigneAffaire=$idLigneAffaire->getId();
+
+        return array(
+            'id_ligne_devis'            =>  $this->getId(),
+            'code_produit'              =>  $this->getCodeProduit(),
+            'intitule_produit'          =>  $this->getIntituleProduit(),
+            'quantite'                  =>  $this->getQuantite(),
+            'prix_vente'                =>  $this->getPrixVente(),
+            'total_prix_vente'          =>  $this->getTotalPrixVente(),
+            'remarques'                 =>  $this->getRemarques(),
+            'ref_devis'                 =>  $idDevis,
+            'ref_ligne_affaire'         =>  $idLigneAffaire
+        );
+    }
+  
+    /**
+     * Populate from an array.
+     *
+     * @param array $data
+     */
+    public function exchangeProperties($ligneAffaire) 
+    {
+        $this->setRefLigneAffaire($ligneAffaire);
+        $this->setCodeProduit($ligneAffaire->getCodeProduit());
+        $this->setIntituleProduit($ligneAffaire->getIntituleLigne());
+        $this->setQuantite($ligneAffaire->getQuantitePrevue());
+        $this->setPrixVente($ligneAffaire->getPrixUnitaireVente());
+        $this->setTotalPrixVente($ligneAffaire->getPrixVentePrevu());
+        $this->setRemarques($ligneAffaire->getRemarques());
+    }
 }
-}
+
+?>

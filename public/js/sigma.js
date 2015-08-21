@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:49:48
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-20 17:50:12
+* @Last Modified time: 2015-08-21 09:17:36
 */
 
 'use strict';
@@ -2296,6 +2296,41 @@ var sigma={
 					}
 				});
 			},
+			setAutocompletionAffaire:function()
+			{
+
+				$('#numero_affaire').autocomplete({
+					source:function(request,response)
+					{
+						$.ajax({
+							url:'/autocompletion_affaire',
+							dataType:'json',
+							data:{ motCle:request.term,maxRows:10 },
+							type:'GET',
+							success:function(data)
+							{
+								var suggestions = eval(data.resultat);
+								response($.map(suggestions,function(item){
+									return {
+										label:item.numero_affaire,
+										value:function()
+										{
+											$('#ref_affaire').val(item.id);
+											return item.numero_affaire;
+										}
+									}
+								}));
+							},
+							error:function(xml,status,message)
+							{
+								alert(message);
+							}
+						});
+					},
+					minLength:3,
+					delay:600
+				});
+			},
 			// setModalLigneAffaire:function(){
 			// 	// Requète ajax
 			// },
@@ -2539,7 +2574,7 @@ var sigma={
 						
 
 				        // Recherche d'affaires par client et numéro d'affaire
-						sigma.controller.ficheHeure.setAutocompletionAffaire();
+						sigma.controller.affaire.setAutocompletionAffaire();
 						// Permet de réinitialiser la valeur de ref_affaire 
 						// (en prévision de recherches)
 						$('#numero_affaire').on('change',function(){ 
@@ -2866,41 +2901,6 @@ var sigma={
 					}
 				});
 			},
-			setAutocompletionAffaire:function()
-			{
-
-				$('#numero_affaire').autocomplete({
-					source:function(request,response)
-					{
-						$.ajax({
-							url:'/autocompletion_affaire',
-							dataType:'json',
-							data:{ motCle:request.term,maxRows:10 },
-							type:'GET',
-							success:function(data)
-							{
-								var suggestions = eval(data.resultat);
-								response($.map(suggestions,function(item){
-									return {
-										label:item.numero_affaire,
-										value:function()
-										{
-											$('#ref_affaire').val(item.id);
-											return item.numero_affaire;
-										}
-									}
-								}));
-							},
-							error:function(xml,status,message)
-							{
-								alert(message);
-							}
-						});
-					},
-					minLength:3,
-					delay:600
-				});
-			},
 			convertInEvents:function(saisiesPHP)
 			{
 				var saisiesJSON = [];
@@ -2994,10 +2994,21 @@ var sigma={
 					case 'listedevis':
 					break;
 					case 'formulairedevis':
+						// Recherche d'affaires par client et numéro d'affaire
+						sigma.controller.affaire.setAutocompletionAffaire();
+						// Permet de réinitialiser la valeur de ref_affaire 
+						// (en prévision de recherches)
+						$('#numero_affaire').on('change',function(){ 
+							if( $('#numero_affaire').val() == "" ){
+								$('#ref_affaire').val("");
+							}
+						});
+
 						sigma.controller.devis.calculTotauxForms();
 						$('#frais_port, #remise, input[name="ligne-affaire[]"]').on('change',function(){
 							sigma.controller.devis.calculTotauxForms();
 						});
+
 						$('#devis-submit-button').on('click',function(){
 							$('#devis-form').find(':input:disabled').removeAttr('disabled');
 						});
