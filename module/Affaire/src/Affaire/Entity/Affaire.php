@@ -935,7 +935,7 @@ class Affaire
     public function getAffairesFicheHeure($sm, $motCle = null)
     {
         $query =   
-            "SELECT a.id, CONCAT_WS(' - ', c.raison_sociale, a.numero_affaire) as numero_affaire
+            "SELECT a.id, CONCAT_WS(' - ', c.raison_sociale, a.numero_affaire, a.designation_affaire) as numero_affaire
              FROM affaire AS a
                 LEFT JOIN client AS c
                     ON a.ref_client = c.id
@@ -945,7 +945,8 @@ class Affaire
         if(!is_null($motCle))
         {
             $query.=  " AND (a.numero_affaire LIKE '%$motCle%'
-                        OR c.raison_sociale LIKE '%$motCle%') ";
+                        OR c.raison_sociale LIKE '%$motCle%'
+                        OR a.designation_affaire LIKE '%$motCle%') ";
         }
 
         $query.=  " ORDER BY numero_affaire ASC ";
@@ -976,7 +977,7 @@ class Affaire
         return $numero;
     }
 
-     public function alreadyExisteNumero($numero, $em = null)
+    public function alreadyExisteNumero($numero, $em = null)
     {
         $query = $em->createQuery("SELECT COUNT(a.numeroAuto) as numero_max FROM Affaire\Entity\Affaire a WHERE a.numeroAuto = :numero");
         $query->setParameter('numero',$numero);
@@ -995,6 +996,29 @@ class Affaire
     //     // qui retourne un tableau de tableaux.
     //     return $query->getResult(); 
     // }
+
+    public function getListeDevis($sm)
+    {
+        $id = (int) $this->getId();
+        $query =   
+            "SELECT id, code_devis, version, date_devis, date_envoi, date_signature, remarques
+             FROM devis
+             WHERE ref_affaire = $id
+             ORDER BY version ASC "
+        ;
+
+        $statement  = $sm->get('Zend\Db\Adapter\Adapter')->query($query);
+        $results    = $statement->execute();
+
+        if($results->isQueryResult())
+        {
+            $resultSet=new ResultSet;
+            $resultSet->initialize($results);
+            return $resultSet->toArray();
+        }
+
+        return array();
+    }
 
 }
 

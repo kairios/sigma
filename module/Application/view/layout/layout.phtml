@@ -69,6 +69,9 @@
                     case 'iCheck':
                         $this->headLink()->appendStylesheet('/css/Inspinia/plugins/iCheck/custom.css');
                     break;
+                    case 'datapicker':
+                        $this->headLink()->appendStylesheet('/css/Inspinia/plugins/datapicker/datepicker3.css');
+                    break;
                     // case 'summernote':
                     //     $this->headLink()
                     //         ->appendStylesheet('/css/Inspinia/plugins/summernote/summernote.css')
@@ -416,14 +419,18 @@
                             ->appendFile($this->basePath('js/Inspinia/plugins/morris/raphael-2.1.0.min.js'))
                             ->appendFile($this->basePath('js/Inspinia/plugins/morris/morris.js'));
                     break;
-                    case 'summernote':
-                        $this->headScript()
-                            ->appendFile($this->basePath('js/Inspinia/plugins/summernote/summernote.min.js'));
-                    break;
+                    // case 'summernote':
+                    //     $this->headScript()
+                    //         ->appendFile($this->basePath('js/Inspinia/plugins/summernote/summernote.min.js'));
+                    // break;
                     // case 'footable':
                     //     $this->headScript()
                     //         ->appendFile($this->basePath('js/Inspinia/plugins/footable/footable.all.min.js')); // Gestion de tables dont les lignes se rétractent et se développent
                     // break;
+                    case 'datapicker':
+                        $this->headScript()
+                            ->appendFile($this->basePath('js/Inspinia/plugins/datapicker/bootstrap-datepicker.js'));
+                    break;
                 }
             }
             $this->headScript()

@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-30 09:31:09
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-20 10:55:14
+ * @Last Modified time: 2015-08-21 12:36:37
  */
 
 namespace Affaire\Controller;
@@ -101,6 +101,8 @@ class IndexController extends AbstractActionController
     public function listeaffaireAction()
     {
         $affaire = new Affaire();
+        $session = new Container('affaire');
+        $session->offsetSet('id',null);
 
         //Si la requète n'est pas de type AJAX, on n'effectue pas de recherche
         if(!$this->getRequest()->isXmlHttpRequest())
@@ -244,6 +246,7 @@ class IndexController extends AbstractActionController
         $translator     = $this->getServiceLocator()->get('Translator');
         // Récupération de la session de l'utilisateur
         $utilisateur    = new Container('utilisateur');
+        $session        = new Container('affaire');
 
         $id = (int)$this->params()->fromRoute('id');
         $affaire = $this->getEntityManager()->getRepository('Affaire\Entity\Affaire')->find($id);
@@ -251,6 +254,7 @@ class IndexController extends AbstractActionController
         {
             throw new \Exception($this->getServiceLocator()->get('Translator')->translate('Cette affaire n\'existe pas'));
         }
+        $session->offsetSet('id',$id);
 
         //Assign variables to layout
         $this->layout()->setVariables(array(
@@ -271,7 +275,8 @@ class IndexController extends AbstractActionController
             'id'=>$id,
             'form'=>$form,
             'affaire'=>$affaire,
-            'adresse'=>$adressePrincipale
+            'adresse'=>$adressePrincipale,
+            'listeDevis'=>$affaire->getListeDevis($sm)
         ));
     }
 

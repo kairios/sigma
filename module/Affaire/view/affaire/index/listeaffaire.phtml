@@ -96,7 +96,7 @@
 										<td><?php echo (isset($affaire['code_postal']))?$affaire['code_postal']:''; ?></td>
 										<td><?php echo (isset($affaire['ville']))?$affaire['ville']:''; ?></td>
 										<td><?php echo (isset($affaire['pays']))?$affaire['pays']:''; ?></td>
-										<td><?php echo (isset($affaire['ref_devis_signe']) && !is_null($affaire['ref_devis_signe']) ) ? '<i class="fa fa-check"></i>' : ''; ?></td> <!-- fa-check instead -->
+										<td class="bool"><?php echo (isset($affaire['ref_devis_signe']) && !is_null($affaire['ref_devis_signe']) ) ? '<i class="fa fa-check"></i>' : ''; ?></td> <!-- fa-check instead -->
 										<td><?php echo (isset($affaire['intitule_etat']))?$affaire['intitule_etat']:''; ?></td>
 										<td class="actions">
                                             <a href="<?php echo $this->url('affaire/consulter_affaire',array('id'=>$affaire['id'])); ?>"><i class="fa fa-eye fa-lg"></i></a>

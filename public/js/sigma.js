@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:49:48
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-20 10:56:42
+* @Last Modified time: 2015-08-21 12:17:22
 */
 
 'use strict';
@@ -166,6 +166,9 @@ var sigma={
 				break;
 				case 'fiche_heure':
 					this.ficheHeure.init();
+				break;
+				case 'devis':
+					this.devis.init();
 				break;
 			}
 
@@ -2293,6 +2296,41 @@ var sigma={
 					}
 				});
 			},
+			setAutocompletionAffaire:function()
+			{
+
+				$('#numero_affaire').autocomplete({
+					source:function(request,response)
+					{
+						$.ajax({
+							url:'/autocompletion_affaire',
+							dataType:'json',
+							data:{ motCle:request.term,maxRows:10 },
+							type:'GET',
+							success:function(data)
+							{
+								var suggestions = eval(data.resultat);
+								response($.map(suggestions,function(item){
+									return {
+										label:item.numero_affaire,
+										value:function()
+										{
+											$('#ref_affaire').val(item.id);
+											return item.numero_affaire;
+										}
+									}
+								}));
+							},
+							error:function(xml,status,message)
+							{
+								alert(message);
+							}
+						});
+					},
+					minLength:3,
+					delay:600
+				});
+			},
 			// setModalLigneAffaire:function(){
 			// 	// Requète ajax
 			// },
@@ -2536,7 +2574,7 @@ var sigma={
 						
 
 				        // Recherche d'affaires par client et numéro d'affaire
-						sigma.controller.ficheHeure.setAutocompletionAffaire();
+						sigma.controller.affaire.setAutocompletionAffaire();
 						// Permet de réinitialiser la valeur de ref_affaire 
 						// (en prévision de recherches)
 						$('#numero_affaire').on('change',function(){ 
@@ -2863,41 +2901,6 @@ var sigma={
 					}
 				});
 			},
-			setAutocompletionAffaire:function()
-			{
-
-				$('#numero_affaire').autocomplete({
-					source:function(request,response)
-					{
-						$.ajax({
-							url:'/autocompletion_affaire',
-							dataType:'json',
-							data:{ motCle:request.term,maxRows:10 },
-							type:'GET',
-							success:function(data)
-							{
-								var suggestions = eval(data.resultat);
-								response($.map(suggestions,function(item){
-									return {
-										label:item.numero_affaire,
-										value:function()
-										{
-											$('#ref_affaire').val(item.id);
-											return item.numero_affaire;
-										}
-									}
-								}));
-							},
-							error:function(xml,status,message)
-							{
-								alert(message);
-							}
-						});
-					},
-					minLength:3,
-					delay:600
-				});
-			},
 			convertInEvents:function(saisiesPHP)
 			{
 				var saisiesJSON = [];
@@ -2984,6 +2987,58 @@ var sigma={
 				});
 			},
 		},
+		devis:{
+			init:function(){
+				switch(_action)
+				{
+					case 'listedevis':
+					break;
+					case 'formulairedevis':
+						$('.input-group.date').datepicker({
+							format: 'mm/dd/yyyy',
+			                todayBtn: "linked",
+			                keyboardNavigation: false,
+			                forceParse: false,
+			                calendarWeeks: true,
+			                autoclose: true
+			            });
+
+						// Recherche d'affaires par client et numéro d'affaire
+						sigma.controller.affaire.setAutocompletionAffaire();
+						// Permet de réinitialiser la valeur de ref_affaire 
+						// (en prévision de recherches)
+						$('#numero_affaire').on('change',function(){ 
+							if( $('#numero_affaire').val() == "" ){
+								$('#ref_affaire').val("");
+							}
+						});
+
+						sigma.controller.devis.calculTotauxForms();
+						$('#frais_port, #remise, input[name="ligne-affaire[]"]').on('change',function(){
+							sigma.controller.devis.calculTotauxForms();
+						});
+
+						$('#devis-submit-button').on('click',function(){
+							$('#devis-form').find(':input:disabled').removeAttr('disabled');
+						});
+					break;
+				}
+			},
+			calculTotauxForms:function()
+			{
+				var totalLignes = 0;
+				
+				$('input[name="ligne-affaire[]"]:checked').each(function() {
+					totalLignes += parseFloat($(this).attr('data-vente'));
+				});
+
+				totalLignes -= parseFloat($('#remise').val());
+				$('.total-hp').text(totalLignes);
+
+				totalLignes += parseFloat($('#frais_port').val())
+				$('.total-ap').text(totalLignes);
+			}
+		}
 	},
 	// Initialisation de l'API Sigma V2.0
 	init:function(){

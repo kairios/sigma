@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-07-13 10:31:47
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-19 18:34:38
+ * @Last Modified time: 2015-08-20 12:48:01
  */
 
 // module\Affaire\src\Affaire\Model\LigneAffaireModel.php
@@ -80,9 +80,9 @@ class LigneAffaireModel implements InputFilterAwareInterface
 							array(
 								'name'=>'Regex',
 								'options'=>array(
-									'pattern'=>'/^[0-9]+([\.,][0-9]){0,1}$/',
+									'pattern'=>'/^[0-9]+([\.,][0-9]{1,2}){0,1}$/',
 									'messages'=>array(
-										'regexNotMatch'=>'Vous devez entrer un décimal valide (0,5 ou 1.5...) [A CHANGER !!]'
+										'regexNotMatch'=>'Vous devez entrer un décimal valide (10, 10.0, 5,07...)'
 									)
 								)
 							)

@@ -1,6 +1,6 @@
 <div class="ibox float-e-margins">
 	<div class="ibox-title">
-		<h5>Devis</h5>
+		<h5><?php echo $this->translate('Devis'); ?></h5>
 		<div class="ibox-tools">
 			<a class="collapse-link">
 				<i class="fa fa-chevron-up"></i>
@@ -11,62 +11,49 @@
 		</div>
 	</div>
 	<div class="ibox-content table-responsive">
-		<em class="text-info">
-			<i class="fa fa-pencil"></i>
-			<?php echo $this->translate('Date signature:'); ?> 03/07/2015
-		</em>
-		<table class="table table-hover no-margins">
-			<thead>
-				<th>Code devis</th>
-				<th>Date creation</th>
-				<th class="bool">Version</th>
-				<th class="bool">Envoyé</th>
-				<th class="bool">Signé</th>
-				<th class="bool">#</th>
-			</thead>
-			<tbody>
-				<tr>
-					<td>13-1234-1</td>
-					<td>
-						<i class="fa fa-clock-o"></i>
-						10/06/2015
-					</td>
-					<td class="bool">1</td>
-					<td class="bool">
-						<input type="checkbox" name="etat" value="1" checked>
-					</td>
-					<td class="bool">
-						<input type="checkbox" name="etat" value="1">
-					</td>
-					<td class="bool">
-						<a href="#"><i class="fa fa-eye"></i></a>
-						<a href="#"><i class="fa fa-pencil"></i></a>
-						<a href="#"><i class="fa fa-trash"></i></a>
-					</td>
-				</tr>
-				<tr>
-					<td>13-1234-2</td>
-					<td>
-						<i class="fa fa-clock-o"></i>
-						30/06/2015
-					</td>
-					<td class="bool">2</td>
-					<td class="bool">
-						<input type="checkbox" name="etat" value="1" checked>
-					</td>
-					<td class="bool">
-						<input type="checkbox" name="etat" value="1" checked>
-					</td>
-					<td class="bool">
-						<a href="#"><i class="fa fa-eye"></i></a>
-						<a href="#"><i class="fa fa-pencil"></i></a>
-						<a href="#"><i class="fa fa-trash"></i></a>
-					</td>
-				</tr>
-				<tr></tr>
-			</tbody>
-		</table>
-		<a href="#">
+		<?php if(!empty($affaire->getRefDevisSigne())) : ?>
+			<em class="text-info">
+				<i class="fa fa-pencil"></i>
+				<?php echo $this->translate('Date signature: ').date('d/m/Y',$affaire->getRefDevisSigne()->getDateSignature()); ?>
+			</em>
+		<?php endif; ?>
+		<?php if(sizeof($this->listeDevis)>0) : ?>
+			<table class="table table-hover no-margins">
+				<thead>
+					<th><?php echo $this->translate('Code devis'); ?></th>
+					<th><?php echo $this->translate('Date creation'); ?></th>
+					<th class="bool"><?php echo $this->translate('Version'); ?></th>
+					<th class="bool"><?php echo $this->translate('Envoyé'); ?></th>
+					<th class="bool"><?php echo $this->translate('Signé'); ?></th>
+					<th class="bool">#</th>
+				</thead>
+				<tbody>
+					<?php foreach($this->listeDevis as $devis): ?>
+						<tr <?php echo (!empty($devis['remarques'])) ? 'title="'.$devis['remarques'].'"' : ''; ?>>
+							<td><?php echo $devis['code_devis']; ?></td>
+							<td>
+								<i class="fa fa-clock-o"></i>
+								<?php echo date('d/m/Y',$devis['date_devis']); ?>
+							</td>
+							<td class="bool"><?php echo $devis['version']; ?></td>
+							<td class="bool">
+								<input type="checkbox" name="envoye" value="1" <?php echo (!empty($devis['date_envoi'])) ? 'checked' : ''; ?>>
+							</td>
+							<td class="bool">
+								<input type="checkbox" name="signe" value="1" <?php echo (!empty($devis['date_signature'])) ? 'checked' : ''; ?>>
+							</td>
+							<td class="bool">
+								<a href="<?php echo $this->url('formulaire_devis', array('id'=>$devis['id'])); ?>"><i class="fa fa-pencil"></i></a>
+								<a href="#"><i class="fa fa-trash"></i></a>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		<?php else : ?>
+			<p><?php echo $this->translate('Aucun devis pour le moment.'); ?></p>
+		<?php endif; ?>
+		<a href="<?php echo $this->url('formulaire_devis'); ?>">
 			<i class="fa fa-plus"></i>
 			<?php echo $this->translate('Ajouter'); ?>
 		</a>

@@ -750,4 +750,15 @@ class Affaire extends \Affaire\Entity\Affaire implements \Doctrine\ORM\Proxy\Pro
         return parent::alreadyExisteNumero($numero, $em);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getListeDevis($sm)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getListeDevis', array($sm));
+
+        return parent::getListeDevis($sm);
+    }
+
 }

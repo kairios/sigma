@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:50:12
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-14 11:36:18
+* @Last Modified time: 2015-08-20 17:02:46
 */
 
                                                 /*********************************************************/
@@ -339,7 +339,8 @@ select option:first-child[value=""] {
 }
 
 /********** Formulaire Client, pour Sous-entités ************/
-span.entite
+span.entite,
+label.entite
 {
     display:block;
     border:1px solid;
