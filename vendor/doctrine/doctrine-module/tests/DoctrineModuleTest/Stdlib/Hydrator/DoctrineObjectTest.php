@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineObjectHydrator;
 use DoctrineModule\Stdlib\Hydrator\Strategy;
 use DoctrineModule\Stdlib\Hydrator\Filter;
+use DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity;
+use Zend\Stdlib\Hydrator\NamingStrategy\UnderscoreNamingStrategy;
 
 class DoctrineObjectTest extends BaseTestCase
 {
@@ -39,8 +41,8 @@ class DoctrineObjectTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->metadata         = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $this->objectManager    = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->metadata      = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $this->objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         $this->objectManager->expects($this->any())
                             ->method('getClassMetadata')
@@ -105,7 +107,63 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
+            $this->objectManager,
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            false
+        );
+    }
+
+    public function configureObjectManagerForNamingStrategyEntity()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity');
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\NamingStrategyEntity'));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array()));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('camelCase')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->equalTo('camelCase'))
+            ->will($this->returnValue('string'));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('camelCase')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
         );
@@ -173,7 +231,75 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
+            $this->objectManager,
+            true
+        );
+        $this->hydratorByReference = new DoctrineObjectHydrator(
+            $this->objectManager,
+            false
+        );
+    }
+
+    public function configureObjectManagerForSimpleEntityWithIsBoolean()
+    {
+        $refl = new ReflectionClass('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithIsBoolean');
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithIsBoolean'));
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getAssociationNames')
+            ->will($this->returnValue(array()));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getFieldNames')
+            ->will($this->returnValue(array('id', 'isActive')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getTypeOfField')
+            ->with($this->logicalOr($this->equalTo('id'), $this->equalTo('isActive')))
+            ->will(
+                $this->returnCallback(
+                    function ($arg) {
+                        if ('id' === $arg) {
+                            return 'integer';
+                        } elseif ('isActive' === $arg) {
+                            return 'boolean';
+                        }
+
+                        throw new \InvalidArgumentException();
+                    }
+                )
+            );
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('hasAssociation')
+            ->will($this->returnValue(false));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getIdentifierFieldNames')
+            ->will($this->returnValue(array('id')));
+
+        $this
+            ->metadata
+            ->expects($this->any())
+            ->method('getReflectionClass')
+            ->will($this->returnValue($refl));
+
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
         );
@@ -292,7 +418,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getReflectionClass')
             ->will($this->returnValue($refl));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
         );
@@ -382,7 +508,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getIdentifier')
             ->will($this->returnValue(array("id")));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
         );
@@ -486,7 +612,7 @@ class DoctrineObjectTest extends BaseTestCase
             ->method('getIdentifier')
             ->will($this->returnValue(array("id")));
 
-        $this->hydratorByValue = new DoctrineObjectHydrator(
+        $this->hydratorByValue     = new DoctrineObjectHydrator(
             $this->objectManager,
             true
         );
@@ -691,7 +817,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertEquals(array('id' => 3, 'field' => 'bar'), $hydrator->extract($entity));
 
         $hydrator->addStrategy('id', new ContextStrategy());
-        $entity   = $hydrator->hydrate(array('id' => 3, 'field' => 'bar'), $entity);
+        $entity = $hydrator->hydrate(array('id' => 3, 'field' => 'bar'), $entity);
         $this->assertEquals(array('id' => '3barbar', 'field' => 'bar'), $hydrator->extract($entity));
     }
 
@@ -800,6 +926,34 @@ class DoctrineObjectTest extends BaseTestCase
             ->expects($this->once())
             ->method('find')
             ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', array('id' => 1))
+            ->will($this->returnValue($entityInDatabaseWithIdOfOne));
+
+        $entity = $this->hydratorByValue->hydrate($data, $entity);
+
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', $entity);
+        $this->assertEquals('bar', $entity->getField(false));
+    }
+
+    /**
+     * Test for https://github.com/doctrine/DoctrineModule/issues/456
+     */
+    public function testReuseExistingEntityIfDataArrayContainsIdentifierWithZeroIdentifier()
+    {
+        // When using hydration by reference, it won't use the public API of the entity to set values (setters)
+        $entity = new Asset\SimpleEntity();
+
+        $this->configureObjectManagerForSimpleEntity();
+        $data = array('id' => 0);
+
+        $entityInDatabaseWithIdOfOne = new Asset\SimpleEntity();
+        $entityInDatabaseWithIdOfOne->setId(0);
+        $entityInDatabaseWithIdOfOne->setField('bar', false);
+
+        $this
+            ->objectManager
+            ->expects($this->once())
+            ->method('find')
+            ->with('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntity', array('id' => 0))
             ->will($this->returnValue($entityInDatabaseWithIdOfOne));
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
@@ -1803,6 +1957,7 @@ class DoctrineObjectTest extends BaseTestCase
                 ''
             )
         );
+
         $entityInDatabaseWithEmptyId = new Asset\SimpleEntity();
         $entityInDatabaseWithEmptyId->setId('');
         $entityInDatabaseWithEmptyId->setField('baz', false);
@@ -1819,7 +1974,7 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\OneToManyEntity', $entity);
 
         $entities = $entity->getEntities(false);
-        $entity = $entities[0];
+        $entity   = $entities[0];
 
         $this->assertEquals(1, count($entities));
 
@@ -1833,7 +1988,7 @@ class DoctrineObjectTest extends BaseTestCase
         $entity = new Asset\SimpleEntityWithDateTime();
         $this->configureObjectManagerForSimpleEntityWithDateTime();
 
-        $now = time();
+        $now  = time();
         $data = array('date' => $now);
 
         $entity = $this->hydratorByValue->hydrate($data, $entity);
@@ -1951,6 +2106,19 @@ class DoctrineObjectTest extends BaseTestCase
         $this->assertEquals(array('id' => 2, 'done' => true), $data);
     }
 
+    public function testCanExtractIsserThatStartsWithIsByValue()
+    {
+        $entity = new Asset\SimpleEntityWithIsBoolean();
+        $entity->setId(2);
+        $entity->setIsActive(true);
+
+        $this->configureObjectManagerForSimpleEntityWithIsBoolean();
+
+        $data = $this->hydratorByValue->extract($entity);
+        $this->assertInstanceOf('DoctrineModuleTest\Stdlib\Hydrator\Asset\SimpleEntityWithIsBoolean', $entity);
+        $this->assertEquals(array('id' => 2, 'isActive' => true), $data);
+    }
+
     public function testExtractWithPropertyNameFilterByValue()
     {
         $entity = new Asset\SimpleEntity();
@@ -1983,5 +2151,41 @@ class DoctrineObjectTest extends BaseTestCase
 
         $this->assertEquals(2, $data['id']);
         $this->assertEquals(array('id'), array_keys($data), 'Only the "id" field should have been extracted.');
+    }
+
+    public function testExtractByReferenceUsesNamingStrategy()
+    {
+        $this->configureObjectManagerForNamingStrategyEntity();
+        $name = 'Foo';
+        $this->hydratorByReference->setNamingStrategy(new UnderscoreNamingStrategy());
+        $data = $this->hydratorByReference->extract(new NamingStrategyEntity($name));
+        $this->assertEquals($name, $data['camel_case']);
+    }
+
+    public function testExtractByValueUsesNamingStrategy()
+    {
+        $this->configureObjectManagerForNamingStrategyEntity();
+        $name = 'Bar';
+        $this->hydratorByValue->setNamingStrategy(new UnderscoreNamingStrategy());
+        $data = $this->hydratorByValue->extract(new NamingStrategyEntity($name));
+        $this->assertEquals($name, $data['camel_case']);
+    }
+
+    public function testHydrateByReferenceUsesNamingStrategy()
+    {
+        $this->configureObjectManagerForNamingStrategyEntity();
+        $name = 'Baz';
+        $this->hydratorByReference->setNamingStrategy(new UnderscoreNamingStrategy());
+        $entity = $this->hydratorByReference->hydrate(array('camel_case' => $name), new NamingStrategyEntity());
+        $this->assertEquals($name, $entity->getCamelCase());
+    }
+
+    public function testHydrateByValueUsesNamingStrategy()
+    {
+        $this->configureObjectManagerForNamingStrategyEntity();
+        $name = 'Qux';
+        $this->hydratorByValue->setNamingStrategy(new UnderscoreNamingStrategy());
+        $entity = $this->hydratorByValue->hydrate(array('camel_case' => $name), new NamingStrategyEntity());
+        $this->assertEquals($name, $entity->getCamelCase());
     }
 }
