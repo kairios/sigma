@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-08-20 11:18:43
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-21 11:58:00
+ * @Last Modified time: 2015-08-21 12:29:04
  */
 
 namespace Devis\Form;
@@ -243,6 +243,10 @@ class DevisForm extends Form
 					}
 					else
 					{
+						if(!empty($value) && ($field == 'date_envoi' || $field == 'date_signature'))
+						{
+							$value = date('d/m/Y',$value);
+						}
 						$element['attributes']['value']=$value;
 					}
 				}

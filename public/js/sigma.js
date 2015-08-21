@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:49:48
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-21 09:17:36
+* @Last Modified time: 2015-08-21 12:17:22
 */
 
 'use strict';
@@ -2994,6 +2994,15 @@ var sigma={
 					case 'listedevis':
 					break;
 					case 'formulairedevis':
+						$('.input-group.date').datepicker({
+							format: 'mm/dd/yyyy',
+			                todayBtn: "linked",
+			                keyboardNavigation: false,
+			                forceParse: false,
+			                calendarWeeks: true,
+			                autoclose: true
+			            });
+
 						// Recherche d'affaires par client et numéro d'affaire
 						sigma.controller.affaire.setAutocompletionAffaire();
 						// Permet de réinitialiser la valeur de ref_affaire 

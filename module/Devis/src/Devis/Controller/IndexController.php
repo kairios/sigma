@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-08-11 18:01:01
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-21 11:59:26
+ * @Last Modified time: 2015-08-21 12:35:46
  */
 
 namespace Devis\Controller;
@@ -139,7 +139,7 @@ class IndexController extends AbstractActionController
                 'breadcrumbActive'  =>  $devis->getCodeDevis(),
                 'action'            =>  'formulairedevis',
                 'module'            =>  'devis',
-                'plugins'           =>  array('jquery-ui'),
+                'plugins'           =>  array('jquery-ui','datapicker'),
             ));
         }
         else
@@ -159,7 +159,7 @@ class IndexController extends AbstractActionController
                 'breadcrumbActive'  =>  $translator->translate('Nouveau devis'),
                 'action'            =>  'formulairedevis',                            
                 'module'            =>  'devis',
-                'plugins'           =>  array('jquery-ui'),
+                'plugins'           =>  array('jquery-ui','datapicker'),
             ));
         }       
 
@@ -204,6 +204,12 @@ class IndexController extends AbstractActionController
                     $devis->setTotalHorsPort($totalDevis);
                     $totalDevis += $devis->getFraisPort();
                     $devis->setTotalAvecPort($totalDevis);
+
+                    if($devis->getDateSignature())
+                    {
+                        $affaire->setRefDevisSigne($devis);
+                        $em->persist($affaire);
+                    }
 
                     $em->persist($devis);
                     $em->flush();

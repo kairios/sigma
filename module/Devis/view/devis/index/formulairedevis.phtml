@@ -186,13 +186,13 @@
 							echo $this->formLabel($form->get('date_envoi'));
 						?>
 						<div class="input-group date">
-							<span class="input-group-addon">
-								<i class="fa fa-calendar"></i>
-							</span>
 							<?php
 								echo $this->formInput($form->get('date_envoi'));
 								echo $this->formElementErrors($form->get('date_envoi'), array('class' => 'liste-erreurs'));
 							 ?>
+							 <span class="input-group-addon">
+								<i class="fa fa-calendar"></i>
+							</span>
 						</div>
 					</div>
 					<div class="form-group col-md-6">
@@ -200,13 +200,13 @@
 							echo $this->formLabel($form->get('date_signature'));
 						?>
 						<div class="input-group date">
-							<span class="input-group-addon">
-								<i class="fa fa-calendar"></i>
-							</span>
 							<?php
 								echo $this->formInput($form->get('date_signature'));
 								echo $this->formElementErrors($form->get('date_signature'), array('class' => 'liste-erreurs'));
 							 ?>
+							 <span class="input-group-addon">
+								<i class="fa fa-calendar"></i>
+							</span>
 						</div>
 					</div>
 				</div>

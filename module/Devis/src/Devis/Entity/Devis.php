@@ -604,9 +604,20 @@ class Devis
         $delaisLivraison                    = (!empty($data['delais_livraison'])) ? $data['delais_livraison'] : null;
         $dureeValidite                      = (!empty($data['duree_validite_prix'])) ? $data['duree_validite_prix'] : null;
         $conditionReglement                 = (!empty($data['condition_reglement'])) ? $data['condition_reglement'] : null;
-        $dateEnvoi                          = (!empty($data['date_envoi'])) ? intval($data['date_envoi']) : null;
-        $dateSignature                      = (!empty($data['date_signature'])) ? intval($data['date_signature']) : null;
         $remarques                          = (!empty($data['remarques'])) ? intval($data['remarques']) : null;
+
+        $dateEnvoi                          = null;
+        $dateSignature                      = null;
+        if(!empty($data['date_envoi']))
+        {
+            list($d,$m,$y) = explode('/', date('d/m/Y'));
+            $dateEnvoi = mktime(4,0,0,(int)$m,(int)$d,(int)$y);
+        }
+        if(!empty($data['date_signature']))
+        {
+            list($d,$m,$y) = explode('/', date('d/m/Y'));
+            $dateSignature = mktime(4,0,0,(int)$m,(int)$d,(int)$y);
+        }
         // $dateCreationModificationFiche      = time();
 
 
