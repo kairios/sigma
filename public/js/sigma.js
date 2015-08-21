@@ -2998,6 +2998,9 @@ var sigma={
 						$('#frais_port, #remise, input[name="ligne-affaire[]"]').on('change',function(){
 							sigma.controller.devis.calculTotauxForms();
 						});
+						$('#devis-submit-button').on('click',function(){
+							$('#devis-form').find(':input:disabled').removeAttr('disabled');
+						});
 					break;
 				}
 			},

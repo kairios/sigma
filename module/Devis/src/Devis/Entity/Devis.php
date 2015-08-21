@@ -518,67 +518,67 @@ class Devis
      */
     public function getArrayCopy() 
     {
-        $idCentre = $this->getRefCentreProfit();
-        if(!(empty($idCentre)))
-            $idCentre=$idCentre->getId();
+        // $idCentre = $this->getRefCentreProfit();
+        // if(!(empty($idCentre)))
+        //     $idCentre=$idCentre->getId();
 
-        $idClient = $this->getRefClient();
-        if(!(empty($idClient)))
-            $idClient=$idClient->getId();
+        // $idClient = $this->getRefClient();
+        // if(!(empty($idClient)))
+        //     $idClient=$idClient->getId();
 
-        $idInterlocuteur = $this->getRefInterlocuteur();
-        if(!(empty($idInterlocuteur)))
-            $idInterlocuteur=$idInterlocuteur->getId();
+        // $idInterlocuteur = $this->getRefInterlocuteur();
+        // if(!(empty($idInterlocuteur)))
+        //     $idInterlocuteur=$idInterlocuteur->getId();
 
-        $idPersonnel = $this->getRefPersonnel();
-        if(!(empty($idPersonnel)))
-            $idPersonnel=$idPersonnel->getId();
+        // $idPersonnel = $this->getRefPersonnel();
+        // if(!(empty($idPersonnel)))
+        //     $idPersonnel=$idPersonnel->getId();
 
-        $idEtat = $this->getRefEtatAffaire();
-        if(!(empty($idEtat)))
-            $idEtat=$idEtat->getId();
+        // $idEtat = $this->getRefEtatAffaire();
+        // if(!(empty($idEtat)))
+        //     $idEtat=$idEtat->getId();
 
-        $idConcurrent = $this->getRefConcurrent();
-        if(!(empty($idConcurrent)))
-            $idConcurrent=$idConcurrent->getId();
+        // $idConcurrent = $this->getRefConcurrent();
+        // if(!(empty($idConcurrent)))
+        //     $idConcurrent=$idConcurrent->getId();
 
-        $idDevis = $this->getRefDevisSigne();
-        if(!(empty($idDevis)))
-            $idDevis=$idDevis->getId();
+        // $idDevis = $this->getRefDevisSigne();
+        // if(!(empty($idDevis)))
+        //     $idDevis=$idDevis->getId();
 
-        $idConditionReglement = $this->getRefConditionReglement();
-        if(!(empty($idConditionReglement)))
-            $idConditionReglement=$idConditionReglement->getId();
+        // $idConditionReglement = $this->getRefConditionReglement();
+        // if(!(empty($idConditionReglement)))
+        //     $idConditionReglement=$idConditionReglement->getId();
 
-        // $idModeReglement = $this->getRefModeReglement();
-        // if(!(empty($idModeReglement)))
-        //     $idModeReglement=$idModeReglement->getId();
+        // // $idModeReglement = $this->getRefModeReglement();
+        // // if(!(empty($idModeReglement)))
+        // //     $idModeReglement=$idModeReglement->getId();
 
-        return array(
-            'id_affaire'                =>  $this->getId(),
-            'numero_auto'               =>  $this->getNumeroAuto(),
-            'numero_affaire'            =>  $this->getNumeroAffaire(),
-            'designation_affaire'       =>  $this->getDesignationAffaire(),
-            'exercice'                  =>  $this->getExercice(),
-            'demande_client'            =>  $this->getDemandeClient(),
-            'remise'                    =>  $this->getRemise(),
-            'frais_port'                =>  $this->getFraisPort(),
-            'reference_commande_client' =>  $this->getReferenceCommandeClient(),
-            'reference_demande_prix'    =>  $this->getReferenceDemandePrix(),
-            'suivi_budget_actif'        =>  $this->getSuiviBudgetActif(),
-            'date_debut'                =>  $this->getDateDebut(),
-            'date_fin'                  =>  $this->getDateFin(),
-            'raison_perte'              =>  $this->getRaisonPerte(),
+        // return array(
+        //     'id_affaire'                =>  $this->getId(),
+        //     'numero_auto'               =>  $this->getNumeroAuto(),
+        //     'numero_affaire'            =>  $this->getNumeroAffaire(),
+        //     'designation_affaire'       =>  $this->getDesignationAffaire(),
+        //     'exercice'                  =>  $this->getExercice(),
+        //     'demande_client'            =>  $this->getDemandeClient(),
+        //     'remise'                    =>  $this->getRemise(),
+        //     'frais_port'                =>  $this->getFraisPort(),
+        //     'reference_commande_client' =>  $this->getReferenceCommandeClient(),
+        //     'reference_demande_prix'    =>  $this->getReferenceDemandePrix(),
+        //     'suivi_budget_actif'        =>  $this->getSuiviBudgetActif(),
+        //     'date_debut'                =>  $this->getDateDebut(),
+        //     'date_fin'                  =>  $this->getDateFin(),
+        //     'raison_perte'              =>  $this->getRaisonPerte(),
 
-            'ref_centre_profit'         =>  $idCentre,
-            'ref_client'                =>  $idClient,
-            'ref_interlocuteur'         =>  $idInterlocuteur,
-            'ref_condition_reglement'   =>  $idConditionReglement,
-            'ref_personnel'             =>  $idPersonnel,
-            'ref_etat_affaire'          =>  $idEtat,
-            'ref_concurrent'            =>  $idConcurrent,
-            'ref_devis_signe'           =>  $idDevis
-        );
+        //     'ref_centre_profit'         =>  $idCentre,
+        //     'ref_client'                =>  $idClient,
+        //     'ref_interlocuteur'         =>  $idInterlocuteur,
+        //     'ref_condition_reglement'   =>  $idConditionReglement,
+        //     'ref_personnel'             =>  $idPersonnel,
+        //     'ref_etat_affaire'          =>  $idEtat,
+        //     'ref_concurrent'            =>  $idConcurrent,
+        //     'ref_devis_signe'           =>  $idDevis
+        // );
     }
   
     /**
@@ -597,8 +597,8 @@ class Devis
         // $centreProfit                       = (!empty($affaire)) ? $affaire->getRefCentreProfit()->getNumero() : null;
 
         $dateDevis                          = $data['date_devis'];
-        $codeDevis                          = (!empty($data['code_devis'])) ? $data['code_devis'] : null;
-        $version                            = (!empty($data['version'])) ? $data['version'] : $this->createNumeroVersionAuto($em);
+        $version                            = (!empty($data['version'])) ? $data['version'] : $this->getVersionDevisMax($em,$affaire)+1;
+        $codeDevis                          = (!empty($data['code_devis'])) ? $data['code_devis'].'-'.$version : null;
         $remise                             = (!empty($data['remise'])) ? $data['remise'] : 0;
         $fraisPort                          = (!empty($data['frais_port'])) ? $data['frais_port'] : 0;
         $delaisLivraison                    = (!empty($data['delais_livraison'])) ? $data['delais_livraison'] : null;
@@ -610,11 +610,14 @@ class Devis
         // $dateCreationModificationFiche      = time();
 
 
-        $this->id = $data['id_affaire'];
-        $this->setCodeDevis($codeDevis);
+        $this->id = $data['id_devis'];
         $this->setDateDevis($dateDevis);
+        // total_hors_port
+        // total_avec_port
+        $this->setCodeDevis($codeDevis);
         $this->setVersion($version);
         $this->setRemise($remise);
+        $this->setFraisPort($fraisPort);
         $this->setDelaisLivraison($delaisLivraison);
         $this->setDureeValiditePrix($dureeValidite);
         $this->setConditionReglement($conditionReglement);
@@ -622,8 +625,8 @@ class Devis
         $this->setDateSignature($dateSignature);
         $this->setRemarques($remarques);
 
-        $this->setRefPersonnel($personnel);
         $this->setRefAffaire($affaire);
+        $this->setRefPersonnel($personnel);
 
         // $this->setDateCreationModificationFiche($dateCreationModificationFiche);
     }
@@ -632,6 +635,20 @@ class Devis
     {
         $query = $em->createQuery("SELECT MAX(d.version) as numero_auto FROM Devis\Entity\Devis d GROUP BY d.refAffaire");
         $numero = (int) $query->getSingleScalarResult() + 1; // retourne plusieurs résultat sous forme de tableau
+
+        return $numero;
+    }
+
+    public function getVersionDevisMax($em, $affaire = null)
+    {
+        if(is_null($affaire))
+        {
+            return 0;
+        }
+
+        $query = $em->createQuery("SELECT MAX(d.version) as numero_auto FROM Devis\Entity\Devis d WHERE d.refAffaire = :refAffaire");
+        $query->setParameter('refAffaire', $affaire);
+        $numero = (int) $query->getSingleScalarResult()/* + 1*/; // retourne plusieurs résultat sous forme de tableau
 
         return $numero;
     }

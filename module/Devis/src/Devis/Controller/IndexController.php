@@ -128,7 +128,16 @@ class IndexController extends AbstractActionController
             // Récupération de l'devis
             $devis = $em->getRepository('Devis\Entity\Devis')->find($id);
             if($devis==null)
-                throw new \Exception($translator->translate('Ce devis n\'existe pas'));            
+                throw new \Exception($translator->translate('Ce devis n\'existe pas'));
+
+            //Assignation de variables au layout
+            $this->layout()->setVariables(array(
+                'headTitle'         =>  $translator->translate('Modifier un devis'),
+                'breadcrumbActive'  =>  $devis->getCodeDevis(),
+                'action'            =>  'formulairedevis',
+                'module'            =>  'devis',
+                'plugins'           =>  array(),
+            ));
         }
         else
         {
@@ -149,16 +158,7 @@ class IndexController extends AbstractActionController
                 'module'            =>  'devis',
                 'plugins'           =>  array(),
             ));
-        }
-
-        //Assignation de variables au layout
-        $this->layout()->setVariables(array(
-            'headTitle'         =>  $translator->translate('Modifier une devis'),
-            'breadcrumbActive'  =>  $devis->getCodeDevis(),
-            'action'            =>  'formulairedevis',
-            'module'            =>  'devis',
-            'plugins'           =>  array(),
-        ));
+        }       
 
         // Creation du formulaire du devis
         $form = new DevisForm($translator,$sm,$em,$request,$devis);   
@@ -170,6 +170,8 @@ class IndexController extends AbstractActionController
                 /* Hydratation de l'objet devis avec les données du formulaire */
 
                 $devis->exchangeArray($form->getData(),$sm,$em);
+
+                var_dump($form->getData());die();
                 
                 // try
                 // {

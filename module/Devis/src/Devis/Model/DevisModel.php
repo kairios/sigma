@@ -19,14 +19,14 @@ class DevisModel implements InputFilterAwareInterface
 	// Champs du devis
 	public $fields=array(
 		'id_devis'							=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'Id')),
-		'code_devis'						=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'CodeDevis')),
 		'date_devis'						=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'DateDevis')),
 		'total_hors_port'					=>array('type'=>'text',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'TotalHorsPort')),
 		'total_avec_port'					=>array('type'=>'text',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'TotalAvecPort')),
 		'ref_affaire'						=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'RefAffaire')),
+		'code_devis'						=>array('type'=>'text',				'form'=>array('type'=>'text','required'=>true, 'label'=>'Code devis')),
+		'version'							=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>true,'label'=>'Version')),
 		'ref_personnel'						=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>true,'label'=>'Chargé d\'affaire')), // form valider email
 		'numero_affaire'					=>array('type'=>'text',				'form'=>array('type'=>'select','required'=>false,'label'=>'Affaire')),
-		'version'							=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>true,'label'=>'Version')),
 		'remise'							=>array('type'=>'float',			'form'=>array('type'=>'text','required'=>false,'label'=>'Remise')),
 		'frais_port'						=>array('type'=>'float',			'form'=>array('type'=>'text','required'=>false,'label'=>'Frais de transport')),
 		'delais_livraison'					=>array('type'=>'text','max'=>50,	'form'=>array('type'=>'select','required'=>false,'label'=>'Délais de livraison')),

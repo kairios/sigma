@@ -224,11 +224,30 @@ class DevisForm extends Form
 									}
 								}
 							break;
-							// case 'version':
-							// 	// récuppérer toutes les versions existantes
-							// 	// S'il n'en existe aucune et/ou que le devis est nouveau, ajouter une version (celle-ci sera selected)
-							// 	// mettre le select en disabled
-							// break;
+							case 'version':
+								if($devis->getRefAffaire())
+								{
+									$versionMax = $devis->getVersionDevisMax($em,$devis->getRefAffaire()) + 1;
+									for ($i=1; $i <= $versionMax; $i++) { 
+										$options[] = array(
+											'value' => $i,
+											'label' => $i
+										);
+									}
+									// récuppérer toutes les versions existantes
+									// S'il n'en existe aucune et/ou que le devis est nouveau, ajouter une version (celle-ci sera selected)
+									// mettre le select en disabled
+									$element['attributes']['value'] = $versionMax;
+									$element['attributes']['disabled'] = 'disabled';
+								}
+								else
+								{
+									$options[] = array(
+										'value' => 1,
+										'label' => 1
+									);
+								}
+							break;
 						}
 						$element['options']['value_options']=$options;
 					}
@@ -248,6 +267,14 @@ class DevisForm extends Form
 					if($value)
 					{
 						$element['attributes']['value']='['.$value->getNumeroAffaire().'] '.$value->getDesignationAffaire();
+					}
+				}
+				elseif($field == 'version')
+				{
+					$value=$devis->getVersion();
+					if(!$value)
+					{
+						$element['attributes']['value']=$devis->getVersionDevisMax($em,$devis->getRefAffaire()) + 1;
 					}
 				}
 				else

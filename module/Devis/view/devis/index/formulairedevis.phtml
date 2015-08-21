@@ -29,7 +29,7 @@
 
 					echo $this->form()->openTag($form);
 					echo $this->formInput($form->get('id_devis'));
-					echo $this->formInput($form->get('code_devis'));
+					// echo $this->formInput($form->get('code_devis'));
 					echo $this->formInput($form->get('date_devis'));
 					echo $this->formInput($form->get('total_hors_port'));
 					echo $this->formInput($form->get('total_avec_port'));
@@ -50,6 +50,23 @@
 							echo $this->formLabel($form->get('ref_personnel'));
 							echo $this->formSelect($form->get('ref_personnel'));
 							echo $this->formElementErrors($form->get('ref_personnel'), array('class' => 'liste-erreurs'));
+						 ?>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="form-group col-sm-8 <?php if(isset($errors['code_devis'])) { echo 'has-error'; } ?>">
+						<?php							
+							echo $this->formLabel($form->get('code_devis'));
+							echo $this->formInput($form->get('code_devis'));
+							echo $this->formElementErrors($form->get('code_devis'), array('class' => 'liste-erreurs'));
+						 ?>
+					</div>
+					<div class="form-group col-sm-4 <?php if(isset($errors['version'])) { echo 'has-error'; } ?>">
+						<?php						
+							echo $this->formLabel($form->get('version'));
+							echo $this->formSelect($form->get('version'));
+							echo $this->formElementErrors($form->get('version'), array('class' => 'liste-erreurs'));
 						 ?>
 					</div>
 				</div>
@@ -118,7 +135,7 @@
 						<label><?php echo $this->translate('Lignes du devis'); ?></label>
 						<?php foreach($this->lignesAffaire as $ligneAffaire) : ?>
 							<label class="entite">
-								<input type="checkbox" name="ligne-affaire[]" value="<?php echo $ligneAffaire->getId(); ?>" data-vente="<?php echo $ligneAffaire->getPrixVentePrevu(); ?>" checked>
+								<input type="checkbox" id="ligne-affaire[]" name="ligne-affaire[]" value="<?php echo $ligneAffaire->getId(); ?>" data-vente="<?php echo $ligneAffaire->getPrixVentePrevu(); ?>" checked>
 								<b><?php echo $ligneAffaire->getQuantitePrevue(); ?>x</b>
 								<?php echo $ligneAffaire->getIntituleLigne(); ?>
 								<b class="total-ligne text-danger pull-right">
