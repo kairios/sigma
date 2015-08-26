@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-30 09:23:52
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-20 10:16:48
+ * @Last Modified time: 2015-08-21 18:28:56
  */
 
 // module\Affaire\config\module.config.php
@@ -100,6 +100,20 @@ return array(
 									),
 								),
 							),
+							'formulaire_ligne_produit'=>array(
+								'type'=>'Segment',
+								'options'=>array(
+									'route'=>'/formulaire-ligne-produit[/:ligne]',
+									'constraints'=>array(
+										'ligne'=>'[0-9]+'
+									),
+									'defaults'=>array(
+										'__NAMESPACE__' => 'Affaire\Controller',
+										'controller'=>'Index',
+										'action'=>'formulaireligneproduit',
+									),
+								),
+							),
 						),
 					),
 				),
@@ -169,17 +183,21 @@ return array(
 	// Permet à l'application de connaitre l'emplacement des fichiers de vue du module
 	'view_manager'=>array(
 		'template_map' => array(
-            'affaire/index'           					=> __DIR__ . '/../view/affaire/index/index-anthony.phtml',
-            'affaire/affaire'			 				=> __DIR__ . '/../view/affaire/index/listeaffaire.phtml',
-            'affaire/consulteraffaire'			 		=> __DIR__ . '/../view/affaire/index/consulteraffaire.phtml',
-            'affaire/listeproduit'			 			=> __DIR__ . '/../view/affaire/index/listeproduit.phtml',
-            'affaire/historique'						=> __DIR__ . '/../view/affaire/index/historique.phtml',
-            'affaire/listedevis'						=> __DIR__ . '/../view/affaire/index/liste/listedevis.phtml',
-            'affaire/listecommande'						=> __DIR__ . '/../view/affaire/index/liste/listecommande.phtml',
-            'affaire/listeconfirmation'					=> __DIR__ . '/../view/affaire/index/liste/listeconfirmation.phtml',
-            'affaire/listebordereau'					=> __DIR__ . '/../view/affaire/index/liste/listebordereau.phtml',
-            'affaire/listefacture'						=> __DIR__ . '/../view/affaire/index/liste/listefacture.phtml',
-            'affaire/formulaireligneaffaire'			=> __DIR__ . '/../view/affaire/index/form/formulaireligneaffaire.phtml',
+            'affaire/index'           						=> __DIR__ . '/../view/affaire/index/index-anthony.phtml',
+            'affaire/affaire'			 					=> __DIR__ . '/../view/affaire/index/listeaffaire.phtml',
+            'affaire/consulteraffaire'			 			=> __DIR__ . '/../view/affaire/index/consulteraffaire.phtml',
+            'affaire/listeproduit'			 				=> __DIR__ . '/../view/affaire/index/listeproduit.phtml',
+            'affaire/historique'							=> __DIR__ . '/../view/affaire/index/historique.phtml',
+            'affaire/listedevis'							=> __DIR__ . '/../view/affaire/index/liste/listedevis.phtml',
+            'affaire/listecommande'							=> __DIR__ . '/../view/affaire/index/liste/listecommande.phtml',
+            'affaire/listeconfirmation'						=> __DIR__ . '/../view/affaire/index/liste/listeconfirmation.phtml',
+            'affaire/listebordereau'						=> __DIR__ . '/../view/affaire/index/liste/listebordereau.phtml',
+            'affaire/listefacture'							=> __DIR__ . '/../view/affaire/index/liste/listefacture.phtml',
+            'affaire/formulaireligneaffaire'				=> __DIR__ . '/../view/affaire/index/form/formulaireligneaffaire.phtml',
+            'affaire/formulaireligneproduit'				=> __DIR__ . '/../view/affaire/index/form/formulaireligneproduit.phtml',
+            'affaire/formulaireligneprestation'				=> __DIR__ . '/../view/affaire/index/form/formulaireligneprestation.phtml',
+            'affaire/overlay_formulaire_ligne_produit'      => __DIR__ . '/../view/affaire/modal/overlay-formulaire-ligne-produit.phtml',
+            'affaire/overlay_formulaire_ligne_prestation'   => __DIR__ . '/../view/affaire/modal/overlay-formulaire-ligne-prestation.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

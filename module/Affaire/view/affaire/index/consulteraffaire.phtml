@@ -213,12 +213,12 @@
 				            	<hr>
 								<div class="col-lg-6">
 									<?php echo $this->render('affaire/listedevis'); ?>
-									<?php echo $this->render('affaire/listefacture'); ?>
-									<?php echo $this->render('affaire/listeconfirmation'); ?>									
+									<?php //echo $this->render('affaire/listefacture'); ?>
+									<?php //echo $this->render('affaire/listeconfirmation'); ?>									
 								</div>
 								<div class="col-lg-6">
-									<?php echo $this->render('affaire/listecommande'); ?>
-									<?php echo $this->render('affaire/listebordereau'); ?>
+									<?php //echo $this->render('affaire/listecommande'); ?>
+									<?php //echo $this->render('affaire/listebordereau'); ?>
 								</div>
 							</div>
 						</div>
@@ -265,4 +265,6 @@
 <?php	
 	echo $this->render('personnel/overlay_formulaire_personnel');
 	echo $this->render('client/overlay_formulaire_interlocuteur');
+	echo $this->render('affaire/overlay_formulaire_ligne_produit'); 
+	echo $this->render('affaire/overlay_formulaire_ligne_prestation'); 
 ?>

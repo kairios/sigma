@@ -29,9 +29,9 @@ class Devis
     private $codeDevis;
 
     /**
-     * @var \DateTime
+     * @var integer
      *
-     * @ORM\Column(name="date_devis", type="date", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="date_devis", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $dateDevis;
 
@@ -92,16 +92,16 @@ class Devis
     private $totalAvecPort;
 
     /**
-     * @var \DateTime
+     * @var integer
      *
-     * @ORM\Column(name="date_envoi", type="date", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="date_envoi", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $dateEnvoi;
 
     /**
-     * @var \DateTime
+     * @var integer
      *
-     * @ORM\Column(name="date_signature", type="date", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="date_signature", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $dateSignature;
 
@@ -169,7 +169,7 @@ class Devis
     /**
      * Set dateDevis
      *
-     * @param \DateTime $dateDevis
+     * @param integer $dateDevis
      * @return Devis
      */
     public function setDateDevis($dateDevis)
@@ -182,7 +182,7 @@ class Devis
     /**
      * Get dateDevis
      *
-     * @return \DateTime 
+     * @return integer 
      */
     public function getDateDevis()
     {
@@ -376,7 +376,7 @@ class Devis
     /**
      * Set dateEnvoi
      *
-     * @param \DateTime $dateEnvoi
+     * @param integer $dateEnvoi
      * @return Devis
      */
     public function setDateEnvoi($dateEnvoi)
@@ -389,7 +389,7 @@ class Devis
     /**
      * Get dateEnvoi
      *
-     * @return \DateTime 
+     * @return integer 
      */
     public function getDateEnvoi()
     {
@@ -399,7 +399,7 @@ class Devis
     /**
      * Set dateSignature
      *
-     * @param \DateTime $dateSignature
+     * @param integer $dateSignature
      * @return Devis
      */
     public function setDateSignature($dateSignature)
@@ -412,7 +412,7 @@ class Devis
     /**
      * Get dateSignature
      *
-     * @return \DateTime 
+     * @return integer 
      */
     public function getDateSignature()
     {

@@ -2,7 +2,7 @@
 * @Author: Ophelie
 * @Date:   2015-05-13 13:49:48
 * @Last Modified by:   Ophelie
-* @Last Modified time: 2015-08-21 12:17:22
+* @Last Modified time: 2015-08-21 17:57:49
 */
 
 'use strict';
@@ -2044,15 +2044,18 @@ var sigma={
 					        wheelStep: 10
 					    });
 					    $('#tab-liste-produit a').one('click',function(){ // "one" au lieu de "on" pour ne pas refaire l'ajax à chaque clic sur l'onglet Interlocuteur, peut être changé selon demande du client
-							sigma.controller.affaire.getLignesAffaire();
+							sigma.controller.affaire.getListeProduit();
 						});
 					break;
 				}
 			},
-			getLignesAffaire:function()
+			getListeProduit:function()
 			{
+				var url = document.location.href;
+				url = url.replace('#','');
+
 				$.ajax({
-					url: document.location.href+'/liste-produit',
+					url: url+'/liste-produit',
 					type: 'get',
 					dataType: 'html',
 					success:function(data, status, XMLHttpRequest)
@@ -2063,6 +2066,10 @@ var sigma={
 					    $('.ligne-affaire-form').on('submit',function(){
 					    	sigma.controller.affaire.verifierLigneAffaire($(this));
 					    	return false;
+					    });
+
+					    $('button.produit').on('click',function(){
+					    	sigma.controller.affaire.setModalLigneProduit($(this).attr('data-id'));
 					    });
 
 					},
@@ -2244,7 +2251,9 @@ var sigma={
 			verifierLigneAffaire:function(form, numLigne)
 			{
 				// Définition de l'adresse de requète
-				var url= document.location.href+'/formulaire-ligne-affaire';
+				var url = document.location.href;
+				url = url.replace('#','');
+				var url= url+'/formulaire-ligne-affaire';
 				if(numLigne)
 					url+='/'+numLigne;
 
@@ -2272,7 +2281,7 @@ var sigma={
 						{	
 							// Si l'utilisateur a été ajouté, on réactualise la table des utilisateurs
 							setTimeout(function(){
-								window.location.href=document.location.href;
+								window.location.href=document.location.href.replace('#','');
 							},1000);
 						}
 						// Si c'est pas bon, on met à jour, le formulaire d'utilisateur avec les erreurs
@@ -2331,9 +2340,41 @@ var sigma={
 					delay:600
 				});
 			},
-			// setModalLigneAffaire:function(){
-			// 	// Requète ajax
-			// },
+			setModalLigneProduit:function(numLigne){
+				var url = document.location.href;
+				url = url.replace('#','');
+				var url = url+'/formulaire-ligne-produit';
+				if(numLigne)
+					url+='/'+numLigne;	
+
+				$.ajax({
+					url: url,
+					type: 'get',
+					dataType: 'html',
+					success:function(data, status, XMLHttpRequest)
+					{
+						$('#ligne-produit-form-modal .modal-body').html(data);
+						$('#ligne-produit-form-modal').modal('toggle');
+						// sigma.controller.client.setAutocompletionSocieteClient();
+						
+						$('#ligne-produit-form-submit').unbind('click');
+						$('#ligne-produit-form-submit').on('click',function(){
+							// sigma.controller.client.verifierInterlocuteur(numInterlocuteur);
+							return false;
+						});
+					},
+					error:function(XMLHttpRequest, status, error)
+					{
+						//sigma.language.error(233);
+						var message='';
+						if(locale=='en_US')
+							message='An error occured when retrieving data : <strong>'+error+'</strong>';
+						else
+							message='Une erreur s\'est produite lors de la récupération du formulaire : <strong>'+error+'</strong>';
+						$("#interlocuteur-modal").html(message);
+					}
+				});
+			},
 		},
 		personnel:{
 			init:function()

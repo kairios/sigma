@@ -3,7 +3,7 @@
  * @Author: Ophelie
  * @Date:   2015-06-30 09:31:09
  * @Last Modified by:   Ophelie
- * @Last Modified time: 2015-08-21 12:36:37
+ * @Last Modified time: 2015-08-21 18:32:20
  */
 
 namespace Affaire\Controller;
@@ -405,6 +405,23 @@ class IndexController extends AbstractActionController
             return $viewModel;
         }
         return $this->redirect()->toRoute('home');
+    }
+
+    public function formulaireligneproduitAction()
+    {
+        $viewModel = new ViewModel();
+        $viewModel
+            ->setTemplate('affaire/formulaireligneproduit')
+            ->setVariables(array(
+            ))
+            ->setTerminal(true);
+
+        return $viewModel;
+    }
+
+    public function formulaireligneprestationAction()
+    {
+
     }
 
     public function autocompletionaffaireAction()
