@@ -433,6 +433,7 @@ class LigneAffaire
             $idConfirmation=$idConfirmation->getId();
 
         return array(
+            
             'id_ligne_affaire'          =>  $this->getId(),
             'code_produit'              =>  $this->getCodeProduit(),
             'intitule_ligne'            =>  $this->getIntituleLigne(),
@@ -488,6 +489,17 @@ class LigneAffaire
         $this->setRefAffaire($affaire);
         $this->setRefFacture($facture);
         $this->setRefConfirmationCommande($confirmation);
+    }
+
+
+    public function getListeProduits($em=null) {
+
+        $db = Zend_Db::factory();
+        $select = new Zend_Db_Select($db);
+
+        $select = $db->select()->from(ligne_produit)->where("ref_ligne_affaire=".$this->getId)->order();
+
+        return $select;
     }
 
 }

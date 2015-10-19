@@ -45,12 +45,14 @@ return array(
 					'facture'=>array(
 						'type'=>'Segment',
 						'options'=>array(
+                            
 							'route'=>'[/:action][/:id]',
 							'constraints'=>array(
 								'action'=>'[a-zA-Z][a-zA-Z0-9_-]*',
 								'id'=>'[0-9]+',
 							),
 							'defaults'=>array(
+
 								'__NAMESPACE__' => 'Facture\Controller',
                         		'controller'    => 'Index',
                         		'action'        => 'index',

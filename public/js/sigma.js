@@ -105,7 +105,7 @@ var sigma={
 			},
 			setOnglet:function(numOnglet)
 			{
-				$('#tabs li:eq('+numOnglet+') a').trigger('click');
+				//$('#tabs li:eq('+numOnglet+') a').trigger('click');
 			}
 		},
 		notification:{ // DÉPRÉCIÉ
@@ -733,7 +733,8 @@ var sigma={
 		                    	'sUrl': '/js/Inspinia/plugins/dataTables/datatables-'+locale+'.json'
 		                	},
 		                	// Fonction de callback
-		                	'fnInitComplete': function(){
+		                	'fnInitComplete': function() {
+
 								sigma.controller.client.setClientListeners();
 
 								$('#table-client').unbind();
@@ -2063,13 +2064,14 @@ var sigma={
 						$('#liste-produit').html(data);
 
 						sigma.controller.produit.setAutocompletionInitulesProduits($('.ligne-affaire-form'));
-					    $('.ligne-affaire-form').on('submit',function(){
+					    $('.ligne-affaire-form').on('submit',function() {
+					    	
 					    	sigma.controller.affaire.verifierLigneAffaire($(this));
 					    	return false;
 					    });
 
-					    $('button.produit').on('click',function(){
-					    	sigma.controller.affaire.setModalLigneProduit($(this).attr('data-id'));
+					    $('button.produit').on('click',function() {
+					    	sigma.controller.affaire.setModalLigneProduit($(this).attr('data-id')); // alert($(this).attr('data-id'));
 					    });
 
 					},
@@ -2312,10 +2314,12 @@ var sigma={
 					source:function(request,response)
 					{
 						$.ajax({
+
 							url:'/autocompletion_affaire',
 							dataType:'json',
 							data:{ motCle:request.term,maxRows:10 },
 							type:'GET',
+
 							success:function(data)
 							{
 								var suggestions = eval(data.resultat);
@@ -2340,42 +2344,104 @@ var sigma={
 					delay:600
 				});
 			},
-			setModalLigneProduit:function(numLigne){
+
+			setModalLigneProduit: function(numLigne) {
+
 				var url = document.location.href;
 				url = url.replace('#','');
-				var url = url+'/formulaire-ligne-produit';
-				if(numLigne)
-					url+='/'+numLigne;	
+				url = url + '/formulaire-ligne-produit';
+
+				if(numLigne) {
+
+					url+='/'+numLigne;
+				}
 
 				$.ajax({
+
 					url: url,
 					type: 'get',
 					dataType: 'html',
-					success:function(data, status, XMLHttpRequest)
-					{
+
+					success: function(data, status, XMLHttpRequest) {
+
 						$('#ligne-produit-form-modal .modal-body').html(data);
 						$('#ligne-produit-form-modal').modal('toggle');
 						// sigma.controller.client.setAutocompletionSocieteClient();
 						
 						$('#ligne-produit-form-submit').unbind('click');
-						$('#ligne-produit-form-submit').on('click',function(){
+						$('#ligne-produit-form-submit').on('click', function() {
+							
 							// sigma.controller.client.verifierInterlocuteur(numInterlocuteur);
 							return false;
 						});
 					},
-					error:function(XMLHttpRequest, status, error)
-					{
-						//sigma.language.error(233);
-						var message='';
-						if(locale=='en_US')
-							message='An error occured when retrieving data : <strong>'+error+'</strong>';
-						else
-							message='Une erreur s\'est produite lors de la récupération du formulaire : <strong>'+error+'</strong>';
+					error: function(XMLHttpRequest, status, error) {
+
+						// sigma.language.error(233);
+						var message = '';
+						if(locale == 'en_US') {
+
+							message = 'An error occured when retrieving data : <strong>' + error + '</strong>';
+						}
+						else {
+
+							message = 'Une erreur s\'est produite lors de la récupération du formulaire : <strong>'+error+'</strong>';
+						}
+
+						$("#interlocuteur-modal").html(message);
+					}
+				});
+			},
+
+			setModalLignePrestation: function(numLigne) {
+
+				var url = document.location.href;
+				url = url.replace('#','');
+				url = url + '/formulaire-ligne-prestation';
+
+				if(numLigne) {
+
+					url+='/'+numLigne;
+				}
+
+				$.ajax({
+
+					url: url,
+					type: 'get',
+					dataType: 'html',
+
+					success: function(data, status, XMLHttpRequest) {
+
+						$('#ligne-prestation-form-modal .modal-body').html(data);
+						$('#ligne-prestation-form-modal').modal('toggle');
+						// sigma.controller.client.setAutocompletionSocieteClient();
+						
+						$('#ligne-prestation-form-submit').unbind('click');
+						$('#ligne-prestation-form-submit').on('click', function() {
+							
+							// sigma.controller.client.verifierInterlocuteur(numInterlocuteur);
+							return false;
+						});
+					},
+					error: function(XMLHttpRequest, status, error) {
+
+						// sigma.language.error(233);
+						var message = '';
+						if(locale == 'en_US') {
+
+							message = 'An error occured when retrieving data : <strong>' + error + '</strong>';
+						}
+						else {
+
+							message = 'Une erreur s\'est produite lors de la récupération du formulaire : <strong>'+error+'</strong>';
+						}
+
 						$("#interlocuteur-modal").html(message);
 					}
 				});
 			},
 		},
+
 		personnel:{
 			init:function()
 			{
@@ -2695,9 +2761,9 @@ var sigma={
 								$('#saisie-form-modal .close').trigger('click');
 
 								// On recharge des saisie d'heure dans le module en faisant une redirection avec setTimeOut
-								setTimeout(function(){
+								setTimeout(function() {
 									window.location.href='/editer-fiche-heures'
-								},500);
+								}, 500);
 							}
 							// Si c'est pas bon, on met à jour, le formulaire d'interlocuteur avec les erreurs
 							else

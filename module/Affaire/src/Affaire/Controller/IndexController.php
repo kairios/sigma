@@ -11,18 +11,32 @@ namespace Affaire\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
+
 // EntityManager
 use Doctrine\ORM\EntityManager;
+
 // Session
 use Zend\Session\Container;
+
+
+
+
+
 // Entity
 use Affaire\Entity\Affaire;
 use Affaire\Entity\LigneAffaire;
+use Affaire\Entity\LigneProduit;
+
+// Form
 use Affaire\Form\AffaireForm;
 use Affaire\Form\LigneAffaireForm;
+use Affaire\Form\LigneProduitForm;
 
-class IndexController extends AbstractActionController
-{
+
+
+
+class IndexController extends AbstractActionController {
+
     /**
      * Entity Manager
      * @var DoctrineORMEntityManager
@@ -32,6 +46,7 @@ class IndexController extends AbstractActionController
     protected $flashArray = array('errors'=>array(),'success'=>array());
 
     // Permet la redirection en cas d'utilisateur non authentifié à l'envoi
+
     // On utilise cette méthode car ce n'est pas possible de le faire dans le constructeur du controller
     // Faire en sorte de centraliser la méthode verifierConnexion() plutôt que la réécrire dans chaque controller, grâce aux gestionnaires d'évènement dans Module.php
 	public function onDispatch(\Zend\Mvc\MvcEvent $e)
@@ -91,6 +106,7 @@ class IndexController extends AbstractActionController
         $view = new ViewModel(array(
             'message' => 'Hello world',
         ));
+
         $view->setTemplate('affaire/index');
         return $view;
     }
@@ -100,6 +116,7 @@ class IndexController extends AbstractActionController
      */
     public function listeaffaireAction()
     {
+        // die(phpinfo());
         $affaire = new Affaire();
         $session = new Container('affaire');
         $session->offsetSet('id',null);
@@ -142,16 +159,16 @@ class IndexController extends AbstractActionController
         ));
     }
 
-    public function formulaireaffaireAction()
-    {
+    public function formulaireaffaireAction() {
+
         /******************************* Initialisation de variables *******************************/
 
         // Récupération de l'EntityManager
-        $em             =$this->getEntityManager();
+        $em             = $this->getEntityManager();
         // Récupération du Service Manager
         $sm             = $this->getServiceLocator();
         // Récupération de la requete
-        $request        =$this->getRequest();
+        $request        = $this->getRequest();
         // Récupération du traducteur
         $translator     = $this->getServiceLocator()->get('Translator');
         // Récupération de la session de l'utilisateur
@@ -234,14 +251,64 @@ class IndexController extends AbstractActionController
         ));
     }
     
-    public function consulteraffaireAction()
-    {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // -- CONTROLLER PRINCIPAL ONGLET 'AFFAIRE'
+    // -----------------------------------------------------------------------------------------------
+    public function consulteraffaireAction() {
+
         // Récupération de l'EntityManager
-        $em             =$this->getEntityManager();
+        $em             = $this->getEntityManager();
         // Récupération du Service Manager
         $sm             = $this->getServiceLocator();
         // Récupération de la requete
-        $request        =$this->getRequest();
+        $request        = $this->getRequest();
         // Récupération du traducteur
         $translator     = $this->getServiceLocator()->get('Translator');
         // Récupération de la session de l'utilisateur
@@ -250,11 +317,13 @@ class IndexController extends AbstractActionController
 
         $id = (int)$this->params()->fromRoute('id');
         $affaire = $this->getEntityManager()->getRepository('Affaire\Entity\Affaire')->find($id);
-        if($affaire==null)
-        {
+
+        if($affaire==null) {
+
             throw new \Exception($this->getServiceLocator()->get('Translator')->translate('Cette affaire n\'existe pas'));
         }
-        $session->offsetSet('id',$id);
+
+        $session->offsetSet('id', $id);
 
         //Assign variables to layout
         $this->layout()->setVariables(array(
@@ -268,10 +337,113 @@ class IndexController extends AbstractActionController
 
         $adressePrincipale = $em->getRepository('Adresse\Entity\Adresse')->findOneBy(array('refClient'=>$affaire->getRefClient()->getId(),'adressePrincipale'=>true));
 
+
+
+
         $ligne = new LigneAffaire();
-        $form = new LigneAffaireForm($translator,$sm,$em,$request,$ligne); 
+
+        // Initialisation du formulaire
+        if(true) $form = new LigneAffaireForm($translator,$sm,$em,$request,$ligne);
+        else if(false) $form = new LigneAffaireForm($translator, $sm, $em, $request, $ligne);
+
+
         
+
+        // -- Creation du formulaire Ligne-Affaire*Ligne-Produit
+        // ----------------------------------------------------------------------------------------
+        if($request->isPost()) {
+
+            $form->setData($request->getPost());
+
+            if($form->isValid()) {
+
+
+
+                // -- FORMULAIRE DEVIS
+                // -------------------------------------------------------------------------------------------
+                if(true) {
+
+                    /* Hydratation de l'objet devis avec les données du formulaire */
+                    $devis->exchangeArray($form->getData(), $sm, $em);
+
+                    $totalDevis = 0;
+                    
+                    try {
+
+                        // On supprime d'abord les lignes de devis existantes
+                        $lignes = $devis->getLignesDevis($sm);
+
+                        foreach($lignes as $ligne) {
+
+                            $devis->removeLigneDevis($sm, $ligne['id']);
+                        }
+
+                        // On ajoute les lignes de devis en fonction des lignes de l'affaire sélectionnées
+                        if(isset($_POST['ligne-affaire'])) {
+
+                            foreach($_POST['ligne-affaire'] as $key => $idLigneAffaire) {
+
+                                // On récupère puis enregistre la ligne de devis
+                                $ligneDevis = new LigneDevis();
+                                $ligneDevis->exchangeProperties($em->getRepository('Affaire\Entity\LigneAffaire')->find($idLigneAffaire));
+                                $ligneDevis->setRefDevis($devis);
+                                $em->persist($ligneDevis);
+
+                                // On ajoute le montant de la ligne devis créée au montant total du devis
+                                $totalDevis += $ligneDevis->getTotalPrixVente();
+                            }
+                        }
+
+                        // On enregistre les totaux
+                        $totalDevis -= $devis->getRemise();
+                        $devis->setTotalHorsPort($totalDevis);
+
+                        $totalDevis += $devis->getFraisPort();
+                        $devis->setTotalAvecPort($totalDevis);
+
+                        if($devis->getDateSignature()) {
+
+                            $affaire->setRefDevisSigne($devis);
+                            $em->persist($affaire);
+                        }
+
+                        $em->persist($devis);
+                        $em->flush();
+                    }
+                    catch(\Exception $e) {
+
+                        $erreurMessage = $translator->translate('Une erreur est survenue durant la sauvegarde du devis. Vérifiez que tous les champs sont valides.').$e->getMessage();
+                        $messagesFlash = $this->flashArray;
+                        $messagesFlash['errors'][] = $erreurMessage;
+                        $utilisateur->offsetSet('messagesFlash', $messagesFlash);
+
+                        return new ViewModel(array(
+                            'devis'=>$devis,
+                            'form'=>$form,
+                            'id'=>$id
+                        ));
+                    }
+                    
+                    return $this->redirect()->toRoute('devis/consulter_devis', array('id'=>$devis->getId()));
+                }
+                // -- FORMULAIRE LIGNE PRODUIT
+                // -------------------------------------------------------------------------------------------
+                else if(true) {
+
+                    $em->persist($ligneAffaire);
+                    $em->flush();
+                }
+            }
+        }
+        /* ----------------------------------------------------------------------------------------
+        /* -- FIN FORMULAIRE -- */
+
+
+
+
+
         return new ViewModel(array(
+
             'id'=>$id,
             'form'=>$form,
             'affaire'=>$affaire,
@@ -280,11 +452,60 @@ class IndexController extends AbstractActionController
         ));
     }
 
-    public function listeproduitAction()
-    {
-        //Si la requète n'est pas de type AJAX, on n'effectue pas de recherche
-        if($this->getRequest()->isXmlHttpRequest())
-        {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function listeproduitAction() {
+
+        // Si la requète n'est pas de type AJAX, on n'effectue pas de recherche
+        if($this->getRequest()->isXmlHttpRequest()) {
+
             $statusForm=null;
             // Récupération de l'EntityManager
             $em=$this->getEntityManager();
@@ -302,9 +523,7 @@ class IndexController extends AbstractActionController
             if($affaire==null)
                 throw new \Exception($translator->translate('Cette affaire n\'existe pas'));
 
-            // $resultat = $affaire->getLignesAffaire($this->getEntityManager());
-
-            $form = new LigneAffaireForm($translator,$sm,$em,$request,new LigneAffaire());
+            $form = new LigneAffaireForm($translator, $sm, $em, $request, new LigneAffaire());
 
             $viewModel = new ViewModel();
             $viewModel->setVariables(array(
@@ -321,47 +540,54 @@ class IndexController extends AbstractActionController
         return $this->redirect()->toRoute('home');
     }
 
-    public function formulaireligneaffaireAction()
-    {
-        if($this->getRequest()->isXmlHttpRequest())
-        {
-            /* Initialisation de variables */
+    public function formulaireligneaffaireAction() {
 
-            $statusForm=null;
+        // SI REQUÊTE AJAX
+        if($this->getRequest()->isXmlHttpRequest()) {
+
+            // Initialisation de variables
+            $statusForm = null;
             // Récupération de l'EntityManager
-            $em=$this->getEntityManager();
+            $em = $this->getEntityManager();
             // Récupération du Service Manager
-            $sm=$this->getServiceLocator();
+            $sm = $this->getServiceLocator();
              // Récupération du traducteur
-            $translator=$sm->get('Translator');
+            $translator = $sm->get('Translator');
             // Récupération de la requete
-            $request=$this->getRequest();
+            $request = $this->getRequest();
 
-            /* Initialisation de la ligne affaire */
+            // Initialisation de la ligne affaire
             $ligneAffaire = null;
             $id = $this->params()->fromRoute('ligne');
-            if(!empty($id)) // Si l'ID de la ligne est transmis, on réccupère celle-ci
-            {
+            
+
+            // Si l'ID de la ligne est transmis, on réccupère celle-ci
+            if(!empty($id)) {
+
                 // Récupération de la ligne en BD
                 $ligneAffaire = $em->getRepository('Affaire\Entity\LigneAffaire')->find($id);
                 if($ligneAffaire == null)
                     throw new \Exception($translator->translate('Une erreur est survenue lors de la récupération de la ligne de l\'affaire.'));
             }
-            else // Sinon on crée un nouvel interlocuteur
-            {
+            // Sinon on crée un nouvel interlocuteur
+            else {
+
                 $id = null;
                 $ligneAffaire = new LigneAffaire();
             }
 
-            /* Creation du formulaire de la ligne affaire */
-            
+
+
+            // -- Creation du formulaire de la ligne affaire
+            // -------------------------------------------------------------------------------------------
             $form = new LigneAffaireForm($translator,$sm,$em,$request,$ligneAffaire);
-            if($request->isPost())
-            {
+
+            if($request->isPost()) {
+
                 $form->setData($request->getPost());
 
-                if($form->isValid())
-                {
+                if($form->isValid()) {
+
                     $statusForm=true;
 
                     // On récuppère l'affaire
@@ -381,10 +607,11 @@ class IndexController extends AbstractActionController
                         // 'motCle'=>$ligneAffaire->getNom(),
                     ));
                 }
-                else // Sinon, on retourne les erreurs au formulaire qui les affiche
-                {
-                    $statusForm=false;
-                    $errors=$form->getMessages();
+                // Sinon, on retourne les erreurs au formulaire qui les affiche
+                else {
+
+                    $statusForm = false;
+                    $errors = $form->getMessages();
 
                     return new JsonModel(array(
                         'statut'=>$statusForm,
@@ -393,8 +620,8 @@ class IndexController extends AbstractActionController
                 }
             }
 
-            /* Affichage du formulaire sans le layout (retour d'une sous-vue uniquement) */
-
+            // -- Affichage du formulaire sans le layout (retour d'une sous-vue uniquement)
+            // -------------------------------------------------------------------------------------------
             $viewModel=new ViewModel;
             $viewModel->setVariables(array(
                 'ligneAffaire'=>$ligneAffaire,
@@ -404,28 +631,143 @@ class IndexController extends AbstractActionController
 
             return $viewModel;
         }
+
         return $this->redirect()->toRoute('home');
     }
 
-    public function formulaireligneproduitAction()
-    {
-        $viewModel = new ViewModel();
-        $viewModel
-            ->setTemplate('affaire/formulaireligneproduit')
-            ->setVariables(array(
-            ))
-            ->setTerminal(true);
 
-        return $viewModel;
+
+
+
+
+
+    // -- GESTION DE L'AFFICHAGE DU FORMULAIRE
+    // -------------------------------------------------------------------------------------------
+    public function formulaireligneproduitAction() {
+
+        // SI REQUÊTE AJAX
+        if($this->getRequest()->isXmlHttpRequest()) {
+
+            // Initialisation de variables
+            $statusForm = null;
+            // Récupération de l'EntityManager
+            $em = $this->getEntityManager();
+            // Récupération du Service Manager
+            $sm = $this->getServiceLocator();
+            // Récupération du traducteur
+            $translator = $sm->get('Translator');
+            // Récupération de la requete
+            $request = $this->getRequest();
+
+            // Initialisation de la ligne affaire
+            $ligneProduit = null;
+            $id = $this->params()->fromRoute('ligne');
+            
+
+            // Si l'ID de la ligne est transmis, on réccupère celle-ci
+            if(!empty($id)) {
+
+                // Récupération de la ligne en BD
+                $ligneProduit = $em->getRepository('Affaire\Entity\LigneProduit')->find($id);
+
+                if($ligneProduit == null) {
+
+                    throw new \Exception($translator->translate('Une erreur est survenue lors de la récupération de la ligne de l\'affaire.'));
+                }
+            }
+            // Sinon on crée un nouvel interlocuteur
+            else {
+
+                $id = null;
+                $ligneAffaire = new LigneAffaire();
+            }
+
+           
+            $form = new LigneProduitForm($translator, $sm, $em, $request, $ligneProduit);
+
+
+            if($request->isPost()) {
+
+                $form->setData($request->getPost());
+
+                if($form->isValid()) {
+
+                    $statusForm = true;
+
+                    // On récuppère l'affaire
+                    $idAffaire = (int) $this->params()->fromRoute('id');
+                    $affaire = $em->getRepository('Affaire\Entity\Affaire')->find($idAffaire);
+                    // 
+
+                    // On hydrate la ligne affaire avec les infos du formulaire
+                    // et on met la référence de l'affaire dans la ligne affaire
+                    $ligneAffaire->exchangeArray($form->getData(), $sm, $em);
+                    $ligneAffaire->setRefAffaire($affaire);
+
+                    $em->persist($ligneAffaire);
+                    $em->flush($ligneAffaire);
+
+                    return new JsonModel(array(
+                        'statut'=>$statusForm,
+                        // 'motCle'=>$ligneAffaire->getNom(),
+                    ));
+                }
+                // Sinon, on retourne les erreurs au formulaire qui les affiche
+                else {
+
+                    $statusForm = false;
+                    $errors = $form->getMessages();
+
+                    return new JsonModel(array(
+                        'statut'=>$statusForm,
+                        'reponse'=>$errors,
+                    ));
+                }
+            }
+
+
+
+
+
+            $viewModel = new ViewModel();
+            $viewModel->setTemplate('affaire/formulaireligneproduit')
+                      ->setVariables(array(
+                            'form' => $form
+                        ))
+                      ->setTerminal(true);
+
+            return $viewModel;
+        }
     }
 
-    public function formulaireligneprestationAction()
-    {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function formulaireligneprestationAction() {
+
 
     }
 
-    public function autocompletionaffaireAction()
-    {
+    public function autocompletionaffaireAction() {
+
         //Si la requète est de type AJAX, on effectue la recherche
         if($this->getRequest()->isXmlHttpRequest())
         {

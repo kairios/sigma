@@ -302,4 +302,7 @@ class LigneProduit
         $this->remarques = $remarques;
     }
 
+    public function getLignes() {
+        
+    }
 }

@@ -14,17 +14,18 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
-class LigneProduitModel implements InputFilterAwareInterface
-{
+class LigneProduitModel implements InputFilterAwareInterface {
+
 	protected $inputFilter;
 
-	public $fields=array(
+	public $fields = array(
+
 		// Champs de la ligne affaire
 		'id_ligne_produit'					=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'Id')),
 		// 'ref_fournisseur'					=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'RefFournisseur')),
-		// 'ref_ligne_affaire'					=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'RefLigneAffaire')),
+		'ref_ligne_affaire'					=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'RefLigneAffaire')),
 		// 'ref_commande_fournisseur'			=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'RefCommandeFournisseur')),
-		'ref_produit_fournisseur_vente'		=>array('type'=>'int', 				'form'=>array('type'=>'hidden','label'=>'','getter'=>'RefProduitFournisseurVente')),
+		// 'ref_produit_fournisseur_vente'		=>array('type'=>'int', 				'form'=>array('type'=>'hidden','label'=>'','getter'=>'RefProduitFournisseurVente')),
 		'code_produit'						=>array('type'=>'text','max'=>50,	'form'=>array('type'=>'text','required'=>false,'label'=>'Référence')),
 		'intitule_produit'					=>array('type'=>'text','max'=>120,	'form'=>array('type'=>'text','required'=>true,'label'=>'Description')),
 		'reference_devis'					=>array('type'=>'text','max'=>50,	'form'=>array('type'=>'text','required'=>false,'label'=>'Ref. devis')),
@@ -41,28 +42,28 @@ class LigneProduitModel implements InputFilterAwareInterface
 		'ref_poste'							=>array('type'=>'int',				'form'=>array('type'=>'select','required'=>true,'label'=>'Poste de coût')),
 	);
 
-	public function setInputFilter(InputFilterInterface $inputFilter)
-	{
+	public function setInputFilter(InputFilterInterface $inputFilter) {
+
 		throw new \Exception("Not used");
 	}
 
-	public function getInputFilter()
-	{
-		if(!$this->inputFilter)
-		{
-			$inputFilter=new InputFilter;
+	public function getInputFilter() {
+
+		if(!$this->inputFilter) {
+
+			$inputFilter = new InputFilter;
 		
 			// Ou créer une validation de ces données propre au affaire
-			$intFilters=array('name'=>'Int');
+			$intFilters = array('name'=>'Int');
 			// StripTags is used to remove unwanted HTML & StringStrim is used to remove unnecessary white spaces
-			$textFilters=array(array('name'=>'StripTags'),array('name'=>'StringTrim'));
+			$textFilters = array(array('name'=>'StripTags'),array('name'=>'StringTrim'));
 
-			foreach($this->fields as $field => $data)
-			{
-				$filters=$validators=null;
-				$required=isset($data['form']['required']) ? $data['form']['required'] : false;
+			foreach($this->fields as $field => $data) {
 
-				$element=array(
+				$filters = $validators = null;
+				$required = isset($data['form']['required']) ? $data['form']['required'] : false;
+
+				$element = array(
 					'name'=>$field,
 					'required'=>$required,
 				);

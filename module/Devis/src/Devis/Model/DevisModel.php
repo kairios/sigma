@@ -18,6 +18,7 @@ class DevisModel implements InputFilterAwareInterface
 
 	// Champs du devis
 	public $fields=array(
+		
 		'id_devis'							=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'Id')),
 		'date_devis'						=>array('type'=>'int',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'DateDevis')),
 		'total_hors_port'					=>array('type'=>'text',				'form'=>array('type'=>'hidden','label'=>'','getter'=>'TotalHorsPort')),
@@ -90,6 +91,7 @@ class DevisModel implements InputFilterAwareInterface
 							)
 						);
 					break;
+
 				}
 
 				$inputFilter->add($element);

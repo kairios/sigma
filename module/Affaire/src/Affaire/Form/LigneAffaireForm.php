@@ -14,12 +14,12 @@ use Zend\Form\Form;
 use Affaire\Model\LigneAffaireModel;
 // use Zend\I18n\Translator\Translator;
 
-class LigneAffaireForm extends Form
-{
+class LigneAffaireForm extends Form {
+
 	public $fields;
 
-	public function __construct($translator,$sm,$em=null,$request=null,$ligneAffaire=null)
-	{
+	public function __construct($translator,$sm,$em=null,$request=null,$ligneAffaire=null) {
+		
 		parent::__construct('ligne-affaire-form');
 		$this->setAttribute('method', 'post');
 
@@ -28,8 +28,8 @@ class LigneAffaireForm extends Form
 		$this->setInputFilter($ligneModel->getInputFilter());
 
 		// Creation des champs du formulaire à partir des champs du modèle de l'affaire'
-		foreach($this->fields as $field => $data)
-		{
+		foreach($this->fields as $field => $data) {
+			
 			$value=$type=$label=$required='';
 			$value_options=array();
 
@@ -255,29 +255,34 @@ class LigneAffaireForm extends Form
 				// }
 				// else
 				// {
-					if($data['form']['type']=='hidden')
-						$value=$ligneAffaire->{'get'.$data['form']['getter']}();
-					else
-					{
-						$tab=explode('_',$field);
-						$method='';
-						foreach($tab as $part)
-						{
+					if($data['form']['type']=='hidden') {
+
+						$value = $ligneAffaire->{'get'.$data['form']['getter']}();
+					}
+					else {
+
+						$tab = explode('_',$field);
+						$method = '';
+
+						foreach($tab as $part) {
+
 							$method.=ucfirst($part);
 						}
+
 						$property=lcfirst($method);
-						if(property_exists($ligneAffaire,$property))
-						{
-							$value=$ligneAffaire->{'get'.$method}();
+						
+						if(property_exists($ligneAffaire,$property)) {
+
+							$value = $ligneAffaire->{ 'get'.$method }();
 						}
 					}
 
-					if(is_object($value))
-					{
+					if(is_object($value)) {
+
 						$element['attributes']['value']=$value->getId();
 					}
-					else
-					{
+					else {
+
 						$element['attributes']['value']=$value;
 					}
 				// }
